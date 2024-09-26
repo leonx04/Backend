@@ -34,3 +34,4 @@ build/
 
 ### Spring Framework ###
 /target/
+!src/main/resources/application.properties
