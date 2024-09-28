@@ -1,4 +1,4 @@
 package com.example.backend.Client.config;
 
-public class SecurityClientConfig {
+public class SecurityAdminConfig {
 }
