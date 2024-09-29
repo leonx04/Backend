@@ -1,4 +1,4 @@
-package com.example.backend.Admin.exception;
+package com.example.backend.Library.exception;
 
 public class DemoException {
 }

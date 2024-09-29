@@ -1,4 +1,4 @@
-package com.example.backend.Admin.service.interfaces;
+package com.example.backend.Library.service.interfaces;
 
 public class DemoInterface {
 }

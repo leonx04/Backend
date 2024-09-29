@@ -1,4 +1,4 @@
-package com.example.backend.Client.util;
+package com.example.backend.Library.util;
 
 public class DemoUtil {
 }
