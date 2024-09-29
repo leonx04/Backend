@@ -6,10 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * DTO (Data Transfer Object) cho Voucher quản trị.
+ * Chứa thông tin chi tiết về voucher và được sử dụng để truyền dữ liệu giữa các lớp.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

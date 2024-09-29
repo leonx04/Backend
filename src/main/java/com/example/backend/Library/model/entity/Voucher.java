@@ -10,7 +10,10 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-
+/**
+ * Lớp thực thể Voucher đại diện cho bảng Voucher trong cơ sở dữ liệu.
+ * Chứa thông tin chi tiết về voucher, bao gồm mã, mô tả, thời gian và giá trị giảm giá.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

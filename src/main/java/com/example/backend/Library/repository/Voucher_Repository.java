@@ -10,17 +10,61 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Repository để quản lý các đối tượng Voucher.
+ * Sử dụng JpaRepository để cung cấp các phương thức CRUD cơ bản.
+ */
 @Repository
 public interface Voucher_Repository extends JpaRepository<Voucher, Integer> {
+
+    /**
+     * Tìm kiếm các voucher theo trạng thái.
+     *
+     * @param status trạng thái của voucher
+     * @return danh sách voucher theo trạng thái
+     */
     List<Voucher> findByStatus(Integer status);
 
+    /**
+     * Tìm kiếm các voucher trong khoảng thời gian cho trước.
+     *
+     * @param startDate thời gian bắt đầu
+     * @param endDate thời gian kết thúc
+     * @return danh sách voucher trong khoảng thời gian
+     */
     @Query("SELECT v FROM Voucher v WHERE v.startDate >= :startDate AND v.endDate <= :endDate")
     List<Voucher> findByDateRange(LocalDateTime startDate, LocalDateTime endDate);
 
+    /**
+     * Tìm kiếm các voucher có giá trị giảm giá nằm trong khoảng giá trị cho trước.
+     *
+     * @param minValue giá trị giảm giá tối thiểu
+     * @param maxValue giá trị giảm giá tối đa
+     * @return danh sách voucher trong khoảng giá trị giảm giá
+     */
     List<Voucher> findByDiscountValueBetween(BigDecimal minValue, BigDecimal maxValue);
 
+    /**
+     * Tìm kiếm các voucher theo loại voucher.
+     *
+     * @param voucherType loại voucher
+     * @return danh sách voucher theo loại
+     */
     List<Voucher> findByVoucherType(String voucherType);
 
+    /**
+     * Tìm kiếm voucher dựa trên nhiều tiêu chí khác nhau.
+     *
+     * @param code mã voucher
+     * @param description mô tả voucher
+     * @param minValue giá trị giảm giá tối thiểu
+     * @param maxValue giá trị giảm giá tối đa
+     * @param status trạng thái voucher
+     * @param voucherType loại voucher
+     * @param startDate thời gian bắt đầu
+     * @param endDate thời gian kết thúc
+     * @return danh sách voucher tìm kiếm được
+     */
     @Query("SELECT v FROM Voucher v WHERE " +
             "(:code IS NULL OR v.code LIKE %:code%) AND " +
             "(:description IS NULL OR v.description LIKE %:description%) AND " +
@@ -38,4 +82,7 @@ public interface Voucher_Repository extends JpaRepository<Voucher, Integer> {
                                  @Param("voucherType") String voucherType,
                                  @Param("startDate") LocalDateTime startDate,
                                  @Param("endDate") LocalDateTime endDate);
+
+    // Phương thức tìm các voucher có ngày kết thúc trước thời điểm hiện tại
+    List<Voucher> findByEndDateBefore(LocalDateTime endDate);
 }
