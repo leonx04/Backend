@@ -1,5 +1,6 @@
 package com.example.backend.Library.repository;
 
+import com.example.backend.Library.model.dto.Voucher_Admin_DTO;
 import com.example.backend.Library.model.entity.Voucher;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Repository để quản lý các đối tượng Voucher.
@@ -85,4 +87,6 @@ public interface Voucher_Repository extends JpaRepository<Voucher, Integer> {
 
     // Phương thức tìm các voucher có ngày kết thúc trước thời điểm hiện tại
     List<Voucher> findByEndDateBefore(LocalDateTime endDate);
+
+    Optional<Voucher> findByCode(String code);
 }

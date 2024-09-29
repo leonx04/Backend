@@ -156,4 +156,10 @@ public class VoucherAdminController {
     public ResponseEntity<Voucher_Admin_DTO> getVoucherById(@PathVariable Integer id) {
         return ResponseEntity.ok(voucherService.getVoucherById(id));
     }
+
+    @GetMapping("/{code}")
+    public ResponseEntity<Voucher_Admin_DTO> getVoucherByCode(@PathVariable String code) {
+        return ResponseEntity.ok(voucherService.getVoucherByCode(code));
+    }
+
 }

@@ -105,4 +105,6 @@ public interface VoucherService {
      * @return Voucher_Admin_DTO chứa thông tin của voucher
      */
     Voucher_Admin_DTO getVoucherById(Integer id);
+
+    Voucher_Admin_DTO getVoucherByCode(String code);
 }

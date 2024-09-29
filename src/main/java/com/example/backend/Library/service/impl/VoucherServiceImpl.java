@@ -188,4 +188,10 @@ public class VoucherServiceImpl implements VoucherService {
                 .orElseThrow(() -> new RuntimeException("Voucher not found")); // Kiểm tra xem voucher có tồn tại không
         return VoucherMapper.INSTANCE.toDto(voucher); // Chuyển đổi từ entity sang DTO và trả về
     }
+    @Override
+    public Voucher_Admin_DTO getVoucherByCode(String code) {
+        Voucher voucher = voucherRepository.findByCode(code)
+                .orElseThrow(() -> new RuntimeException("Voucher not found")); // Kiểm tra xem voucher có tồn tại không
+        return VoucherMapper.INSTANCE.toDto(voucher); // Chuyển đổi từ entity sang DTO và trả về
+    }
 }
