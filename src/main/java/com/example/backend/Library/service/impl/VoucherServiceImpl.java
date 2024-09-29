@@ -1,10 +1,12 @@
 package com.example.backend.Library.service.impl;
 
+import com.example.backend.Library.exception.ExceptionHandles;
 import com.example.backend.Library.model.dto.Voucher_Admin_DTO;
 import com.example.backend.Library.model.entity.Voucher;
 import com.example.backend.Library.model.mapper.VoucherMapper;
 import com.example.backend.Library.repository.Voucher_Repository;
 import com.example.backend.Library.service.interfaces.VoucherService;
+import com.example.backend.Library.validation.VoucherValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +33,7 @@ public class VoucherServiceImpl implements VoucherService {
     public List<Voucher_Admin_DTO> getAllVouchers() {
         return voucherRepository.findAll().stream()
                 .map(VoucherMapper.INSTANCE::toDto) // Chuyển đổi từ Voucher sang Voucher_Admin_DTO
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); // Trả về danh sách DTO
     }
 
     /**
@@ -43,8 +45,8 @@ public class VoucherServiceImpl implements VoucherService {
     @Override
     public List<Voucher_Admin_DTO> getVouchersByStatus(Integer status) {
         return voucherRepository.findByStatus(status).stream()
-                .map(VoucherMapper.INSTANCE::toDto)
-                .collect(Collectors.toList());
+                .map(VoucherMapper.INSTANCE::toDto) // Chuyển đổi từ Voucher sang Voucher_Admin_DTO
+                .collect(Collectors.toList()); // Trả về danh sách DTO
     }
 
     /**
@@ -57,8 +59,8 @@ public class VoucherServiceImpl implements VoucherService {
     @Override
     public List<Voucher_Admin_DTO> getVouchersByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
         return voucherRepository.findByDateRange(startDate, endDate).stream()
-                .map(VoucherMapper.INSTANCE::toDto)
-                .collect(Collectors.toList());
+                .map(VoucherMapper.INSTANCE::toDto) // Chuyển đổi từ Voucher sang Voucher_Admin_DTO
+                .collect(Collectors.toList()); // Trả về danh sách DTO
     }
 
     /**
@@ -71,8 +73,8 @@ public class VoucherServiceImpl implements VoucherService {
     @Override
     public List<Voucher_Admin_DTO> getVouchersByValueRange(BigDecimal minValue, BigDecimal maxValue) {
         return voucherRepository.findByDiscountValueBetween(minValue, maxValue).stream()
-                .map(VoucherMapper.INSTANCE::toDto)
-                .collect(Collectors.toList());
+                .map(VoucherMapper.INSTANCE::toDto) // Chuyển đổi từ Voucher sang Voucher_Admin_DTO
+                .collect(Collectors.toList()); // Trả về danh sách DTO
     }
 
     /**
@@ -84,8 +86,8 @@ public class VoucherServiceImpl implements VoucherService {
     @Override
     public List<Voucher_Admin_DTO> getVouchersByType(String voucherType) {
         return voucherRepository.findByVoucherType(voucherType).stream()
-                .map(VoucherMapper.INSTANCE::toDto)
-                .collect(Collectors.toList());
+                .map(VoucherMapper.INSTANCE::toDto) // Chuyển đổi từ Voucher sang Voucher_Admin_DTO
+                .collect(Collectors.toList()); // Trả về danh sách DTO
     }
 
     /**
@@ -111,10 +113,10 @@ public class VoucherServiceImpl implements VoucherService {
                                                   LocalDateTime startDate,
                                                   LocalDateTime endDate) {
         List<Voucher> vouchers = voucherRepository.searchVouchers(code, description, minValue, maxValue,
-                status, voucherType, startDate, endDate);
+                status, voucherType, startDate, endDate); // Tìm kiếm voucher theo các tiêu chí
         return vouchers.stream()
-                .map(VoucherMapper.INSTANCE::toDto)
-                .collect(Collectors.toList());
+                .map(VoucherMapper.INSTANCE::toDto) // Chuyển đổi từ Voucher sang Voucher_Admin_DTO
+                .collect(Collectors.toList()); // Trả về danh sách DTO
     }
 
     /**
@@ -125,11 +127,16 @@ public class VoucherServiceImpl implements VoucherService {
      */
     @Override
     public Voucher_Admin_DTO createVoucher(Voucher_Admin_DTO voucherDto) {
+        List<String> validationErrors = VoucherValidator.validateVoucher(voucherDto); // Xác thực thông tin voucher
+        if (!validationErrors.isEmpty()) {
+            throw new ExceptionHandles.ValidationException(validationErrors); // Ném ra lỗi nếu có vấn đề xác thực
+        }
+
         Voucher voucher = VoucherMapper.INSTANCE.toEntity(voucherDto); // Chuyển đổi từ DTO sang entity
-        voucher.setCreatedDate(LocalDateTime.now()); // Thiết lập ngày tạo
-        voucher.setUpdatedDate(LocalDateTime.now()); // Thiết lập ngày cập nhật
+        voucher.setCreatedDate(LocalDateTime.now()); // Thiết lập thời gian tạo
+        voucher.setUpdatedDate(LocalDateTime.now()); // Thiết lập thời gian cập nhật
         voucher = voucherRepository.save(voucher); // Lưu voucher vào cơ sở dữ liệu
-        return VoucherMapper.INSTANCE.toDto(voucher); // Chuyển đổi trở lại thành DTO
+        return VoucherMapper.INSTANCE.toDto(voucher); // Trả về DTO của voucher đã tạo
     }
 
     /**
@@ -141,16 +148,22 @@ public class VoucherServiceImpl implements VoucherService {
      */
     @Override
     public Voucher_Admin_DTO updateVoucher(Integer id, Voucher_Admin_DTO voucherDto) {
-        Voucher existingVoucher = voucherRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Voucher not found")); // Kiểm tra xem voucher có tồn tại không
+        List<String> validationErrors = VoucherValidator.validateVoucher(voucherDto); // Xác thực thông tin voucher
+        if (!validationErrors.isEmpty()) {
+            throw new ExceptionHandles.ValidationException(validationErrors); // Ném ra lỗi nếu có vấn đề xác thực
+        }
 
-        Voucher updatedVoucher = VoucherMapper.INSTANCE.toEntity(voucherDto); // Chuyển đổi từ DTO sang entity
-        updatedVoucher.setId(existingVoucher.getId()); // Giữ lại id cũ
-        updatedVoucher.setCreatedDate(existingVoucher.getCreatedDate()); // Giữ lại ngày tạo cũ
-        updatedVoucher.setUpdatedDate(LocalDateTime.now()); // Cập nhật ngày hiện tại
+        Voucher existingVoucher = voucherRepository.findById(id)
+                .orElseThrow(() -> new ExceptionHandles.ResourceNotFoundException("Voucher not found with id: " + id)); // Kiểm tra xem voucher có tồn tại không
+
+        // Chuyển đổi từ DTO sang entity và cập nhật các thông tin cần thiết
+        Voucher updatedVoucher = VoucherMapper.INSTANCE.toEntity(voucherDto);
+        updatedVoucher.setId(existingVoucher.getId()); // Giữ nguyên ID của voucher cũ
+        updatedVoucher.setCreatedDate(existingVoucher.getCreatedDate()); // Giữ nguyên thời gian tạo
+        updatedVoucher.setUpdatedDate(LocalDateTime.now()); // Thiết lập thời gian cập nhật mới
 
         updatedVoucher = voucherRepository.save(updatedVoucher); // Lưu voucher đã cập nhật vào cơ sở dữ liệu
-        return VoucherMapper.INSTANCE.toDto(updatedVoucher); // Chuyển đổi trở lại thành DTO
+        return VoucherMapper.INSTANCE.toDto(updatedVoucher); // Trả về DTO của voucher đã cập nhật
     }
 
     /**
@@ -173,6 +186,6 @@ public class VoucherServiceImpl implements VoucherService {
     public Voucher_Admin_DTO getVoucherById(Integer id) {
         Voucher voucher = voucherRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Voucher not found")); // Kiểm tra xem voucher có tồn tại không
-        return VoucherMapper.INSTANCE.toDto(voucher); // Chuyển đổi từ entity sang DTO
+        return VoucherMapper.INSTANCE.toDto(voucher); // Chuyển đổi từ entity sang DTO và trả về
     }
 }
