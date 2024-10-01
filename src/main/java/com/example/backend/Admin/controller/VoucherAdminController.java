@@ -16,7 +16,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/admin/vouchers")
-@CrossOrigin(origins = "http://localhost:4200") // Cho phép truy cập từ địa chỉ này
+@CrossOrigin(origins =  "http://127.0.0.1:5501") // Cho phép truy cập từ địa chỉ này
 public class VoucherAdminController {
 
     @Autowired

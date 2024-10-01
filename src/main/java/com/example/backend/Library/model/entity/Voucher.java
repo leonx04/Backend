@@ -47,9 +47,6 @@ public class Voucher {
     @Column(name = "VoucherType")
     private String voucherType;
 
-    @Column(name = "CustomerLimit")
-    private Integer customerLimit;
-
     @Column(name = "MaximumDiscountAmount")
     private BigDecimal maximumDiscountAmount;
 

@@ -27,7 +27,6 @@ public class VoucherValidator {
         errors.addAll(validateDiscountValue(voucherDto.getDiscountValue(), voucherDto.getVoucherType())); // Xác thực giá trị giảm giá
         errors.addAll(validateMinimumOrderValue(voucherDto.getMinimumOrderValue())); // Xác thực giá trị đơn hàng tối thiểu
         errors.addAll(validateVoucherType(voucherDto.getVoucherType())); // Xác thực loại voucher
-        errors.addAll(validateCustomerLimit(voucherDto.getCustomerLimit(), voucherDto.getQuantity())); // Xác thực giới hạn khách hàng
         errors.addAll(validateMaximumDiscountAmount(voucherDto.getMaximumDiscountAmount(), voucherDto.getVoucherType(), voucherDto.getDiscountValue())); // Xác thực số tiền giảm giá tối đa
         errors.addAll(validateQuantity(voucherDto.getQuantity())); // Xác thực số lượng
         errors.addAll(validateStatus(voucherDto.getStatus())); // Xác thực trạng thái
@@ -126,18 +125,6 @@ public class VoucherValidator {
         return errors; // Trả về danh sách lỗi
     }
 
-    // Phương thức xác thực giới hạn khách hàng
-    private static List<String> validateCustomerLimit(Integer customerLimit, Integer quantity) {
-        List<String> errors = new ArrayList<>();
-        if (customerLimit == null) {
-            errors.add("Giới hạn khách hàng là bắt buộc"); // Lỗi: giới hạn khách hàng không được để trống
-        } else if (customerLimit < 0) {
-            errors.add("Giới hạn khách hàng không được âm"); // Lỗi: giới hạn khách hàng không được âm
-        } else if (quantity != null && customerLimit > quantity) {
-            errors.add("Giới hạn khách hàng không được vượt quá tổng số lượng voucher"); // Lỗi: giới hạn khách hàng vượt quá tổng số lượng voucher
-        }
-        return errors; // Trả về danh sách lỗi
-    }
 
     // Phương thức xác thực số tiền giảm giá tối đa
     private static List<String> validateMaximumDiscountAmount(BigDecimal maximumDiscountAmount, String voucherType, BigDecimal discountValue) {

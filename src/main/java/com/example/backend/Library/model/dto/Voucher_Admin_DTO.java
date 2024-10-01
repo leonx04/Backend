@@ -28,7 +28,6 @@ public class Voucher_Admin_DTO {
     private BigDecimal discountValue;
     private BigDecimal minimumOrderValue;
     private String voucherType;
-    private Integer customerLimit;
     private BigDecimal maximumDiscountAmount;
     private Integer quantity;
     private Integer status;
