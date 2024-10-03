@@ -127,17 +127,45 @@ public class VoucherServiceImpl implements VoucherService {
      */
     @Override
     public Voucher_Admin_DTO createVoucher(Voucher_Admin_DTO voucherDto) {
-        List<String> validationErrors = VoucherValidator.validateVoucher(voucherDto); // Xác thực thông tin voucher
+        // Kiểm tra tính hợp lệ của dữ liệu voucher
+        List<String> validationErrors = VoucherValidator.validateVoucher(voucherDto);
         if (!validationErrors.isEmpty()) {
-            throw new ExceptionHandles.ValidationException(validationErrors); // Ném ra lỗi nếu có vấn đề xác thực
+            // Ném ngoại lệ nếu có lỗi xác thực
+            throw new ExceptionHandles.ValidationException(validationErrors);
         }
 
-        Voucher voucher = VoucherMapper.INSTANCE.toEntity(voucherDto); // Chuyển đổi từ DTO sang entity
-        voucher.setCreatedDate(LocalDateTime.now()); // Thiết lập thời gian tạo
-        voucher.setUpdatedDate(LocalDateTime.now()); // Thiết lập thời gian cập nhật
-        voucher = voucherRepository.save(voucher); // Lưu voucher vào cơ sở dữ liệu
-        return VoucherMapper.INSTANCE.toDto(voucher); // Trả về DTO của voucher đã tạo
+        // Chuyển đổi từ DTO sang thực thể (entity)
+        Voucher voucher = VoucherMapper.INSTANCE.toEntity(voucherDto);
+
+        // Lấy ngày giờ hiện tại
+        LocalDateTime now = LocalDateTime.now();
+
+        // Thiết lập trạng thái dựa trên ngày bắt đầu và ngày kết thúc
+        if (voucher.getStartDate().isAfter(now)) {
+            // Trạng thái 3: Nếu ngày bắt đầu sau ngày hiện tại (tương lai)
+            voucher.setStatus(3);
+        } else if (voucher.getStartDate().isBefore(now) || voucher.getStartDate().isEqual(now)) {
+            // Nếu ngày bắt đầu <= ngày hiện tại
+            if (voucher.getEndDate().isAfter(now) || voucher.getEndDate().isEqual(now)) {
+                // Trạng thái 1: Nếu ngày hiện tại nằm trong khoảng từ ngày bắt đầu đến ngày kết thúc
+                voucher.setStatus(1);
+            } else {
+                // Trạng thái 2: Nếu voucher đã hết hạn (ngày kết thúc < ngày hiện tại)
+                voucher.setStatus(2);
+            }
+        }
+
+        // Thiết lập ngày tạo và ngày cập nhật là ngày hiện tại
+        voucher.setCreatedDate(now);
+        voucher.setUpdatedDate(now);
+
+        // Lưu voucher vào cơ sở dữ liệu
+        voucher = voucherRepository.save(voucher);
+
+        // Chuyển đổi thực thể thành DTO và trả về kết quả
+        return VoucherMapper.INSTANCE.toDto(voucher);
     }
+
 
     /**
      * Cập nhật thông tin của một voucher.

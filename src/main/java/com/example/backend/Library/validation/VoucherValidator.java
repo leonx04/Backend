@@ -29,7 +29,7 @@ public class VoucherValidator {
         errors.addAll(validateVoucherType(voucherDto.getVoucherType())); // Xác thực loại voucher
         errors.addAll(validateMaximumDiscountAmount(voucherDto.getMaximumDiscountAmount(), voucherDto.getVoucherType(), voucherDto.getDiscountValue())); // Xác thực số tiền giảm giá tối đa
         errors.addAll(validateQuantity(voucherDto.getQuantity())); // Xác thực số lượng
-        errors.addAll(validateStatus(voucherDto.getStatus())); // Xác thực trạng thái
+//        errors.addAll(validateStatus(voucherDto.getStatus())); // Xác thực trạng thái
 
         return errors; // Trả về danh sách lỗi
     }
@@ -155,13 +155,13 @@ public class VoucherValidator {
     }
 
     // Phương thức xác thực trạng thái
-    private static List<String> validateStatus(Integer status) {
-        List<String> errors = new ArrayList<>();
-        if (status == null) {
-            errors.add("Trạng thái là bắt buộc"); // Lỗi: trạng thái không được để trống
-        } else if (status < 0 || status > 1) {
-            errors.add("Trạng thái không hợp lệ. Phải là 0 (không hoạt động) hoặc 1 (hoạt động)"); // Lỗi: trạng thái không hợp lệ
-        }
-        return errors; // Trả về danh sách lỗi
-    }
+//    private static List<String> validateStatus(Integer status) {
+//        List<String> errors = new ArrayList<>();
+//        if (status == null) {
+//            errors.add("Trạng thái là bắt buộc"); // Lỗi: trạng thái không được để trống
+//        } else if (status < 0 || status > 1) {
+//            errors.add("Trạng thái không hợp lệ. Phải là 0 (không hoạt động) hoặc 1 (hoạt động)"); // Lỗi: trạng thái không hợp lệ
+//        }
+//        return errors; // Trả về danh sách lỗi
+//    }
 }

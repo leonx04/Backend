@@ -87,6 +87,7 @@ public interface Voucher_Repository extends JpaRepository<Voucher, Integer> {
 
     // Phương thức tìm các voucher có ngày kết thúc trước thời điểm hiện tại
     List<Voucher> findByEndDateBefore(LocalDateTime endDate);
-
+    // Phương thức tìm các voucher có ngày  bắt đầu trước thời điểm hiện tại
+    List<Voucher> findByStartDateAfter(LocalDateTime startDate);
     Optional<Voucher> findByCode(String code);
 }

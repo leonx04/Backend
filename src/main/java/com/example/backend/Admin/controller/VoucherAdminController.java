@@ -16,7 +16,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/admin/vouchers")
-@CrossOrigin(origins =  "http://127.0.0.1:5501") // Cho phép truy cập từ địa chỉ này
+@CrossOrigin(origins =  "http://127.0.0.1:5500/") // Cho phép truy cập từ địa chỉ này
 public class VoucherAdminController {
 
     @Autowired
@@ -157,9 +157,9 @@ public class VoucherAdminController {
         return ResponseEntity.ok(voucherService.getVoucherById(id));
     }
 
-    @GetMapping("/{code}")
-    public ResponseEntity<Voucher_Admin_DTO> getVoucherByCode(@PathVariable String code) {
-        return ResponseEntity.ok(voucherService.getVoucherByCode(code));
-    }
+//    @GetMapping("/{code}")
+//    public ResponseEntity<Voucher_Admin_DTO> getVoucherByCode(@PathVariable String code) {
+//        return ResponseEntity.ok(voucherService.getVoucherByCode(code));
+//    }
 
 }
