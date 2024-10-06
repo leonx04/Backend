@@ -1,13 +1,13 @@
-package com.example.backend.Library.model.dto;
+package com.example.backend.Library.model.dto.response;
 
-import lombok.Data;
+import lombok.Value;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
 
-@Data
-public class CustomerDto implements Serializable {
+@Value
+public class CustomerResponse implements Serializable {
     Integer id;
     String code;
     String userName;
