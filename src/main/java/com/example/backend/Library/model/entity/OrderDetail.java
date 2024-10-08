@@ -12,24 +12,24 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "OrderDetail")
+@Table(name = "orderdetail")
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "OrderId", nullable = false)
+    @JoinColumn(name = "orderid", nullable = false)
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "ProductDetailId", nullable = false)
+    @JoinColumn(name = "productdetailid", nullable = false)
     private ProductDetail productDetail;
 
     @Column(nullable = false)
     private Integer quantity;
 
     @Column(nullable = false)
-    private BigDecimal price;
+    private Double price;
 
 }

@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Order")
+@Table(name = "order")
 public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,15 +25,15 @@ public class Order extends BaseEntity {
     private String code;
 
     @ManyToOne
-    @JoinColumn(name = "UserId", nullable = false)
+    @JoinColumn(name = "userid", nullable = false)
     private Customer user;
 
     @ManyToOne
-    @JoinColumn(name = "EmployeeId", nullable = false)
+    @JoinColumn(name = "employeeid", nullable = false)
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "VoucherId")
+    @JoinColumn(name = "voucherid")
     private Voucher voucher;
 
     @OneToOne(mappedBy = "order")
@@ -47,12 +47,12 @@ public class Order extends BaseEntity {
     private LocalDateTime paymentDate;
 
     @Column(nullable = false)
-    private BigDecimal subtotal;
+    private Double subtotal;
 
-    private BigDecimal shippingCost;
+    private Double shippingCost;
 
     @Column(nullable = false)
-    private BigDecimal total;
+    private Double total;
 
     private String orderType;
     private String trackingNumber;
