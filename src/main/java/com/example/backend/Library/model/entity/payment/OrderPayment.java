@@ -1,33 +1,35 @@
-package com.example.backend.Library.model.entity;
-import jakarta.persistence.*;
+package com.example.backend.Library.model.entity.payment;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-@Entity
+
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
 @Table(name = "OrderPayment")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderPayment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
-    @OneToOne
-    @JoinColumn(name = "OrderId", nullable = false)
-    private Order order;
-
-    @ManyToOne
-    @JoinColumn(name = "PaymentId", nullable = false)
-    private Payment payment;
-
-    private String transaction;
+    private String methodName;
     private LocalDateTime paymentDate;
     private BigDecimal amount;
-    private Integer status;
+    private int status;
     private String note;
+
 }

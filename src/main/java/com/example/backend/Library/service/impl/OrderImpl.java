@@ -1,8 +1,6 @@
 package com.example.backend.Library.service.impl;
 
-import com.example.backend.Library.model.dto.OrderItemDTO;
 import com.example.backend.Library.model.dto.OrderListDTO;
-import com.example.backend.Library.model.entity.Order;
 import com.example.backend.Library.repository.OrderDetailRepository;
 import com.example.backend.Library.repository.OrderRepository;
 import com.example.backend.Library.service.interfaces.OrderInterface;
@@ -42,13 +40,14 @@ public class OrderImpl implements OrderInterface {
 
     @Override
     public List<OrderListDTO> getOrderList() {
-        return orderRepository.findAll().stream().map(order->{
-            OrderListDTO dto = new OrderListDTO();
-            dto.setOrderId(order.getCode());
-            dto.setCustomerName(order.getUser().getFullName());
-            dto.setTotalAmount(order.getTotal());
-            dto.setStatus(order.getOrderStatus());
-            return dto;
-        }).collect(Collectors.toList());
+//        return orderRepository.findAll().stream().map(order->{
+//            OrderListDTO dto = new OrderListDTO();
+//            dto.setOrderId(order.getCode());
+//            dto.setCustomerName(order.getUser().getFullName());
+//            dto.setTotalAmount(order.getTotal());
+//            dto.setStatus(order.getOrderStatus());
+//            return dto;
+//        }).collect(Collectors.toList());
+        return null;
     }
 }
