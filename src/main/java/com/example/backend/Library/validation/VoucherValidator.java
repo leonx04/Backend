@@ -1,6 +1,6 @@
 package com.example.backend.Library.validation;
 
-import com.example.backend.Library.model.dto.Voucher_Admin_DTO;
+import com.example.backend.Library.model.dto.request.voucher.Voucher_Admin_DTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

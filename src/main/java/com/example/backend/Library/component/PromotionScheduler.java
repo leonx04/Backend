@@ -1,6 +1,6 @@
 package com.example.backend.Library.component;
 
-import com.example.backend.Library.model.entity.Promotion;
+import com.example.backend.Library.model.entity.promotion.Promotion;
 import com.example.backend.Library.repository.Promotion_Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +46,7 @@ public class PromotionScheduler {
      * Phương thức lập lịch để cập nhật trạng thái khuyến mãi ở một tỷ lệ cố định.
      * Khoảng thời gian có thể được cấu hình qua thuộc tính ứng dụng (mặc định là 1 phút).
      */
-    @Scheduled(fixedRateString = "${promotion.update.interval:60000}")
+    @Scheduled(fixedRateString = "${promotion.update.interval:1000}")
     @Transactional
     public void updatePromotionStatuses() {
         LocalDateTime now = LocalDateTime.now(); // Lấy thời gian hiện tại

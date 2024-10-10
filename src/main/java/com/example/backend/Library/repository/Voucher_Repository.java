@@ -1,7 +1,6 @@
 package com.example.backend.Library.repository;
 
-import com.example.backend.Library.model.dto.Voucher_Admin_DTO;
-import com.example.backend.Library.model.entity.Voucher;
+import com.example.backend.Library.model.entity.voucher.Voucher;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

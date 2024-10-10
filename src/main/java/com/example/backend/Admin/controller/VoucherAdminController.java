@@ -1,6 +1,6 @@
 package com.example.backend.Admin.controller;
 
-import com.example.backend.Library.model.dto.Voucher_Admin_DTO;
+import com.example.backend.Library.model.dto.request.voucher.Voucher_Admin_DTO;
 import com.example.backend.Library.service.interfaces.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;

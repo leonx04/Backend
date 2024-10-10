@@ -1,4 +1,4 @@
-package com.example.backend.Library.model.dto;
+package com.example.backend.Library.model.dto.request.voucher;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package com.example.backend.Library.model.mapper;
 
-import com.example.backend.Library.model.dto.Promotion_Admin_DTO;
-import com.example.backend.Library.model.entity.Promotion;
+import com.example.backend.Library.model.dto.request.promotion.Promotion_Admin_DTO;
+import com.example.backend.Library.model.entity.promotion.Promotion;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -27,7 +27,7 @@ public interface PromotionMapper {
      */
     @Mapping(source = "createdAt", target = "createdAt")
     @Mapping(source = "updatedAt", target = "updatedAt")
-    @Mapping(source = "discountPercent", target = "discountPercent")
+    @Mapping(source = "discountPercentage", target = "discountPercentage")
     Promotion_Admin_DTO toDto(Promotion promotion);
 
     /**
@@ -37,8 +37,8 @@ public interface PromotionMapper {
      * @return đối tượng Promotion tương ứng
      */
     @Mapping(target = "id", ignore = true) // Bỏ qua việc ánh xạ trường id, thường dùng khi tạo mới entity
-    @Mapping(source = "discountPercent"
-            , target = "discountPercent")
+    @Mapping(source = "discountPercentage"
+            , target = "discountPercentage")
     Promotion toEntity(Promotion_Admin_DTO promotionDto);
 
     /**

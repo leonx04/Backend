@@ -1,4 +1,4 @@
-package com.example.backend.Library.model.dto;
+package com.example.backend.Library.model.dto.request.promotion;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ public class Promotion_Admin_DTO {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private Integer quantity;
-    private BigDecimal discountPercent;
+    private BigDecimal discountPercentage;
     private Integer status;
     private String createdAt;
     private String updatedAt;

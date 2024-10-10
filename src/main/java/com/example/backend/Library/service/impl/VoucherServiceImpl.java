@@ -1,8 +1,8 @@
 package com.example.backend.Library.service.impl;
 
 import com.example.backend.Library.exception.ExceptionHandles;
-import com.example.backend.Library.model.dto.Voucher_Admin_DTO;
-import com.example.backend.Library.model.entity.Voucher;
+import com.example.backend.Library.model.dto.request.voucher.Voucher_Admin_DTO;
+import com.example.backend.Library.model.entity.voucher.Voucher;
 import com.example.backend.Library.model.mapper.VoucherMapper;
 import com.example.backend.Library.repository.Voucher_Repository;
 import com.example.backend.Library.service.interfaces.VoucherService;
@@ -156,8 +156,8 @@ public class VoucherServiceImpl implements VoucherService {
         }
 
         // Thiết lập ngày tạo và ngày cập nhật là ngày hiện tại
-        voucher.setCreatedDate(now);
-        voucher.setUpdatedDate(now);
+        voucher.setCreatedAt(now);
+        voucher.setUpdatedAt(now);
 
         // Lưu voucher vào cơ sở dữ liệu
         voucher = voucherRepository.save(voucher);
@@ -187,8 +187,8 @@ public class VoucherServiceImpl implements VoucherService {
         // Chuyển đổi từ DTO sang entity và cập nhật các thông tin cần thiết
         Voucher updatedVoucher = VoucherMapper.INSTANCE.toEntity(voucherDto);
         updatedVoucher.setId(existingVoucher.getId()); // Giữ nguyên ID của voucher cũ
-        updatedVoucher.setCreatedDate(existingVoucher.getCreatedDate()); // Giữ nguyên thời gian tạo
-        updatedVoucher.setUpdatedDate(LocalDateTime.now()); // Thiết lập thời gian cập nhật mới
+        updatedVoucher.setCreatedAt(existingVoucher.getCreatedAt()); // Giữ nguyên thời gian tạo
+        updatedVoucher.setUpdatedAt(LocalDateTime.now()); // Thiết lập thời gian cập nhật mới
 
         updatedVoucher = voucherRepository.save(updatedVoucher); // Lưu voucher đã cập nhật vào cơ sở dữ liệu
         return VoucherMapper.INSTANCE.toDto(updatedVoucher); // Trả về DTO của voucher đã cập nhật

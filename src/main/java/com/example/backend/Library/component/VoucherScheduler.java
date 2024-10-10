@@ -1,6 +1,6 @@
 package com.example.backend.Library.component;
 
-import com.example.backend.Library.model.entity.Voucher;
+import com.example.backend.Library.model.entity.voucher.Voucher;
 import com.example.backend.Library.repository.Voucher_Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

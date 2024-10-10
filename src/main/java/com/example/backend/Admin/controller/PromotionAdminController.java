@@ -1,6 +1,6 @@
 package com.example.backend.Admin.controller;
 
-import com.example.backend.Library.model.dto.Promotion_Admin_DTO;
+import com.example.backend.Library.model.dto.request.promotion.Promotion_Admin_DTO;
 import com.example.backend.Library.service.interfaces.Promotion_Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;

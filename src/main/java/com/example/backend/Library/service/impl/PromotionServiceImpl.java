@@ -1,16 +1,12 @@
 package com.example.backend.Library.service.impl;
 
 import com.example.backend.Library.exception.ExceptionHandles;
-import com.example.backend.Library.exception.ExceptionHandles.ResourceNotFoundException;
-import com.example.backend.Library.model.dto.Promotion_Admin_DTO;
-import com.example.backend.Library.model.entity.Promotion;
+import com.example.backend.Library.model.dto.request.promotion.Promotion_Admin_DTO;
+import com.example.backend.Library.model.entity.promotion.Promotion;
 import com.example.backend.Library.model.mapper.PromotionMapper;
 import com.example.backend.Library.repository.Promotion_Repository;
 import com.example.backend.Library.service.interfaces.Promotion_Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -80,15 +76,6 @@ public class PromotionServiceImpl implements Promotion_Service {
 
         LocalDateTime now = LocalDateTime.now();
         updatedPromotion.setUpdatedAt(now);
-
-        // Xác định trạng thái dựa trên ngày bắt đầu và ngày kết thúc
-        if (updatedPromotion.getEndDate().isBefore(now)) {
-            updatedPromotion.setStatus(2); // Hết hạn
-        } else if (updatedPromotion.getStartDate().isAfter(now)) {
-            updatedPromotion.setStatus(3); // Tương lai
-        } else {
-            updatedPromotion.setStatus(1); // Hoạt động
-        }
 
         Promotion savedPromotion = promotionRepository.save(updatedPromotion);
         return PromotionMapper.INSTANCE.toDto(savedPromotion);

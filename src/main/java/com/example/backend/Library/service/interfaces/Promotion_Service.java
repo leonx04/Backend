@@ -1,11 +1,6 @@
 package com.example.backend.Library.service.interfaces;
 
-import com.example.backend.Library.model.dto.Promotion_Admin_DTO;
-import com.example.backend.Library.model.entity.Promotion;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import com.example.backend.Library.model.dto.request.promotion.Promotion_Admin_DTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
