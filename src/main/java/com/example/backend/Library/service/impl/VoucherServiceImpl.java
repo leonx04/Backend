@@ -150,8 +150,8 @@ public class VoucherServiceImpl implements VoucherService {
                 // Trạng thái 1: Nếu ngày hiện tại nằm trong khoảng từ ngày bắt đầu đến ngày kết thúc
                 voucher.setStatus(1);
             } else {
-                // Trạng thái 2: Nếu voucher đã hết hạn (ngày kết thúc < ngày hiện tại)
-                voucher.setStatus(2);
+                // Trạng thái 4: Nếu voucher đã hết hạn (ngày kết thúc < ngày hiện tại)
+                voucher.setStatus(4);
             }
         }
 

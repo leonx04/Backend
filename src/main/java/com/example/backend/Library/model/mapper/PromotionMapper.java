@@ -27,8 +27,6 @@ public interface PromotionMapper {
      */
     @Mapping(source = "createdAt", target = "createdAt")
     @Mapping(source = "updatedAt", target = "updatedAt")
-    @Mapping(source = "createdBy", target = "addBy")
-    @Mapping(source = "updatedBy", target = "editBy")
     @Mapping(source = "discountPercent", target = "discountPercent")
     Promotion_Admin_DTO toDto(Promotion promotion);
 
@@ -39,10 +37,6 @@ public interface PromotionMapper {
      * @return đối tượng Promotion tương ứng
      */
     @Mapping(target = "id", ignore = true) // Bỏ qua việc ánh xạ trường id, thường dùng khi tạo mới entity
-    @Mapping(source = "addBy",
-            target = "createdBy")
-    @Mapping(source = "editBy",
-            target = "updatedBy")
     @Mapping(source = "discountPercent"
             , target = "discountPercent")
     Promotion toEntity(Promotion_Admin_DTO promotionDto);

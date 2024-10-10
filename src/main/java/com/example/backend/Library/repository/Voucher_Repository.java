@@ -85,9 +85,6 @@ public interface Voucher_Repository extends JpaRepository<Voucher, Integer> {
                                  @Param("startDate") LocalDateTime startDate,
                                  @Param("endDate") LocalDateTime endDate);
 
-    List<Voucher> findByEndDateBefore(LocalDateTime endDate);
-    List<Voucher> findByStartDateAfter(LocalDateTime startDate);
-    List<Voucher> findByStartDateEquals(LocalDateTime startDate);
-    List<Voucher> findByQuantityAndStatusNot(Integer quantity, Integer status);
+
     Optional<Voucher> findByCode(String code);
 }

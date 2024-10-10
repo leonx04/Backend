@@ -1,6 +1,7 @@
 package com.example.backend.Library.repository;
 
 import com.example.backend.Library.model.entity.Promotion;
+import com.example.backend.Library.model.entity.Voucher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;

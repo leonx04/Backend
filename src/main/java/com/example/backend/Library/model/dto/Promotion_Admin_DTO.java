@@ -25,6 +25,5 @@ public class Promotion_Admin_DTO {
     private Integer status;
     private String createdAt;
     private String updatedAt;
-    private String addBy;
-    private String editBy;
+
 }

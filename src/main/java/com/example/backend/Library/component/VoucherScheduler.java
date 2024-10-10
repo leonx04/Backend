@@ -2,101 +2,157 @@ package com.example.backend.Library.component;
 
 import com.example.backend.Library.model.entity.Voucher;
 import com.example.backend.Library.repository.Voucher_Repository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+
 /**
- * VoucherScheduler chịu trách nhiệm tự động cập nhật trạng thái của các voucher
- * dựa trên các tiêu chí như ngày hết hạn, ngày bắt đầu, và số lượng.
- * Bộ lập lịch này chạy định kỳ để đảm bảo trạng thái của voucher luôn được cập nhật.
+ * Component chịu trách nhiệm lập lịch và cập nhật trạng thái voucher dựa trên tính hợp lệ của chúng.
+ * Trạng thái có thể bao gồm: Hoạt động, Không hoạt động, Sắp bắt đầu, Hết hạn, hoặc Đã hết hàng.
  */
 @Component
 public class VoucherScheduler {
 
-    @Autowired
-    private Voucher_Repository voucherRepository;
+    // Logger để ghi lại các cập nhật và thay đổi trạng thái
+    private static final Logger LOGGER = LoggerFactory.getLogger(VoucherScheduler.class);
+
+    // Hằng số trạng thái cho các trạng thái voucher khác nhau
+    private static final int ACTIVE_STATUS = 1;      // Voucher đang hoạt động
+    private static final int INACTIVE_STATUS = 2;    // Voucher không hoạt động (do nhân viên vô hiệu hóa)
+    private static final int UPCOMING_STATUS = 3;    // Voucher sắp bắt đầu
+    private static final int SOLD_OUT_STATUS = 0;    // Voucher đã hết hàng
+    private static final int EXPIRED_STATUS = 4;     // Voucher đã hết hạn (quá ngày kết thúc)
+
+    private final Voucher_Repository voucherRepository;
 
     /**
-     * Cập nhật trạng thái voucher mỗi giây.
-     * Phương thức này là điểm khởi đầu cho tất cả các hoạt động cập nhật trạng thái voucher.
+     * Constructor để tiêm vào repository Voucher.
+     *
+     * @param voucherRepository Repository để truy cập dữ liệu voucher
      */
-    @Scheduled(fixedRate = 1000) // Chạy mỗi giây
+    @Autowired
+    public VoucherScheduler(Voucher_Repository voucherRepository) {
+        this.voucherRepository = voucherRepository;
+    }
+
+    /**
+     * Phương thức lập lịch để cập nhật trạng thái voucher ở một tỷ lệ cố định.
+     * Khoảng thời gian có thể được cấu hình qua thuộc tính ứng dụng (mặc định là 1 giây).
+     */
+    @Scheduled(fixedRateString = "${voucher.update.interval:1000}")
+    @Transactional
     public void updateVoucherStatuses() {
         LocalDateTime now = LocalDateTime.now(); // Lấy thời gian hiện tại
-        LocalDate today = LocalDate.now(); // Lấy ngày hiện tại
+        List<Voucher> vouchers = voucherRepository.findAll(); // Lấy tất cả các voucher
 
-        updateExpiredVouchers(now); // Cập nhật các voucher đã hết hạn
-        updateFutureVouchers(now); // Cập nhật các voucher sắp có hiệu lực
-        updateStartingVouchers(today); // Cập nhật các voucher bắt đầu hôm nay
-        updateZeroQuantityVouchers(); // Cập nhật các voucher có số lượng bằng 0
+        // Cập nhật trạng thái cho các voucher cần thiết
+        vouchers.stream()
+                .filter(voucher -> needsStatusUpdate(voucher, now)) // Lọc các voucher cần cập nhật trạng thái
+                .forEach(voucher -> updateVoucherStatus(voucher, now)); // Cập nhật trạng thái cho từng voucher
     }
 
     /**
-     * Cập nhật trạng thái của các voucher đã hết hạn.
+     * Kiểm tra xem trạng thái voucher có cần cập nhật hay không.
      *
-     * @param now Thời gian hiện tại
+     * @param voucher Voucher cần kiểm tra
+     * @param now     Thời gian hiện tại
+     * @return true nếu trạng thái voucher cần cập nhật, false nếu không
      */
-    private void updateExpiredVouchers(LocalDateTime now) {
-        // Tìm các voucher đã kết thúc trước thời gian hiện tại
-        List<Voucher> expiredVouchers = voucherRepository.findByEndDateBefore(now);
-        for (Voucher voucher : expiredVouchers) {
-            // Cập nhật trạng thái thành 2 (hết hạn) nếu chưa phải
-            if (voucher.getStatus() != 2) {
-                voucher.setStatus(2);
-                voucherRepository.save(voucher);
-            }
-        }
+    private boolean needsStatusUpdate(Voucher voucher, LocalDateTime now) {
+        int newStatus = determineVoucherStatus(voucher, now); // Xác định trạng thái mới
+        return voucher.getStatus() != newStatus; // Kiểm tra xem trạng thái hiện tại có khác với trạng thái mới hay không
     }
 
     /**
-     * Cập nhật trạng thái của các voucher chưa bắt đầu.
+     * Cập nhật trạng thái của voucher và ghi lại thay đổi.
      *
-     * @param now Thời gian hiện tại
+     * @param voucher Voucher cần cập nhật
+     * @param now     Thời gian hiện tại
      */
-    private void updateFutureVouchers(LocalDateTime now) {
-        // Tìm các voucher có ngày bắt đầu sau thời gian hiện tại
-        List<Voucher> futureVouchers = voucherRepository.findByStartDateAfter(now);
-        for (Voucher voucher : futureVouchers) {
-            // Cập nhật trạng thái thành 3 (sắp có hiệu lực) nếu chưa phải
-            if (voucher.getStatus() != 3) {
-                voucher.setStatus(3);
-                voucherRepository.save(voucher);
-            }
-        }
+    private void updateVoucherStatus(Voucher voucher, LocalDateTime now) {
+        int newStatus = determineVoucherStatus(voucher, now); // Xác định trạng thái mới
+        voucher.setStatus(newStatus); // Cập nhật trạng thái cho voucher
+        voucherRepository.save(voucher); // Lưu thay đổi vào cơ sở dữ liệu
+        LOGGER.info("Đã cập nhật voucher: Mã = {}, Trạng thái mới = {}", voucher.getCode(), newStatus); // Ghi lại cập nhật
     }
 
     /**
-     * Cập nhật trạng thái của các voucher bắt đầu từ hôm nay.
+     * Xác định trạng thái của voucher dựa trên ngày bắt đầu, ngày kết thúc và số lượng.
      *
-     * @param today Ngày hiện tại
+     * @param voucher Voucher cần đánh giá
+     * @param now     Thời gian hiện tại
+     * @return Trạng thái của voucher dưới dạng số nguyên
      */
-    private void updateStartingVouchers(LocalDate today) {
-        // Tìm các voucher bắt đầu vào đầu ngày hôm nay
-        List<Voucher> startingVouchers = voucherRepository.findByStartDateEquals(today.atStartOfDay());
-        for (Voucher voucher : startingVouchers) {
-            // Cập nhật trạng thái thành 1 (hoạt động) nếu chưa phải
-            if (voucher.getStatus() != 1) {
-                voucher.setStatus(1);
-                voucherRepository.save(voucher);
-            }
+    private int determineVoucherStatus(Voucher voucher, LocalDateTime now) {
+        if (voucher.getStatus() == INACTIVE_STATUS) {
+            return INACTIVE_STATUS; // Giữ nguyên trạng thái nếu đã vô hiệu hóa voucher
+        }
+        if (isExpired(voucher, now)) {
+            return EXPIRED_STATUS; // Đánh dấu hết hạn nếu voucher đã quá ngày kết thúc
+        }
+        if (isActive(voucher, now)) {
+            return ACTIVE_STATUS; // Trạng thái hoạt động nếu thỏa mãn các điều kiện
+        } else if (isUpcoming(voucher, now)) {
+            return UPCOMING_STATUS; // Trạng thái sắp bắt đầu nếu ngày bắt đầu ở tương lai
+        } else if (isInactive(voucher, now)) {
+            return INACTIVE_STATUS; // Trạng thái không hoạt động nếu voucher hết hàng hoặc quá ngày kết thúc
+        } else {
+            return SOLD_OUT_STATUS; // Trạng thái hết hàng nếu số lượng voucher bằng 0
         }
     }
 
     /**
-     * Cập nhật trạng thái của các voucher có số lượng bằng 0.
-     * Phương thức này được gọi mỗi giây để nhanh chóng cập nhật các voucher hết hàng.
+     * Kiểm tra xem voucher có đang hoạt động hay không.
+     *
+     * @param voucher Voucher cần kiểm tra
+     * @param now     Thời gian hiện tại
+     * @return true nếu voucher đang hoạt động, false nếu không
      */
-    private void updateZeroQuantityVouchers() {
-        // Tìm các voucher có số lượng bằng 0 và trạng thái không phải 2 (hết hạn)
-        List<Voucher> zeroQuantityVouchers = voucherRepository.findByQuantityAndStatusNot(0, 2);
-        for (Voucher voucher : zeroQuantityVouchers) {
-            // Cập nhật trạng thái thành 2 (hết hạn hoặc không khả dụng)
-            voucher.setStatus(2);
-            voucherRepository.save(voucher);
-        }
+    private boolean isActive(Voucher voucher, LocalDateTime now) {
+        return Objects.nonNull(voucher.getStartDate()) &&
+                voucher.getStartDate().toLocalDate().equals(now.toLocalDate()) && // Ngày bắt đầu phải là hôm nay
+                voucher.getQuantity() > 0; // Voucher phải còn số lượng khả dụng
+    }
+
+    /**
+     * Kiểm tra xem voucher có sắp bắt đầu hay không.
+     *
+     * @param voucher Voucher cần kiểm tra
+     * @param now     Thời gian hiện tại
+     * @return true nếu voucher sắp bắt đầu, false nếu không
+     */
+    private boolean isUpcoming(Voucher voucher, LocalDateTime now) {
+        return Objects.nonNull(voucher.getStartDate()) &&
+                voucher.getStartDate().isAfter(now); // Ngày bắt đầu phải ở tương lai
+    }
+
+    /**
+     * Kiểm tra xem voucher có không hoạt động hay không.
+     *
+     * @param voucher Voucher cần kiểm tra
+     * @param now     Thời gian hiện tại
+     * @return true nếu voucher không hoạt động, false nếu không
+     */
+    private boolean isInactive(Voucher voucher, LocalDateTime now) {
+        return (Objects.nonNull(voucher.getEndDate()) && voucher.getEndDate().isBefore(now)) || // Ngày kết thúc phải ở quá khứ
+                voucher.getQuantity() == 0; // Voucher phải không còn số lượng khả dụng
+    }
+
+    /**
+     * Kiểm tra xem voucher có hết hạn hay không.
+     *
+     * @param voucher Voucher cần kiểm tra
+     * @param now     Thời gian hiện tại
+     * @return true nếu voucher đã hết hạn, false nếu không
+     */
+    private boolean isExpired(Voucher voucher, LocalDateTime now) {
+        return Objects.nonNull(voucher.getEndDate()) && voucher.getEndDate().isBefore(now); // Ngày kết thúc đã qua
     }
 }

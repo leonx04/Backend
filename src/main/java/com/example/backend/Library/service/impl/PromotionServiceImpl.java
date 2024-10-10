@@ -51,8 +51,20 @@ public class PromotionServiceImpl implements Promotion_Service {
     @Override
     public Promotion_Admin_DTO createPromotion(Promotion_Admin_DTO promotionDto) {
         Promotion promotion = PromotionMapper.INSTANCE.toEntity(promotionDto);
-        promotion.setCreatedAt(LocalDateTime.now());
-        promotion.setUpdatedAt(LocalDateTime.now());
+
+        LocalDateTime now = LocalDateTime.now();
+        promotion.setCreatedAt(now);
+        promotion.setUpdatedAt(now);
+
+        // Xác định trạng thái dựa trên ngày bắt đầu và ngày kết thúc
+        if (promotion.getEndDate().isBefore(now)) {
+            promotion.setStatus(4); // Hết hạn
+        } else if (promotion.getStartDate().isAfter(now)) {
+            promotion.setStatus(3); // Tương lai
+        } else {
+            promotion.setStatus(1); // Hoạt động
+        }
+
         Promotion savedPromotion = promotionRepository.save(promotion);
         return PromotionMapper.INSTANCE.toDto(savedPromotion);
     }
@@ -65,7 +77,18 @@ public class PromotionServiceImpl implements Promotion_Service {
         Promotion updatedPromotion = PromotionMapper.INSTANCE.toEntity(promotionDto);
         updatedPromotion.setId(existingPromotion.getId());
         updatedPromotion.setCreatedAt(existingPromotion.getCreatedAt());
-        updatedPromotion.setUpdatedAt(LocalDateTime.now());
+
+        LocalDateTime now = LocalDateTime.now();
+        updatedPromotion.setUpdatedAt(now);
+
+        // Xác định trạng thái dựa trên ngày bắt đầu và ngày kết thúc
+        if (updatedPromotion.getEndDate().isBefore(now)) {
+            updatedPromotion.setStatus(2); // Hết hạn
+        } else if (updatedPromotion.getStartDate().isAfter(now)) {
+            updatedPromotion.setStatus(3); // Tương lai
+        } else {
+            updatedPromotion.setStatus(1); // Hoạt động
+        }
 
         Promotion savedPromotion = promotionRepository.save(updatedPromotion);
         return PromotionMapper.INSTANCE.toDto(savedPromotion);

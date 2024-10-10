@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/promotions")
+@RequestMapping("/api/admin/promotions")
+@CrossOrigin(origins =  "http://127.0.0.1:5500/")
 public class PromotionAdminController {
     @Autowired
     private  Promotion_Service promotionService;
@@ -49,13 +50,13 @@ public class PromotionAdminController {
         return new ResponseEntity<>(createdPromotion, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Promotion_Admin_DTO> updatePromotion(@PathVariable Integer id, @RequestBody Promotion_Admin_DTO promotionDto) {
         Promotion_Admin_DTO updatedPromotion = promotionService.updatePromotion(id, promotionDto);
         return ResponseEntity.ok(updatedPromotion);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deletePromotion(@PathVariable Integer id) {
         promotionService.deletePromotion(id);
         return ResponseEntity.noContent().build();

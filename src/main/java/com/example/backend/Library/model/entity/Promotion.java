@@ -47,10 +47,6 @@ public class Promotion {
     @Column(name = "updatedAt")
     private LocalDateTime updatedAt;
 
-    @Column(name = "createdBy")
-    private String createdBy;
 
-    @Column(name = "updatedBy")
-    private String updatedBy;
 
 }
