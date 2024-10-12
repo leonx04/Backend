@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDetail extends BaseEntity {
-    private String code;
+ //   private String code;
     private int quantity;
     private BigDecimal price;
     private int weight;

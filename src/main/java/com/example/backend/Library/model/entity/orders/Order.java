@@ -4,13 +4,7 @@ import com.example.backend.Library.model.entity.customer.Customer;
 import com.example.backend.Library.model.entity.employee.Employee;
 import com.example.backend.Library.model.entity.payment.OrderPayment;
 import com.example.backend.Library.model.entity.voucher.Voucher;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,11 +13,12 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "Voucher")
+@Table(name = "orders")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,10 +27,8 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
+    @Column(name = "Code")
     private String code;
-
-
     @ManyToOne
     @JoinColumn(name = "userID", referencedColumnName = "id")
     private Customer user;
@@ -55,15 +48,21 @@ public class Order {
 
     private int orderStatus;
     private int shippingStatus;
-    private BigDecimal subtotal;
-    private BigDecimal shippingCost;
-    private BigDecimal total;
+    private Double subtotal;
+    private Double shippingCost;
+    private Double total;
     private String orderType;
     private String trackingNumber;
     private String notes;
+    @Column(name = "createdat")
     private LocalDateTime createdAt;
+    @Column(name = "updatedat")
     private LocalDateTime updatedAt;
+    @Column(name = "createdby")
     private int createdBy;
+    @Column(name = "updatedby")
     private int updatedBy;
 
+    @OneToMany(mappedBy = "order")
+    private List<OrderDetail> orderDetails;
 }

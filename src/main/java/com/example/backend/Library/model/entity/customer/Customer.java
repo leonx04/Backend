@@ -1,11 +1,7 @@
 package com.example.backend.Library.model.entity.customer;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,13 +28,14 @@ public class Customer {
     private String userName;
     private String passWord;
     private String fullName;
-    private int gender;
+    private String gender;
     private String email;
     private String phone;
     private LocalDate birthDate;
     private String imageUrl;
-
+    @Column(name = "CreatedAt")
     private LocalDate createAt;
+    @Column(name = "UpdatedAt")
     private LocalDate updateAt;
 
 

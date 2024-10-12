@@ -25,7 +25,6 @@ public class OrderPayment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     private String methodName;
     private LocalDateTime paymentDate;
     private BigDecimal amount;

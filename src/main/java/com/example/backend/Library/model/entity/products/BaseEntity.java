@@ -1,9 +1,6 @@
 package com.example.backend.Library.model.entity.products;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -20,11 +17,9 @@ public abstract class BaseEntity implements Serializable {
     private int id;
 
     @CreationTimestamp
-    private LocalDate createAt;
-    private int createBy;
+    private LocalDate createdAt;
+    private int createdBy;
     @CreationTimestamp
-    private LocalDate updateAt;
-    private int updateBy;
-
-
+    private LocalDate updatedAt;
+    private int updatedBy;
 }
