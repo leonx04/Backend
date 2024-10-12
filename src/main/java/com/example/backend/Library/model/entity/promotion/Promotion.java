@@ -31,8 +31,6 @@ public class Promotion {
 
     private LocalDateTime endDate;
 
-    private int quantity;
-
     private BigDecimal discountPercentage;
 
     private int status;

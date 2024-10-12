@@ -31,6 +31,6 @@ public class Voucher_Admin_DTO {
     private BigDecimal maximumDiscountAmount;
     private Integer quantity;
     private Integer status;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
 }

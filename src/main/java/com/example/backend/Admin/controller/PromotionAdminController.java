@@ -61,4 +61,5 @@ public class PromotionAdminController {
         promotionService.deletePromotion(id);
         return ResponseEntity.noContent().build();
     }
+    
 }

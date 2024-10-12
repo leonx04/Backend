@@ -1,4 +1,4 @@
-package com.example.backend.Library.model.mapper;
+package com.example.backend.Library.model.mapper.promotion;
 
 import com.example.backend.Library.model.dto.request.promotion.Promotion_Admin_DTO;
 import com.example.backend.Library.model.entity.promotion.Promotion;
@@ -25,8 +25,8 @@ public interface PromotionMapper {
      * @param promotion đối tượng Promotion cần chuyển đổi
      * @return đối tượng Promotion_Admin_DTO tương ứng
      */
-    @Mapping(source = "createdAt", target = "createdAt")
-    @Mapping(source = "updatedAt", target = "updatedAt")
+    @Mapping(source = "createdAt", target = "createdDate")
+    @Mapping(source = "updatedAt", target = "updatedDate")
     @Mapping(source = "discountPercentage", target = "discountPercentage")
     Promotion_Admin_DTO toDto(Promotion promotion);
 

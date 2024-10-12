@@ -15,7 +15,7 @@ import java.util.Objects;
 
 /**
  * Component chịu trách nhiệm lập lịch và cập nhật trạng thái khuyến mãi dựa trên tính hợp lệ của chúng.
- * Trạng thái có thể bao gồm: Hoạt động, Không hoạt động, Sắp bắt đầu, Hết hạn, hoặc Đã hết hàng.
+ * Trạng thái có thể bao gồm: Hoạt động, Không hoạt động, Sắp bắt đầu, Hết hạn.
  */
 @Component
 public class PromotionScheduler {
@@ -27,7 +27,6 @@ public class PromotionScheduler {
     private static final int ACTIVE_STATUS = 1;      // Khuyến mãi đang hoạt động
     private static final int INACTIVE_STATUS = 2;    // Khuyến mãi không hoạt động (do nhân viên vô hiệu hóa)
     private static final int UPCOMING_STATUS = 3;    // Khuyến mãi sắp bắt đầu
-    private static final int SOLD_OUT_STATUS = 0;    // Khuyến mãi đã hết hàng
     private static final int EXPIRED_STATUS = 4;     // Khuyến mãi đã hết hạn (quá ngày kết thúc)
 
     private final Promotion_Repository promotionRepository;
@@ -84,7 +83,7 @@ public class PromotionScheduler {
     }
 
     /**
-     * Xác định trạng thái của khuyến mãi dựa trên ngày bắt đầu, ngày kết thúc và số lượng.
+     * Xác định trạng thái của khuyến mãi dựa trên ngày bắt đầu và ngày kết thúc.
      *
      * @param promotion Khuyến mãi cần đánh giá
      * @param now       Thời gian hiện tại
@@ -101,10 +100,8 @@ public class PromotionScheduler {
             return ACTIVE_STATUS; // Trạng thái hoạt động nếu thỏa mãn các điều kiện
         } else if (isUpcoming(promotion, now)) {
             return UPCOMING_STATUS; // Trạng thái sắp bắt đầu nếu ngày bắt đầu ở tương lai
-        } else if (isInactive(promotion, now)) {
-            return INACTIVE_STATUS; // Trạng thái không hoạt động nếu khuyến mãi hết hàng hoặc quá ngày kết thúc
         } else {
-            return SOLD_OUT_STATUS; // Trạng thái hết hàng nếu số lượng khuyến mãi bằng 0
+            return INACTIVE_STATUS; // Trạng thái không hoạt động nếu không còn điều kiện nào khác
         }
     }
 
@@ -118,8 +115,7 @@ public class PromotionScheduler {
     private boolean isActive(Promotion promotion, LocalDateTime now) {
         return Objects.nonNull(promotion.getStartDate()) &&
                 !promotion.getStartDate().isAfter(now) && // Ngày bắt đầu phải là hôm nay hoặc trước đó
-                (Objects.isNull(promotion.getEndDate()) || promotion.getEndDate().isAfter(now)) && // Ngày kết thúc phải là trong tương lai hoặc chưa được đặt
-                promotion.getQuantity() > 0; // Khuyến mãi phải còn số lượng khả dụng
+                (Objects.isNull(promotion.getEndDate()) || promotion.getEndDate().isAfter(now)); // Ngày kết thúc phải là trong tương lai hoặc chưa được đặt
     }
 
     /**
@@ -132,18 +128,6 @@ public class PromotionScheduler {
     private boolean isUpcoming(Promotion promotion, LocalDateTime now) {
         return Objects.nonNull(promotion.getStartDate()) &&
                 promotion.getStartDate().isAfter(now); // Ngày bắt đầu phải ở tương lai
-    }
-
-    /**
-     * Kiểm tra xem khuyến mãi có không hoạt động hay không.
-     *
-     * @param promotion Khuyến mãi cần kiểm tra
-     * @param now       Thời gian hiện tại
-     * @return true nếu khuyến mãi không hoạt động, false nếu không
-     */
-    private boolean isInactive(Promotion promotion, LocalDateTime now) {
-        return (Objects.nonNull(promotion.getEndDate()) && promotion.getEndDate().isBefore(now)) || // Ngày kết thúc phải ở quá khứ
-                promotion.getQuantity() == 0; // Khuyến mãi phải không còn số lượng khả dụng
     }
 
     /**

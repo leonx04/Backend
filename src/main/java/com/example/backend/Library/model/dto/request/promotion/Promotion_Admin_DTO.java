@@ -20,10 +20,9 @@ public class Promotion_Admin_DTO {
     private String name;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private Integer quantity;
     private BigDecimal discountPercentage;
     private Integer status;
-    private String createdAt;
-    private String updatedAt;
+    private String createdDate;
+    private String updatedDate;
 
 }

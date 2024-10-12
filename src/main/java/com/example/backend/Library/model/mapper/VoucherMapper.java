@@ -23,8 +23,8 @@ public interface VoucherMapper {
      * @param voucher đối tượng Voucher cần chuyển đổi
      * @return đối tượng Voucher_Admin_DTO
      */
-    @Mapping(source = "createdAt", target = "createdAt") // Ánh xạ createdDate thành createdAt
-    @Mapping(source = "updatedAt", target = "updatedAt") // Ánh xạ updatedDate thành updatedAt
+    @Mapping(source = "createdAt", target = "createdDate") // Ánh xạ createdDate thành createdAt
+    @Mapping(source = "updatedAt", target = "updatedDate") // Ánh xạ updatedDate thành updatedAt
     Voucher_Admin_DTO toDto(Voucher voucher);
 
     /**
@@ -34,8 +34,8 @@ public interface VoucherMapper {
      * @return đối tượng Voucher
      */
     @Mapping(target = "id", ignore = true) // Bỏ qua ánh xạ cho trường id
-    @Mapping(source = "createdAt", target = "createdAt") // Ánh xạ createdAt thành createdDate
-    @Mapping(source = "updatedAt", target = "updatedAt") // Ánh xạ updatedAt thành updatedDate
+    @Mapping(source = "createdDate", target = "createdAt") // Ánh xạ createdAt thành createdDate
+    @Mapping(source = "updatedDate", target = "updatedAt") // Ánh xạ updatedAt thành updatedDate
     Voucher toEntity(Voucher_Admin_DTO voucherDto);
 
     /**
