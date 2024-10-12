@@ -4,6 +4,8 @@ import com.example.backend.Library.model.dto.request.voucher.Voucher_Admin_DTO;
 import com.example.backend.Library.service.interfaces.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -119,7 +121,10 @@ public class VoucherAdminController {
      */
     @PostMapping
     public ResponseEntity<Voucher_Admin_DTO> createVoucher(@RequestBody Voucher_Admin_DTO voucherDto) {
-        return ResponseEntity.ok(voucherService.createVoucher(voucherDto));
+        System.out.println("Debug - createVoucher - startDate: " + voucherDto.getStartDate());
+        System.out.println("Debug - createVoucher - endDate: " + voucherDto.getEndDate());
+        Voucher_Admin_DTO createdVoucher = voucherService.createVoucher(voucherDto);
+        return new ResponseEntity<>(createdVoucher, HttpStatus.CREATED);
     }
 
     /**
@@ -131,7 +136,10 @@ public class VoucherAdminController {
      */
     @PutMapping("update/{id}")
     public ResponseEntity<Voucher_Admin_DTO> updateVoucher(@PathVariable Integer id, @RequestBody Voucher_Admin_DTO voucherDto) {
-        return ResponseEntity.ok(voucherService.updateVoucher(id, voucherDto));
+        System.out.println("Debug - updateVoucher - startDate: " + voucherDto.getStartDate());
+        System.out.println("Debug - updateVoucher - endDate: " + voucherDto.getEndDate());
+        Voucher_Admin_DTO updatedVoucher = voucherService.updateVoucher(id, voucherDto);
+        return ResponseEntity.ok(updatedVoucher);
     }
 
     /**

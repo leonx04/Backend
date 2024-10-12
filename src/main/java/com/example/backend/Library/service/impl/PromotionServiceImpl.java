@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,21 @@ public class PromotionServiceImpl implements Promotion_Service {
 
     @Override
     public Promotion_Admin_DTO createPromotion(Promotion_Admin_DTO promotionDto) {
+        System.out.println("Debug - PromotionServiceImpl - createPromotion - startDate: " + promotionDto.getStartDate());
+        System.out.println("Debug - PromotionServiceImpl - createPromotion - endDate: " + promotionDto.getEndDate());
+
+        // Đảm bảo rằng ngày giờ được xử lý đúng cách
+        LocalDateTime startDate = promotionDto.getStartDate();
+        LocalDateTime endDate = promotionDto.getEndDate();
+
+        // Nếu cần, bạn có thể điều chỉnh múi giờ ở đây
+         ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
+         startDate = startDate.atZone(ZoneId.of("UTC")).withZoneSameInstant(zoneId).toLocalDateTime();
+         endDate = endDate.atZone(ZoneId.of("UTC")).withZoneSameInstant(zoneId).toLocalDateTime();
+
         Promotion promotion = PromotionMapper.INSTANCE.toEntity(promotionDto);
+        promotion.setStartDate(startDate);
+        promotion.setEndDate(endDate);
 
         LocalDateTime now = LocalDateTime.now();
         promotion.setCreatedAt(now);
@@ -67,19 +82,47 @@ public class PromotionServiceImpl implements Promotion_Service {
 
     @Override
     public Promotion_Admin_DTO updatePromotion(Integer id, Promotion_Admin_DTO promotionDto) {
+        System.out.println("Debug - PromotionServiceImpl - updatePromotion - startDate: " + promotionDto.getStartDate());
+        System.out.println("Debug - PromotionServiceImpl - updatePromotion - endDate: " + promotionDto.getEndDate());
+
+        // Tìm kiếm promotion hiện có trong DB
         Promotion existingPromotion = promotionRepository.findById(id)
                 .orElseThrow(() -> new ExceptionHandles.ResourceNotFoundException("Promotion not found with id: " + id));
 
+        // Đảm bảo rằng ngày giờ được xử lý đúng cách
+        LocalDateTime startDate = promotionDto.getStartDate();
+        LocalDateTime endDate = promotionDto.getEndDate();
+
+        // Điều chỉnh múi giờ nếu cần, tương tự như create
+        ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
+        startDate = startDate.atZone(ZoneId.of("UTC")).withZoneSameInstant(zoneId).toLocalDateTime();
+        endDate = endDate.atZone(ZoneId.of("UTC")).withZoneSameInstant(zoneId).toLocalDateTime();
+
+        // Chuyển đổi DTO sang Entity và cập nhật thông tin
         Promotion updatedPromotion = PromotionMapper.INSTANCE.toEntity(promotionDto);
         updatedPromotion.setId(existingPromotion.getId());
         updatedPromotion.setCreatedAt(existingPromotion.getCreatedAt());
+        updatedPromotion.setStartDate(startDate);
+        updatedPromotion.setEndDate(endDate);
 
+        // Cập nhật thời gian hiện tại cho updatedAt
         LocalDateTime now = LocalDateTime.now();
         updatedPromotion.setUpdatedAt(now);
 
+        // Xác định trạng thái dựa trên ngày bắt đầu và ngày kết thúc
+        if (updatedPromotion.getEndDate().isBefore(now)) {
+            updatedPromotion.setStatus(4); // Hết hạn
+        } else if (updatedPromotion.getStartDate().isAfter(now)) {
+            updatedPromotion.setStatus(3); // Tương lai
+        } else {
+            updatedPromotion.setStatus(1); // Hoạt động
+        }
+
+        // Lưu promotion đã cập nhật vào DB
         Promotion savedPromotion = promotionRepository.save(updatedPromotion);
         return PromotionMapper.INSTANCE.toDto(savedPromotion);
     }
+
 
     @Override
     public void deletePromotion(Integer id) {

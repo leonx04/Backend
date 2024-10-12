@@ -34,6 +34,8 @@ public class PromotionAdminController {
             @RequestParam(required = false) BigDecimal maxDiscount,
             @RequestParam(required = false) String code,
             @RequestParam(required = false) String name) {
+        System.out.println("Debug - searchPromotions - startDate: " + startDate);
+        System.out.println("Debug - searchPromotions - endDate: " + endDate);
         List<Promotion_Admin_DTO> promotions = promotionService.searchPromotions(startDate, endDate, minDiscount, maxDiscount, code, name);
         return ResponseEntity.ok(promotions);
     }
@@ -46,12 +48,16 @@ public class PromotionAdminController {
 
     @PostMapping
     public ResponseEntity<Promotion_Admin_DTO> createPromotion(@RequestBody Promotion_Admin_DTO promotionDto) {
+        System.out.println("Debug - createPromotion - startDate: " + promotionDto.getStartDate());
+        System.out.println("Debug - createPromotion - endDate: " + promotionDto.getEndDate());
         Promotion_Admin_DTO createdPromotion = promotionService.createPromotion(promotionDto);
         return new ResponseEntity<>(createdPromotion, HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Promotion_Admin_DTO> updatePromotion(@PathVariable Integer id, @RequestBody Promotion_Admin_DTO promotionDto) {
+        System.out.println("Debug - updatePromotion - startDate: " + promotionDto.getStartDate());
+        System.out.println("Debug - updatePromotion - endDate: " + promotionDto.getEndDate());
         Promotion_Admin_DTO updatedPromotion = promotionService.updatePromotion(id, promotionDto);
         return ResponseEntity.ok(updatedPromotion);
     }

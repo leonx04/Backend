@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -127,72 +128,81 @@ public class VoucherServiceImpl implements VoucherService {
      */
     @Override
     public Voucher_Admin_DTO createVoucher(Voucher_Admin_DTO voucherDto) {
-        // Kiểm tra tính hợp lệ của dữ liệu voucher
+        System.out.println("Debug - VoucherServiceImpl - createVoucher - startDate: " + voucherDto.getStartDate());
+        System.out.println("Debug - VoucherServiceImpl - createVoucher - endDate: " + voucherDto.getEndDate());
+
         List<String> validationErrors = VoucherValidator.validateVoucher(voucherDto);
         if (!validationErrors.isEmpty()) {
-            // Ném ngoại lệ nếu có lỗi xác thực
             throw new ExceptionHandles.ValidationException(validationErrors);
         }
 
-        // Chuyển đổi từ DTO sang thực thể (entity)
+        // Adjust time zone
+        ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
+        LocalDateTime startDate = voucherDto.getStartDate().atZone(ZoneId.of("UTC")).withZoneSameInstant(zoneId).toLocalDateTime();
+        LocalDateTime endDate = voucherDto.getEndDate().atZone(ZoneId.of("UTC")).withZoneSameInstant(zoneId).toLocalDateTime();
+
         Voucher voucher = VoucherMapper.INSTANCE.toEntity(voucherDto);
+        voucher.setStartDate(startDate);
+        voucher.setEndDate(endDate);
 
-        // Lấy ngày giờ hiện tại
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(zoneId);
 
-        // Thiết lập trạng thái dựa trên ngày bắt đầu và ngày kết thúc
         if (voucher.getStartDate().isAfter(now)) {
-            // Trạng thái 3: Nếu ngày bắt đầu sau ngày hiện tại (tương lai)
             voucher.setStatus(3);
         } else if (voucher.getStartDate().isBefore(now) || voucher.getStartDate().isEqual(now)) {
-            // Nếu ngày bắt đầu <= ngày hiện tại
             if (voucher.getEndDate().isAfter(now) || voucher.getEndDate().isEqual(now)) {
-                // Trạng thái 1: Nếu ngày hiện tại nằm trong khoảng từ ngày bắt đầu đến ngày kết thúc
                 voucher.setStatus(1);
             } else {
-                // Trạng thái 4: Nếu voucher đã hết hạn (ngày kết thúc < ngày hiện tại)
                 voucher.setStatus(4);
             }
         }
 
-        // Thiết lập ngày tạo và ngày cập nhật là ngày hiện tại
         voucher.setCreatedAt(now);
         voucher.setUpdatedAt(now);
 
-        // Lưu voucher vào cơ sở dữ liệu
         voucher = voucherRepository.save(voucher);
-
-        // Chuyển đổi thực thể thành DTO và trả về kết quả
         return VoucherMapper.INSTANCE.toDto(voucher);
     }
 
-
-    /**
-     * Cập nhật thông tin của một voucher.
-     *
-     * @param id        id của voucher cần cập nhật
-     * @param voucherDto thông tin voucher mới
-     * @return Voucher_Admin_DTO của voucher đã cập nhật
-     */
     @Override
     public Voucher_Admin_DTO updateVoucher(Integer id, Voucher_Admin_DTO voucherDto) {
-        List<String> validationErrors = VoucherValidator.validateVoucher(voucherDto); // Xác thực thông tin voucher
+        System.out.println("Debug - VoucherServiceImpl - updateVoucher - startDate: " + voucherDto.getStartDate());
+        System.out.println("Debug - VoucherServiceImpl - updateVoucher - endDate: " + voucherDto.getEndDate());
+
+        List<String> validationErrors = VoucherValidator.validateVoucher(voucherDto);
         if (!validationErrors.isEmpty()) {
-            throw new ExceptionHandles.ValidationException(validationErrors); // Ném ra lỗi nếu có vấn đề xác thực
+            throw new ExceptionHandles.ValidationException(validationErrors);
         }
 
-        Voucher existingVoucher = voucherRepository.findById(id)
-                .orElseThrow(() -> new ExceptionHandles.ResourceNotFoundException("Voucher not found with id: " + id)); // Kiểm tra xem voucher có tồn tại không
+        Voucher existingVoucher = voucherRepository.findById(id).orElseThrow(() -> new ExceptionHandles.ResourceNotFoundException("Voucher not found with id: " + id));
 
-        // Chuyển đổi từ DTO sang entity và cập nhật các thông tin cần thiết
+        // Adjust time zone
+        ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
+        LocalDateTime startDate = voucherDto.getStartDate().atZone(ZoneId.of("UTC")).withZoneSameInstant(zoneId).toLocalDateTime();
+        LocalDateTime endDate = voucherDto.getEndDate().atZone(ZoneId.of("UTC")).withZoneSameInstant(zoneId).toLocalDateTime();
+
         Voucher updatedVoucher = VoucherMapper.INSTANCE.toEntity(voucherDto);
-        updatedVoucher.setId(existingVoucher.getId()); // Giữ nguyên ID của voucher cũ
-        updatedVoucher.setCreatedAt(existingVoucher.getCreatedAt()); // Giữ nguyên thời gian tạo
-        updatedVoucher.setUpdatedAt(LocalDateTime.now()); // Thiết lập thời gian cập nhật mới
+        updatedVoucher.setId(existingVoucher.getId());
+        updatedVoucher.setCreatedAt(existingVoucher.getCreatedAt());
+        updatedVoucher.setStartDate(startDate);
+        updatedVoucher.setEndDate(endDate);
 
-        updatedVoucher = voucherRepository.save(updatedVoucher); // Lưu voucher đã cập nhật vào cơ sở dữ liệu
-        return VoucherMapper.INSTANCE.toDto(updatedVoucher); // Trả về DTO của voucher đã cập nhật
+        LocalDateTime now = LocalDateTime.now(zoneId);
+        updatedVoucher.setUpdatedAt(now);
+
+        // Update status based on current time and voucher dates
+        if (updatedVoucher.getEndDate().isBefore(now)) {
+            updatedVoucher.setStatus(4); // Expired
+        } else if (updatedVoucher.getStartDate().isAfter(now)) {
+            updatedVoucher.setStatus(3); // Future
+        } else {
+            updatedVoucher.setStatus(1); // Active
+        }
+
+        updatedVoucher = voucherRepository.save(updatedVoucher);
+        return VoucherMapper.INSTANCE.toDto(updatedVoucher);
     }
+
 
     /**
      * Xóa một voucher theo id.
