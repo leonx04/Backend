@@ -4,15 +4,16 @@ import com.example.backend.Library.model.dto.request.orders.ListOrderDTO;
 import com.example.backend.Library.model.dto.request.orders.OrderDTO;
 
 import com.example.backend.Library.model.dto.request.orders.OrderItemDTO;
-import com.example.backend.Library.model.entity.orders.Order;
 import com.example.backend.Library.model.entity.payment.OrderPayment;
 import com.example.backend.Library.model.entity.voucher.Voucher;
+import com.example.backend.Library.model.mapper.Orders.MapOrderFields;
 import com.example.backend.Library.repository.OrderDetailRepository;
 import com.example.backend.Library.repository.OrderRepository;
 import com.example.backend.Library.service.interfaces.OrderInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,12 +23,15 @@ public class OrderImpl implements OrderInterface {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
+    private MapOrderFields mapOrderFields;
+    @Autowired
     private OrderDetailRepository orderDetailRepository;
 
     @Override
-    public List<ListOrderDTO> OrderListAllfindCode(Integer id) {
-        return orderRepository.findByCodeContaining(id).stream().map(order -> {
+    public List<ListOrderDTO> OrderListAllfindCode(String code) {
+        return orderRepository.findByCodeContaining(code).stream().map(order -> {
             ListOrderDTO dto = new ListOrderDTO();
+            mapOrderFields.mapCommonOrderFields(order, dto);
            dto.setNotes(order.getNotes());
            dto.setVoucherCode(Optional.ofNullable(order.getVoucher()).map(Voucher::getCode).orElse(null));
 //           dto.setVoucherCode(order.getVoucher().getCode()!= null? order.getVoucher().getCode():null);
@@ -53,19 +57,22 @@ public class OrderImpl implements OrderInterface {
 
     @Override
     public List<OrderDTO> getOrder() {
-        return orderRepository.findAll().stream().map(order->{
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return orderRepository.findAll().stream().map(order -> {
             OrderDTO dto = new OrderDTO();
-            dto.setCode(order.getCode());
-            dto.setCustomerName(order.getUser().getFullName());
-            dto.setTotalAmount(order.getTotal());
-            dto.setEmployee(order.getEmployee().getFullName());
-            dto.setCreatedAt(order.getCreatedAt());
-            dto.setUpdatedAt(order.getUpdatedAt());
-            dto.setOrderType(order.getOrderType());
-            dto.setStatus(order.getOrderStatus());
+//            dto.setCode(order.getCode());
+//            dto.setCustomerName(order.getUser().getFullName());
+//            dto.setTotalAmount(order.getTotal());
+//            dto.setEmployee(order.getEmployee().getFullName());
+//            dto.setCreatedAt(order.getCreatedDate().format(dateTimeFormatter));
+//            dto.setUpdatedAt(order.getUpdatedDate().format(dateTimeFormatter));
+//            dto.setOrderType(order.getOrderType());
+//            dto.setStatus(order.getOrderStatus());
+            mapOrderFields.mapCommonOrderFields(order, dto);
             return dto;
         }).collect(Collectors.toList());
     }
+
 
 
 }

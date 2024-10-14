@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order,Integer> {
-    List<Order> findByCodeContaining(Integer id);
+    List<Order> findByCodeContaining(String  code);
 }

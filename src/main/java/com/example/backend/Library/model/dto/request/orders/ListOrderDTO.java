@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ListOrderDTO {
+public class ListOrderDTO extends OrderDTO {
     private String voucherCode;
     private String paymentMethod;
     private Double subtotal;

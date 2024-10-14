@@ -7,7 +7,7 @@ import com.example.backend.Library.model.entity.orders.Order;
 import java.util.List;
 
 public interface OrderInterface {
-    List<ListOrderDTO> OrderListAllfindCode(Integer id);
+    List<ListOrderDTO> OrderListAllfindCode(String code);
     List<OrderDTO> getOrder();
 
 

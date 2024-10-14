@@ -16,9 +16,9 @@ import java.util.List;
 public class ControllerGetListOrder {
     @Autowired
     private OrderImpl orderImpl;
-    @GetMapping("/{id}")
-    public ResponseEntity<List<ListOrderDTO>> getOrdersByCode(@PathVariable Integer id) {
-        List<ListOrderDTO> orders = orderImpl.OrderListAllfindCode(id);
+    @GetMapping("/{code}")
+    public ResponseEntity<List<ListOrderDTO>> getOrdersByCode(@PathVariable String code) {
+        List<ListOrderDTO> orders = orderImpl.OrderListAllfindCode(code);
         return ResponseEntity.ok(orders);
     }
 }

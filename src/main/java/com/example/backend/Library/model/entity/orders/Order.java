@@ -12,7 +12,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -55,9 +57,9 @@ public class Order {
     private String trackingNumber;
     private String notes;
     @Column(name = "createdat")
-    private LocalDateTime createdAt;
+    private LocalDateTime  createdAt;
     @Column(name = "updatedat")
-    private LocalDateTime updatedAt;
+    private LocalDateTime   updatedAt;
     @Column(name = "createdby")
     private int createdBy;
     @Column(name = "updatedby")
@@ -65,4 +67,15 @@ public class Order {
 
     @OneToMany(mappedBy = "order")
     private List<OrderDetail> orderDetails;
+    public String getOrderStatus() {
+        return OrderStatus.getDescriptionByCode(orderStatus);
+    }
+    // Phương thức để lấy ngày từ LocalDateTime
+    public LocalDate getCreatedDate() {
+        return createdAt.toLocalDate();
+    }
+
+    public LocalDate getUpdatedDate() {
+        return updatedAt.toLocalDate();
+    }
 }
