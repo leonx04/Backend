@@ -5,7 +5,7 @@ USE ShopShoesJN
 GO
 
 CREATE TABLE [Employee] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
   [Code] NVARCHAR(255) UNIQUE NOT NULL,
   [UserName] NVARCHAR(100) UNIQUE NOT NULL,
   [Password] NVARCHAR(255) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE [Employee] (
   [Phone] NVARCHAR(20),
   [Email] NVARCHAR(255),
   [Address] NVARCHAR(255),
-  [URL] NVARCHAR(255),
+  [ImageURL] NVARCHAR(255),
   [RoleId] INT DEFAULT (2),
   [Status] INT DEFAULT (1),
   [Note] NVARCHAR(MAX),
@@ -25,7 +25,7 @@ CREATE TABLE [Employee] (
 GO
 
 CREATE TABLE [Customer] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
   [Code] NVARCHAR(255) UNIQUE NOT NULL,
   [UserName] NVARCHAR(100) UNIQUE NOT NULL,
   [Password] NVARCHAR(255) NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE [Customer] (
   [Email] NVARCHAR(255) NOT NULL,
   [Phone] VARCHAR(20),
   [BirthDate] DATE,
-  [URL] NVARCHAR(255),
+  [ImageURL] NVARCHAR(255),
   [Status] INT DEFAULT (1),
   [CreatedAt] DATETIME DEFAULT (GETDATE()),
   [UpdatedAt] DATETIME DEFAULT (GETDATE())
@@ -42,9 +42,11 @@ CREATE TABLE [Customer] (
 GO
 
 CREATE TABLE [Address] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
   [CustomerId] INT NOT NULL,
   [DetailAddress] NVARCHAR(255) NOT NULL,
+  [RecipientName] NVARCHAR(255),
+  [RecipientPhone] NVARCHAR(20),
   [City] NVARCHAR(255) NOT NULL,
   [District] NVARCHAR(255) NOT NULL,
   [Commune] NVARCHAR(255) NOT NULL,
@@ -55,7 +57,7 @@ CREATE TABLE [Address] (
 GO
 
 CREATE TABLE [Product] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
   [Name] NVARCHAR(255) NOT NULL,
   [Description] NVARCHAR(MAX),
   [CategoryId] INT NOT NULL,
@@ -71,8 +73,8 @@ CREATE TABLE [Product] (
 GO
 
 CREATE TABLE [ProductImage] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
-  [ImageUrl] VARCHAR(255) NOT NULL,
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
+  [ImageURL] VARCHAR(255) NOT NULL,
   [ProductId] INT NOT NULL,
   [CreatedAt] DATETIME DEFAULT (GETDATE()),
   [UpdatedAt] DATETIME DEFAULT (GETDATE()),
@@ -82,8 +84,8 @@ CREATE TABLE [ProductImage] (
 GO
 
 CREATE TABLE [ProductDetail] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
-  [Code] VARCHAR(50) UNIQUE NOT NULL,
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
+  [Name] VARCHAR(50) UNIQUE NOT NULL,
   [Quantity] INT NOT NULL DEFAULT (0),
   [Price] DECIMAL(10,0) NOT NULL,
   [Weight] INT NOT NULL,
@@ -99,16 +101,13 @@ CREATE TABLE [ProductDetail] (
 )
 GO
 
-CREATE TABLE [Order] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
+CREATE TABLE [Orders] (
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
   [Code] NVARCHAR(250) UNIQUE NOT NULL,
   [UserId] INT NOT NULL,
   [EmployeeId] INT NOT NULL,
   [VoucherId] INT,
-  [OrderPayMentId] INT,
-  [RecipientName] NVARCHAR(255),
-  [RecipientPhone] NVARCHAR(20),
-  [TransactionCode] NVARCHAR(50),
+  [OrderPaymentId] INT NOT NULL,
   [OrderStatus] INT,
   [ShippingStatus] INT,
   [PaymentDate] DATETIME,
@@ -125,18 +124,10 @@ CREATE TABLE [Order] (
 )
 GO
 
-CREATE TABLE [Payment] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
-  [PaymentMethod] NVARCHAR(255) NOT NULL
-)
-GO
-
 CREATE TABLE [OrderPayment] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
-  [OrderId] INT NOT NULL,
-  [PaymentId] INT NOT NULL,
-  [Transaction] VARCHAR(255),
-  [PaymentDate] DATETIME,
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
+  [MethodName] NVARCHAR(255) NOT NULL,
+  [PaymentDate] DATETIME DEFAULT (GETDATE()),
   [Amount] DECIMAL(10,0),
   [Status] int,
   [Note] NVARCHAR(255)
@@ -144,7 +135,7 @@ CREATE TABLE [OrderPayment] (
 GO
 
 CREATE TABLE [OrderDetail] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
   [OrderId] INT NOT NULL,
   [ProductDetailId] INT NOT NULL,
   [Quantity] INT NOT NULL,
@@ -153,13 +144,13 @@ CREATE TABLE [OrderDetail] (
 GO
 
 CREATE TABLE [Cart] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
   [UserId] INT UNIQUE NOT NULL
 )
 GO
 
 CREATE TABLE [CartDetail] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
   [CartId] INT NOT NULL,
   [ProductDetailId] INT NOT NULL,
   [Quantity] INT NOT NULL
@@ -167,7 +158,7 @@ CREATE TABLE [CartDetail] (
 GO
 
 CREATE TABLE [Promotion] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
   [Code] NVARCHAR(255) UNIQUE NOT NULL,
   [Name] NVARCHAR(255) NOT NULL,
   [StartDate] DATETIME NOT NULL,
@@ -176,31 +167,19 @@ CREATE TABLE [Promotion] (
   [DiscountPercentage] DECIMAL(5,2),
   [Status] INT DEFAULT (1),
   [CreatedAt] DATETIME DEFAULT (GETDATE()),
-  [UpdatedAt] DATETIME DEFAULT (GETDATE()),
-  [CreatedBy] INT NOT NULL,
-  [UpdatedBy] INT NOT NULL
-)
-GO
-
-CREATE TABLE [CustomerVoucher] (
-  [Id] int UNIQUE NOT NULL,
-  [CustomerId] int NOT NULL,
-  [VoucherId] int NOT NULL,
-  [UsageCount] int,
-  [IsSaved] BIT
+  [UpdatedAt] DATETIME DEFAULT (GETDATE())
 )
 GO
 
 CREATE TABLE [Voucher] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
   [Code] NVARCHAR(255) UNIQUE NOT NULL,
-  [Name] NVARCHAR(255) NOT NULL,
+  [Description] NVARCHAR(255) NOT NULL,
   [StartDate] DATETIME NOT NULL,
   [EndDate] DATETIME NOT NULL,
-  [DiscountAmount] DECIMAL(10,0),
-  [DiscountPercentage] DECIMAL(5,2),
+  [DiscountValue] DECIMAL(15,0),
   [VoucherType] NVARCHAR(50) NOT NULL,
-  [MinimumDiscountAmount] DECIMAL(10,0),
+  [MinimumOrderValue] DECIMAL(10,0),
   [MaximumDiscountAmount] DECIMAL(10,0),
   [Quantity] INT NOT NULL,
   [Status] INT DEFAULT (1),
@@ -210,8 +189,7 @@ CREATE TABLE [Voucher] (
 GO
 
 CREATE TABLE [Size] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
-  [Code] NVARCHAR(255) UNIQUE NOT NULL,
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
   [Name] NVARCHAR(100) NOT NULL,
   [Status] INT DEFAULT (1),
   [CreatedAt] DATETIME DEFAULT (GETDATE()),
@@ -222,8 +200,7 @@ CREATE TABLE [Size] (
 GO
 
 CREATE TABLE [Color] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
-  [Code] NVARCHAR(255) UNIQUE NOT NULL,
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
   [Name] NVARCHAR(100) NOT NULL,
   [Status] INT DEFAULT (1),
   [CreatedAt] DATETIME DEFAULT (GETDATE()),
@@ -234,8 +211,7 @@ CREATE TABLE [Color] (
 GO
 
 CREATE TABLE [Category] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
-  [Code] NVARCHAR(255) UNIQUE NOT NULL,
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
   [Name] NVARCHAR(255) NOT NULL,
   [Status] INT DEFAULT (1),
   [CreatedAt] DATETIME DEFAULT (GETDATE()),
@@ -246,8 +222,7 @@ CREATE TABLE [Category] (
 GO
 
 CREATE TABLE [Brand] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
-  [Code] NVARCHAR(255) UNIQUE NOT NULL,
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
   [Name] NVARCHAR(255) NOT NULL,
   [Status] INT DEFAULT (1),
   [CreatedAt] DATETIME DEFAULT (GETDATE()),
@@ -258,8 +233,7 @@ CREATE TABLE [Brand] (
 GO
 
 CREATE TABLE [Material] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
-  [Code] NVARCHAR(255) UNIQUE NOT NULL,
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
   [Name] NVARCHAR(255) NOT NULL,
   [Status] INT DEFAULT (1),
   [CreatedAt] DATETIME DEFAULT (GETDATE()),
@@ -270,8 +244,7 @@ CREATE TABLE [Material] (
 GO
 
 CREATE TABLE [Sole] (
-  [Id] INT PRIMARY KEY NOT NULL IDENTITY(1, 1),
-  [Code] NVARCHAR(255) UNIQUE NOT NULL,
+  [Id] INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
   [Name] NVARCHAR(255) NOT NULL,
   [Status] INT DEFAULT (1),
   [CreatedAt] DATETIME DEFAULT (GETDATE()),
@@ -308,28 +281,19 @@ GO
 ALTER TABLE [ProductDetail] ADD FOREIGN KEY ([PromotionId]) REFERENCES [Promotion] ([Id])
 GO
 
-ALTER TABLE [OrderPayment] ADD FOREIGN KEY ([OrderId]) REFERENCES [Order] ([Id])
-GO
-
-ALTER TABLE [OrderPayment] ADD FOREIGN KEY ([PaymentId]) REFERENCES [Payment] ([Id])
-GO
-
-ALTER TABLE [OrderDetail] ADD FOREIGN KEY ([OrderId]) REFERENCES [Order] ([Id])
+ALTER TABLE [OrderDetail] ADD FOREIGN KEY ([OrderId]) REFERENCES [Orders] ([Id])
 GO
 
 ALTER TABLE [OrderDetail] ADD FOREIGN KEY ([ProductDetailId]) REFERENCES [ProductDetail] ([Id])
 GO
 
-ALTER TABLE [Order] ADD FOREIGN KEY ([VoucherId]) REFERENCES [Voucher] ([Id])
-GO
-
-ALTER TABLE [CustomerVoucher] ADD FOREIGN KEY ([CustomerId]) REFERENCES [Customer] ([Id])
+ALTER TABLE [Orders] ADD FOREIGN KEY ([VoucherId]) REFERENCES [Voucher] ([Id])
 GO
 
 ALTER TABLE [Address] ADD FOREIGN KEY ([CustomerId]) REFERENCES [Customer] ([Id])
 GO
 
-ALTER TABLE [Order] ADD FOREIGN KEY ([EmployeeId]) REFERENCES [Employee] ([Id])
+ALTER TABLE [Orders] ADD FOREIGN KEY ([EmployeeId]) REFERENCES [Employee] ([Id])
 GO
 
 ALTER TABLE [CartDetail] ADD FOREIGN KEY ([ProductDetailId]) REFERENCES [ProductDetail] ([Id])
@@ -341,5 +305,8 @@ GO
 ALTER TABLE [ProductDetail] ADD FOREIGN KEY ([ProductId]) REFERENCES [Product] ([Id])
 GO
 
-ALTER TABLE [CustomerVoucher] ADD FOREIGN KEY ([Id]) REFERENCES [Voucher] ([Id])
+ALTER TABLE [Orders] ADD FOREIGN KEY ([UserId]) REFERENCES [Customer] ([Id])
+GO
+
+ALTER TABLE [Orders] ADD FOREIGN KEY ([OrderPaymentId]) REFERENCES [OrderPayment] ([Id])
 GO
