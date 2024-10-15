@@ -1,11 +1,11 @@
-package com.example.backend.Admin.service;
+package com.example.backend.Library.service.impl;
 
-import com.example.backend.Admin.entity.Employee;
-import com.example.backend.Admin.repositoty.EmployeeRepo;
+
+import com.example.backend.Library.model.entity.Employee;
+import com.example.backend.Library.repository.EmployeeRepo;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import java.util.Date;
 import java.util.List;

@@ -1,6 +1,4 @@
-package com.example.backend.Admin.entity;
-
-import java.util.Date;
+package com.example.backend.Library.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

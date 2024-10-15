@@ -1,18 +1,16 @@
 package com.example.backend.Admin.controller;
-
-
-import com.example.backend.Admin.entity.Employee;
-import com.example.backend.Admin.service.EmployeeService;
+import com.example.backend.Library.model.entity.Employee;
+import com.example.backend.Library.repository.EmployeeRepo;
+import com.example.backend.Library.service.impl.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 @RestController
-@RequestMapping("/employees")
+@RequestMapping("/api/admin/employees")
 
 public class EmployeeController {
     @Autowired

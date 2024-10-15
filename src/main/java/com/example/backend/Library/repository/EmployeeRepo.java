@@ -1,6 +1,6 @@
-package com.example.backend.Admin.repositoty;
+package com.example.backend.Library.repository;
 
-import com.example.backend.Admin.entity.Employee;
+import com.example.backend.Library.model.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
