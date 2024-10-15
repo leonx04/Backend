@@ -3,6 +3,9 @@ package com.example.backend.Admin.controller;
 import com.example.backend.Library.model.dto.request.voucher.Voucher_Admin_DTO;
 import com.example.backend.Library.service.interfaces.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -30,8 +33,11 @@ public class VoucherAdminController {
      * @return danh sách voucher dưới dạng ResponseEntity
      */
     @GetMapping
-    public ResponseEntity<List<Voucher_Admin_DTO>> getAllVouchers() {
-        return ResponseEntity.ok(voucherService.getAllVouchers());
+    public ResponseEntity<Page<Voucher_Admin_DTO>> getAllVouchers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(voucherService.getAllVouchersPageable(pageable));
     }
 
     /**
@@ -98,7 +104,7 @@ public class VoucherAdminController {
      * @return danh sách voucher tìm kiếm được dưới dạng ResponseEntity
      */
     @GetMapping("/search")
-    public ResponseEntity<List<Voucher_Admin_DTO>> searchVouchers(
+    public ResponseEntity<Page<Voucher_Admin_DTO>> searchVouchers(
             @RequestParam(required = false) String code,
             @RequestParam(required = false) String description,
             @RequestParam(required = false) BigDecimal minValue,
@@ -106,10 +112,13 @@ public class VoucherAdminController {
             @RequestParam(required = false) Integer status,
             @RequestParam(required = false) String voucherType,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
-        List<Voucher_Admin_DTO> results = voucherService.searchVouchers(code, description, minValue, maxValue,
-                status, voucherType, startDate, endDate);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Voucher_Admin_DTO> results = voucherService.searchVouchersPageable(code, description, minValue, maxValue,
+                status, voucherType, startDate, endDate, pageable);
         return ResponseEntity.ok(results);
     }
 
@@ -134,7 +143,7 @@ public class VoucherAdminController {
      * @param voucherDto thông tin mới của voucher
      * @return voucher đã cập nhật dưới dạng ResponseEntity
      */
-    @PutMapping("update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Voucher_Admin_DTO> updateVoucher(@PathVariable Integer id, @RequestBody Voucher_Admin_DTO voucherDto) {
         System.out.println("Debug - updateVoucher - startDate: " + voucherDto.getStartDate());
         System.out.println("Debug - updateVoucher - endDate: " + voucherDto.getEndDate());
@@ -148,7 +157,7 @@ public class VoucherAdminController {
      * @param id id của voucher cần xóa
      * @return ResponseEntity không có nội dung
      */
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteVoucher(@PathVariable Integer id) {
         voucherService.deleteVoucher(id);
         return ResponseEntity.noContent().build(); // Trả về phản hồi không có nội dung

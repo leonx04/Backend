@@ -1,6 +1,8 @@
 package com.example.backend.Library.repository;
 
 import com.example.backend.Library.model.entity.voucher.Voucher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -53,19 +55,6 @@ public interface Voucher_Repository extends JpaRepository<Voucher, Integer> {
      */
     List<Voucher> findByVoucherType(String voucherType);
 
-    /**
-     * Tìm kiếm voucher dựa trên nhiều tiêu chí khác nhau.
-     *
-     * @param code mã voucher
-     * @param description mô tả voucher
-     * @param minValue giá trị giảm giá tối thiểu
-     * @param maxValue giá trị giảm giá tối đa
-     * @param status trạng thái voucher
-     * @param voucherType loại voucher
-     * @param startDate thời gian bắt đầu
-     * @param endDate thời gian kết thúc
-     * @return danh sách voucher tìm kiếm được
-     */
     @Query("SELECT v FROM Voucher v WHERE " +
             "(:code IS NULL OR v.code LIKE %:code%) AND " +
             "(:description IS NULL OR v.description LIKE %:description%) AND " +
@@ -75,14 +64,15 @@ public interface Voucher_Repository extends JpaRepository<Voucher, Integer> {
             "(:voucherType IS NULL OR v.voucherType = :voucherType) AND " +
             "(:startDate IS NULL OR v.startDate >= :startDate) AND " +
             "(:endDate IS NULL OR v.endDate <= :endDate)")
-    List<Voucher> searchVouchers(@Param("code") String code,
-                                 @Param("description") String description,
-                                 @Param("minValue") BigDecimal minValue,
-                                 @Param("maxValue") BigDecimal maxValue,
-                                 @Param("status") Integer status,
-                                 @Param("voucherType") String voucherType,
-                                 @Param("startDate") LocalDateTime startDate,
-                                 @Param("endDate") LocalDateTime endDate);
+    Page<Voucher> searchVouchersPageable(@Param("code") String code,
+                                         @Param("description") String description,
+                                         @Param("minValue") BigDecimal minValue,
+                                         @Param("maxValue") BigDecimal maxValue,
+                                         @Param("status") Integer status,
+                                         @Param("voucherType") String voucherType,
+                                         @Param("startDate") LocalDateTime startDate,
+                                         @Param("endDate") LocalDateTime endDate,
+                                         Pageable pageable);
 
 
     Optional<Voucher> findByCode(String code);

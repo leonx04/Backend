@@ -1,6 +1,8 @@
 package com.example.backend.Library.repository;
 
 import com.example.backend.Library.model.entity.promotion.Promotion;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,13 +22,14 @@ public interface Promotion_Repository  extends JpaRepository<Promotion, Integer>
             "(:maxDiscount IS NULL OR p.discountPercentage <= :maxDiscount) AND " +
             "(:code IS NULL OR p.code LIKE %:code%) AND " +
             "(:name IS NULL OR p.name LIKE %:name%)")
-    List<Promotion> searchPromotions(
+    Page<Promotion> searchPromotions(
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
             @Param("minDiscount") BigDecimal minDiscount,
             @Param("maxDiscount") BigDecimal maxDiscount,
             @Param("code") String code,
-            @Param("name") String name
+            @Param("name") String name,
+            Pageable pageable
     );
 
 

@@ -1,6 +1,8 @@
 package com.example.backend.Library.service.interfaces;
 
 import com.example.backend.Library.model.dto.request.voucher.Voucher_Admin_DTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -53,7 +55,15 @@ public interface VoucherService {
     List<Voucher_Admin_DTO> getVouchersByType(String voucherType);
 
     /**
-     * Tìm kiếm các voucher dựa trên nhiều tiêu chí khác nhau.
+     * Lấy tất cả các voucher với phân trang.
+     *
+     * @param pageable thông tin phân trang
+     * @return Page<Voucher_Admin_DTO> chứa thông tin của tất cả các voucher với phân trang
+     */
+    Page<Voucher_Admin_DTO> getAllVouchersPageable(Pageable pageable);
+
+    /**
+     * Tìm kiếm voucher dựa trên nhiều tiêu chí với phân trang.
      *
      * @param code mã voucher
      * @param description mô tả voucher
@@ -63,16 +73,18 @@ public interface VoucherService {
      * @param voucherType loại voucher
      * @param startDate thời gian bắt đầu
      * @param endDate thời gian kết thúc
-     * @return danh sách Voucher_Admin_DTO chứa thông tin của các voucher tìm kiếm được
+     * @param pageable thông tin phân trang
+     * @return Page<Voucher_Admin_DTO> chứa thông tin của các voucher tìm kiếm được với phân trang
      */
-    List<Voucher_Admin_DTO> searchVouchers(String code,
-                                           String description,
-                                           BigDecimal minValue,
-                                           BigDecimal maxValue,
-                                           Integer status,
-                                           String voucherType,
-                                           LocalDateTime startDate,
-                                           LocalDateTime endDate);
+    Page<Voucher_Admin_DTO> searchVouchersPageable(String code,
+                                                   String description,
+                                                   BigDecimal minValue,
+                                                   BigDecimal maxValue,
+                                                   Integer status,
+                                                   String voucherType,
+                                                   LocalDateTime startDate,
+                                                   LocalDateTime endDate,
+                                                   Pageable pageable);
 
     /**
      * Tạo mới một voucher.

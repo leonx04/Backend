@@ -1,4 +1,4 @@
-package com.example.backend.Library.model.mapper;
+package com.example.backend.Library.model.mapper.voucher;
 
 import com.example.backend.Library.model.dto.request.voucher.Voucher_Admin_DTO;
 import com.example.backend.Library.model.entity.voucher.Voucher;
