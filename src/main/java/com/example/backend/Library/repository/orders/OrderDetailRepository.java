@@ -1,4 +1,4 @@
-package com.example.backend.Library.repository;
+package com.example.backend.Library.repository.orders;
 
 import com.example.backend.Library.model.entity.orders.OrderDetail;
 import org.springframework.data.jpa.repository.JpaRepository;

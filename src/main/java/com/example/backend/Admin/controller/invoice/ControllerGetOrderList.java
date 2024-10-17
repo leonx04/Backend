@@ -1,7 +1,7 @@
 package com.example.backend.Admin.controller.invoice;
 
 import com.example.backend.Library.model.dto.request.orders.OrderDTO;
-import com.example.backend.Library.service.impl.OrderImpl;
+import com.example.backend.Library.service.impl.orders.OrderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

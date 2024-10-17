@@ -11,15 +11,15 @@ public enum OrderStatus {
     SHIPPING(3, "Đang giao hàng"),
     COMPLETED(4, "Hoàn thành"),
     CANCELED(5, "Đã hủy");
-    private final int code;
+    private final int code_status;
     private final String description;
 
-    public static String getDescriptionByCode(int code) {
+    public static String getDescriptionByCode(int code_status) {
         for (OrderStatus status : values()) {
-            if (status.code == code) {
+            if (status.code_status == code_status) {
                 return status.description;
             }
         }
-        throw new IllegalArgumentException("Invalid order status code: " + code);
+        throw new IllegalArgumentException("Invalid order status code: " + code_status);
     }
 }

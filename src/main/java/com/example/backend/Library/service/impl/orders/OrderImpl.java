@@ -1,15 +1,17 @@
-package com.example.backend.Library.service.impl;
+package com.example.backend.Library.service.impl.orders;
 
 import com.example.backend.Library.model.dto.request.orders.ListOrderDTO;
 import com.example.backend.Library.model.dto.request.orders.OrderDTO;
 
 import com.example.backend.Library.model.dto.request.orders.OrderItemDTO;
+import com.example.backend.Library.model.dto.request.orders.OrderStatusUpdateDTO;
+import com.example.backend.Library.model.entity.orders.Order;
 import com.example.backend.Library.model.entity.payment.OrderPayment;
 import com.example.backend.Library.model.entity.voucher.Voucher;
 import com.example.backend.Library.model.mapper.Orders.MapOrderFields;
-import com.example.backend.Library.repository.OrderDetailRepository;
-import com.example.backend.Library.repository.OrderRepository;
-import com.example.backend.Library.service.interfaces.OrderInterface;
+import com.example.backend.Library.repository.orders.OrderDetailRepository;
+import com.example.backend.Library.repository.orders.OrderRepository;
+import com.example.backend.Library.service.interfaces.orders.OrderInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,6 +75,14 @@ public class OrderImpl implements OrderInterface {
         }).collect(Collectors.toList());
     }
 
+    @Override
+    public Order Changestate(OrderStatusUpdateDTO dto) {
+        Order order = orderRepository.findByCode(dto.getCode());
+            order.setOrderStatus(dto.getStatus());
+//            order.setUpdatedAt(dto.getUpdatedAt());
+            return orderRepository.save(order);
+
+    }
 
 
 }

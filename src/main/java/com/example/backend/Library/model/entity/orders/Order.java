@@ -70,7 +70,7 @@ public class Order {
     public String getOrderStatus() {
         return OrderStatus.getDescriptionByCode(orderStatus);
     }
-    // Phương thức để lấy ngày từ LocalDateTime
+     //Phương thức để lấy ngày từ LocalDateTime
     public LocalDate getCreatedDate() {
         return createdAt.toLocalDate();
     }

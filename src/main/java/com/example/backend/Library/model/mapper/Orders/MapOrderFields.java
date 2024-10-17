@@ -2,8 +2,8 @@ package com.example.backend.Library.model.mapper.Orders;
 
 import com.example.backend.Library.model.dto.request.orders.OrderDTO;
 import com.example.backend.Library.model.entity.orders.Order;
-import com.example.backend.Library.repository.OrderDetailRepository;
-import com.example.backend.Library.repository.OrderRepository;
+import com.example.backend.Library.repository.orders.OrderDetailRepository;
+import com.example.backend.Library.repository.orders.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
