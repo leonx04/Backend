@@ -105,7 +105,12 @@ public class PromotionServiceImpl implements Promotion_Service {
         LocalDateTime now = LocalDateTime.now();
         updatedPromotion.setUpdatedAt(now);
 
-        updatePromotionStatus(updatedPromotion, now);
+        // Kiểm tra nếu trạng thái từ Frontend là 2, giữ nguyên trạng thái
+        if (promotionDto.getStatus() != null && promotionDto.getStatus() == 2) {
+            updatedPromotion.setStatus(2);
+        } else {
+            updatePromotionStatus(updatedPromotion, now);
+        }
 
         return updatedPromotion;
     }
