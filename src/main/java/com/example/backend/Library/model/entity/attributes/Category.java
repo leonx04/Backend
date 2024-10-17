@@ -18,4 +18,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Category extends BaseEntity {
     private String name;
+
 }

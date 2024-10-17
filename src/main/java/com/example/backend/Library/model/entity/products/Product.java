@@ -4,7 +4,9 @@ import com.example.backend.Library.model.entity.attributes.Brand;
 import com.example.backend.Library.model.entity.attributes.Category;
 import com.example.backend.Library.model.entity.attributes.Material;
 import com.example.backend.Library.model.entity.attributes.Sole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -14,6 +16,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Entity
@@ -21,24 +25,24 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product extends BaseEntity {
+public class Product extends BaseEntity implements Serializable {
 
     private String name;
     private String description;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "categoryId" , referencedColumnName = "id")
     private Category category;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "brandId" , referencedColumnName = "id")
     private Brand brand;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "materialId" , referencedColumnName = "id")
     private Material material;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "soleId" , referencedColumnName = "id")
     private Sole sole;
 

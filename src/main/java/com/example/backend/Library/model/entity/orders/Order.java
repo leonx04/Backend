@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "Voucher")
+@Table(name = "Order")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

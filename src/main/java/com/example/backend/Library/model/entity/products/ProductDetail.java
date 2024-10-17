@@ -4,6 +4,7 @@ import com.example.backend.Library.model.entity.attributes.Color;
 import com.example.backend.Library.model.entity.attributes.Size;
 import com.example.backend.Library.model.entity.promotion.Promotion;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -28,19 +29,19 @@ public class ProductDetail extends BaseEntity {
     private BigDecimal price;
     private int weight;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productId", referencedColumnName = "id")
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sizeId", referencedColumnName = "id")
     private Size size;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "colorId", referencedColumnName = "id")
     private Color color;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "promotionId", referencedColumnName = "id")
     private Promotion promotion;
 
