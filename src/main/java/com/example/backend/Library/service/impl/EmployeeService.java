@@ -44,7 +44,6 @@ public class EmployeeService {
         employee.setPhone(updatedEmployee.getPhone());
         employee.setEmail(updatedEmployee.getEmail());
         employee.setAddress(updatedEmployee.getAddress());
-        employee.setUrl(updatedEmployee.getUrl());
         employee.setRoleid(updatedEmployee.getRoleid());
         employee.setStatus(updatedEmployee.getStatus());
         employee.setNote(updatedEmployee.getNote());

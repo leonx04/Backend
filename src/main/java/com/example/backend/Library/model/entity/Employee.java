@@ -21,7 +21,6 @@ public class Employee {
     String phone;
     String email;
     String address;
-    String url;
     Integer roleid;
     Integer status;
     String note;

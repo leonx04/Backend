@@ -1,4 +1,4 @@
-package com.example.backend.Client.model.dto;
+package com.example.backend.Library.model.dto;
 
 public class DemoDTO {
 }
