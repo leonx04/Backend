@@ -1,7 +1,7 @@
-package com.example.backend.Admin.controller;
+package com.example.backend.Admin.controller.promotion;
 
 import com.example.backend.Library.model.dto.request.promotion.Promotion_Admin_DTO;
-import com.example.backend.Library.service.interfaces.Promotion_Service;
+import com.example.backend.Library.service.interfaces.promotion.Promotion_Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

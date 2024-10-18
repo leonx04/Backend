@@ -1,4 +1,4 @@
-package com.example.backend.Library.service.interfaces;
+package com.example.backend.Library.service.interfaces.voucher;
 
 import com.example.backend.Library.model.dto.request.voucher.Voucher_Admin_DTO;
 import org.springframework.data.domain.Page;

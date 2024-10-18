@@ -24,26 +24,26 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDetail extends BaseEntity {
-    private String code;
+//    private String code;
     private int quantity;
     private BigDecimal price;
     private int weight;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "productId", referencedColumnName = "id")
     private Product product;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "sizeId", referencedColumnName = "id")
     private Size size;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "colorId", referencedColumnName = "id")
     private Color color;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "promotionId", referencedColumnName = "id")
     private Promotion promotion;
 
-    private int status;
+//    private int status;
 }
