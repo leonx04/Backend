@@ -55,4 +55,10 @@ public class ProductDetailServiceImpl implements ProductDetailService {
         productDetail.setStatus(status);
         productDetailRepo.save(productDetail);
     }
+
+    // new
+    @Override
+    public List<ProductDetail> findByProductId(Integer productId) {
+        return productDetailRepo.findByProductId(productId);
+    }
 }

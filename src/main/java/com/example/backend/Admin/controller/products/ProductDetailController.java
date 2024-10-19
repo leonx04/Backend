@@ -57,4 +57,14 @@ public class ProductDetailController {
         return new ResponseData<>(HttpStatus.OK.value(), "Successfully deleted productDetail", null);
     }
 
+    //New
+    @GetMapping("/product/{productId}")
+    public ResponseData<?> getByProductId(
+            @PathVariable @Min(value = 1) Integer productId
+    ) {
+        return new ResponseData<>(HttpStatus.OK.value(),
+                "Successfully retrieved product details for product ID: " + productId,
+                this.productDetailService.findByProductId(productId));
+    }
+
 }
