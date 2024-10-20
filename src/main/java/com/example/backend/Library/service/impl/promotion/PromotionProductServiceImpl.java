@@ -57,7 +57,7 @@ public class PromotionProductServiceImpl {
                         .orElseThrow(() -> new RuntimeException("Không tìm thấy product detail với id: " + productDetailId));
 
                 // Kiểm tra tính hợp lệ của product detail và cập nhật status nếu cần
-                validateProductDetailForPromotion(productDetail);
+//                validateProductDetailForPromotion(productDetail);
                 ensureValidStatus(productDetail);
 
                 // Gán promotion cho product detail và lưu vào danh sách kết quả

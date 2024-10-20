@@ -1,8 +1,11 @@
 package com.example.backend.Admin.controller.promotion;
 
+import com.example.backend.Library.model.dto.reponse.ResponseData;
 import com.example.backend.Library.model.entity.products.ProductDetail;
 import com.example.backend.Library.service.impl.promotion.PromotionProductServiceImpl;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,4 +48,6 @@ public class PromotionProductController {
         List<ProductDetail> updatedProducts = promotionProductService.removePromotionFromProducts(productDetailIds);
         return ResponseEntity.ok(updatedProducts); // Trả về kết quả dưới dạng HTTP 200 OK
     }
+
+
 }

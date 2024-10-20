@@ -67,4 +67,13 @@ public class ProductDetailController {
                 this.productDetailService.findByProductId(productId));
     }
 
+    @GetMapping("/promotion/{promotionId}")
+    public ResponseData<?> getByPromotionId(
+            @PathVariable @Min(value = 1) Integer promotionId
+    ) {
+        return new ResponseData<>(HttpStatus.OK.value(),
+                "Successfully retrieved product details for promotion ID: " + promotionId,
+                this.productDetailService.findByPromotionId(promotionId));
+    }
+
 }

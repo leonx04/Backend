@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ProductDetailService extends GenericCrudService<ProductDetail, Integer> {
     List<ProductDetail> findByProductId(Integer productId);
+
+    List<ProductDetail> findByPromotionId(Integer promotionId);
 }

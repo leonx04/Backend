@@ -11,4 +11,6 @@ import java.util.List;
 
 public interface ProductDetailRepository extends JpaRepository<ProductDetail, Integer> {
     List<ProductDetail> findByProductId(Integer productId);
+
+    List<ProductDetail> findByPromotionId(Integer promotionId);
 }

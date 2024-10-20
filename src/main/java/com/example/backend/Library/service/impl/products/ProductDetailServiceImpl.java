@@ -61,4 +61,9 @@ public class ProductDetailServiceImpl implements ProductDetailService {
     public List<ProductDetail> findByProductId(Integer productId) {
         return productDetailRepo.findByProductId(productId);
     }
+
+    @Override
+    public List<ProductDetail> findByPromotionId(Integer promotionId) {
+        return productDetailRepo.findByPromotionId(promotionId);
+    }
 }
