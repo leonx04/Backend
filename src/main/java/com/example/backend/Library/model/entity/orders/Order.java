@@ -1,8 +1,8 @@
 package com.example.backend.Library.model.entity.orders;
 
+import com.example.backend.Library.model.entity.customer.Address;
 import com.example.backend.Library.model.entity.customer.Customer;
 import com.example.backend.Library.model.entity.employee.Employee;
-import com.example.backend.Library.model.entity.payment.OrderPayment;
 import com.example.backend.Library.model.entity.voucher.Voucher;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,8 +32,8 @@ public class Order {
     @Column(name = "Code")
     private String code;
     @ManyToOne
-    @JoinColumn(name = "userID", referencedColumnName = "id")
-    private Customer user;
+    @JoinColumn(name = "DeliveryAddress", referencedColumnName = "id")
+    private Address address;
 
     @ManyToOne
     @JoinColumn(name = "employeeId", referencedColumnName = "id")
@@ -43,9 +43,7 @@ public class Order {
     @JoinColumn(name = "voucherId", referencedColumnName = "id")
     private Voucher voucher;
 
-    @ManyToOne
-    @JoinColumn(name = "orderPaymentId", referencedColumnName = "id")
-    private OrderPayment orderPayment;
+    private Integer orderPayment;
 
 
     private int orderStatus;
@@ -70,7 +68,7 @@ public class Order {
     public String getOrderStatus() {
         return OrderStatus.getDescriptionByCode(orderStatus);
     }
-     //Phương thức để lấy ngày từ LocalDateTime
+    //Phương thức để lấy ngày từ LocalDateTime
     public LocalDate getCreatedDate() {
         return createdAt.toLocalDate();
     }
@@ -78,4 +76,16 @@ public class Order {
     public LocalDate getUpdatedDate() {
         return updatedAt.toLocalDate();
     }
+
+    public String getorderPaymentString(){
+        if(orderPayment==0){
+            return "Thanh toán chuyển khoản";
+        }else if(orderPayment==1){
+            return "Thanh toán tiền mặt";
+        }else {
+            return "Thanh toán khi nhận hàng";
+        }
+
+    }
+
 }

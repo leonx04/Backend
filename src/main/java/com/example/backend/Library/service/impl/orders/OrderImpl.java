@@ -6,7 +6,6 @@ import com.example.backend.Library.model.dto.request.orders.OrderDTO;
 import com.example.backend.Library.model.dto.request.orders.OrderItemDTO;
 import com.example.backend.Library.model.dto.request.orders.OrderStatusUpdateDTO;
 import com.example.backend.Library.model.entity.orders.Order;
-import com.example.backend.Library.model.entity.payment.OrderPayment;
 import com.example.backend.Library.model.entity.voucher.Voucher;
 import com.example.backend.Library.model.mapper.Orders.MapOrderFields;
 import com.example.backend.Library.repository.orders.OrderDetailRepository;
@@ -35,10 +34,11 @@ public class OrderImpl implements OrderInterface {
             ListOrderDTO dto = new ListOrderDTO();
             mapOrderFields.mapCommonOrderFields(order, dto);
            dto.setNotes(order.getNotes());
-           dto.setVoucherCode(Optional.ofNullable(order.getVoucher()).map(Voucher::getCode).orElse(null));
-//           dto.setVoucherCode(order.getVoucher().getCode()!= null? order.getVoucher().getCode():null);
-            dto.setPaymentMethod(Optional.ofNullable(order.getOrderPayment()).map(OrderPayment::getMethodName).orElse(null));
-           // dto.setPaymentMethod(order.getOrderPayment().getMethodName()!=null? order.getOrderPayment().getMethodName():null);
+           dto.setVoucherCode(order.getVoucher().getDiscountValue());
+           dto.setRecipientName(order.getAddress().getRecipientName());
+           dto.setRecipientPhone(order.getAddress().getRecipientPhone());
+           dto.setDetailAddress(order.getAddress().getDetailAddress());
+           dto.setOrderPayment(order.getorderPaymentString());
            dto.setSubtotal(order.getSubtotal());
            dto.setTotal(order.getTotal());
            dto.setShippingCost(order.getShippingCost());
@@ -62,14 +62,6 @@ public class OrderImpl implements OrderInterface {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return orderRepository.findAll().stream().map(order -> {
             OrderDTO dto = new OrderDTO();
-//            dto.setCode(order.getCode());
-//            dto.setCustomerName(order.getUser().getFullName());
-//            dto.setTotalAmount(order.getTotal());
-//            dto.setEmployee(order.getEmployee().getFullName());
-//            dto.setCreatedAt(order.getCreatedDate().format(dateTimeFormatter));
-//            dto.setUpdatedAt(order.getUpdatedDate().format(dateTimeFormatter));
-//            dto.setOrderType(order.getOrderType());
-//            dto.setStatus(order.getOrderStatus());
             mapOrderFields.mapCommonOrderFields(order, dto);
             return dto;
         }).collect(Collectors.toList());

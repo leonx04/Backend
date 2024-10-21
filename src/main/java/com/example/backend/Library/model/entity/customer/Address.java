@@ -1,13 +1,7 @@
 package com.example.backend.Library.model.entity.customer;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,8 +25,9 @@ public class Address {
     private int id;
 
 
-    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
-    private List<Customer> customer;
+    @ManyToOne
+    @JoinColumn(name = "CustomerId")
+    private Customer customer;
 
     private String detailAddress;
 
@@ -48,6 +43,6 @@ public class Address {
 
     private int status;
 
-    private LocalDate createAt;
-    private LocalDate updateAt;
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
 }
