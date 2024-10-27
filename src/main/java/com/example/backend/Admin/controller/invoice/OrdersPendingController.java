@@ -11,16 +11,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/orders")
-public class ControllerGetOrderList {
+@RequestMapping("/api/orders/pending")
+// Get list of pending orders
+public class OrdersPendingController {
     @Autowired
     private OrderImpl orderImpl;
 
-    @GetMapping
+
+    @GetMapping()
     public ResponseEntity<?> getOrderList(@RequestParam(defaultValue = "0") int pageNo,
                                           @RequestParam(defaultValue = "10") int pageSize) {
 
-        PageDTO<OrderDTO> pageDTO = orderImpl.getOrder(pageNo, pageSize);
+        PageDTO<OrderDTO> pageDTO = orderImpl.getOrderfindStatus(pageNo, pageSize);
 
         System.out.println("Page: " + pageNo);
         System.out.println("Size: " + pageSize);
@@ -29,5 +31,4 @@ public class ControllerGetOrderList {
 
         return ResponseEntity.ok(pageDTO);
     }
-
 }

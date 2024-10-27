@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class UpdateStatus {
     @Autowired
     private OrderImpl orderImpl;
-    @PutMapping("/status")
-    public ResponseEntity<?> updateOrderStatus(@RequestBody OrderStatusUpdateDTO dto) {
-        Order order =orderImpl.Changestate(dto);
-        if (order != null) {
-            return ResponseEntity.ok(order); // Trả về 200 OK với đối tượng Order
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Trả về 404 NOT FOUND
-        }
-    }
+//    @PutMapping("/status")
+//    public ResponseEntity<?> updateOrderStatus(@RequestBody OrderStatusUpdateDTO dto) {
+//        Order order =orderImpl.Changestate(dto);
+//        if (order != null) {
+//            return ResponseEntity.ok(order); // Trả về 200 OK với đối tượng Order
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Trả về 404 NOT FOUND
+//        }
+//    }
 }

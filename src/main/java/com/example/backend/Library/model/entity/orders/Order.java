@@ -31,13 +31,16 @@ public class Order {
     private int id;
     @Column(name = "Code")
     private String code;
-    @ManyToOne
-    @JoinColumn(name = "DeliveryAddress", referencedColumnName = "id")
-    private Address address;
+    private String ordersAddress;
+
+    private String recipientName;
+
+    private String recipientPhone;
 
     @ManyToOne
-    @JoinColumn(name = "employeeId", referencedColumnName = "id")
-    private Employee employee;
+    @JoinColumn(name = "CustomerId")
+    private Customer customer;
+
 
     @ManyToOne
     @JoinColumn(name = "voucherId", referencedColumnName = "id")
@@ -57,11 +60,7 @@ public class Order {
     @Column(name = "createdat")
     private LocalDateTime  createdAt;
     @Column(name = "updatedat")
-    private LocalDateTime   updatedAt;
-    @Column(name = "createdby")
-    private int createdBy;
-    @Column(name = "updatedby")
-    private int updatedBy;
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "order")
     private List<OrderDetail> orderDetails;

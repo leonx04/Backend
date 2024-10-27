@@ -19,9 +19,8 @@ public class MapOrderFields {
     public void mapCommonOrderFields(Order order, OrderDTO dto) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         dto.setCode(order.getCode());
-        dto.setCustomerName(order.getAddress().getCustomer().getFullName());
+        dto.setCustomerName(order.getCustomer().getFullName());
         dto.setTotalAmount(order.getTotal());
-        dto.setEmployee(order.getEmployee().getFullName());
         dto.setCreatedAt(order.getCreatedDate().format(dateTimeFormatter));
         dto.setUpdatedAt(order.getUpdatedDate().format(dateTimeFormatter));
         dto.setOrderType(order.getOrderType());
