@@ -17,19 +17,15 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     boolean existsByUserName(String userName);
     boolean existsByEmail(String email);
+    boolean existsByPhone(String phone);
 
     // Lấy ra Nhân viên có mã lớn nhất(1 nhân viên)
     Customer findFirstByOrderByCodeDesc();
 
     // tìm kiếm khách hàng theo các thuộc tính của khách hàng
-    Page<Customer> findByFullNameContainingAndEmailContainingAndPhoneContainingAndGenderContainingAndStatusContaining(
-            String fullName, String email, String phone, int gender, int status, Pageable pageable);
-
-    // tìm kiếm khách hàng theo các thuộc tính của khách hàng
-    // viết câu lệnh Query
     @Query("SELECT c FROM Customer c WHERE "
-            + "(:fullName IS NULL OR c.fullName LIKE %:fullName%) AND "
-            + "(:email IS NULL OR c.email LIKE %:email%) AND "
+            + "(:fullName IS NULL OR LOWER(c.fullName) LIKE LOWER(CONCAT('%', :fullName, '%'))) AND "
+            + "(:email IS NULL OR LOWER(c.email) LIKE LOWER(CONCAT('%', :email, '%'))) AND "
             + "(:phone IS NULL OR c.phone LIKE %:phone%) AND "
             + "(:gender IS NULL OR c.gender = :gender) AND "
             + "(:status IS NULL OR c.status = :status)")

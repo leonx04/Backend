@@ -46,7 +46,7 @@ public class LoginClientController {
 
     // Method tạo tài khoản khách hàng
     @PostMapping(value = "register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createCustomer(
+    public ResponseEntity<?> registerCustomer(
             @Valid @ModelAttribute RegisterRequest request,
             BindingResult result
     ) {
@@ -69,7 +69,7 @@ public class LoginClientController {
         }
 
         try {
-            customerService.createCustomer(request);
+            customerService.registerCustomer(request);
             return ResponseEntity.ok("Tạo tài khoản thành công");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

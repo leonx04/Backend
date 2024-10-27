@@ -14,12 +14,11 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("${api.prefix}/user/address")
-public class AddressController {
+public class ClientAddressController {
     @Autowired
     private IAddressService addressService;
 
-    @PostMapping
-            ("/{customerId}")
+    @PostMapping("/{customerId}")
     public ResponseEntity<?> createAddress(
             @PathVariable("customerId") Integer customerId,
             @Valid @RequestBody AddressRequest request,
@@ -41,8 +40,7 @@ public class AddressController {
     }
 
     // Lấy danh sách địa chỉ của khách hàng
-    @GetMapping
-            ("/customer/{customerId}")
+    @GetMapping("/customer/{customerId}")
     public ResponseEntity<?> getAllAddressOfCustomer(@PathVariable("customerId") Integer customerId) {
         try {
             List<AddressResponse> addresses = addressService.getAllAddressOfCustomer(customerId);
@@ -84,6 +82,7 @@ public class AddressController {
             if (Objects.isNull(addressService.getAddressById(id))) {
                 return ResponseEntity.badRequest().body("Địa chỉ không tồn tại");
             }
+            addressService.deleteAddress(id);
             return ResponseEntity.ok("Xóa địa chỉ thành công");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Xóa địa chỉ thất bại");

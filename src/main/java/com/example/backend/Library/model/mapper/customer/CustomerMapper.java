@@ -10,6 +10,7 @@ import org.mapstruct.*;
 public interface CustomerMapper {
     @Mapping(target = "code", ignore = true) // Bỏ qua trường code khi ánh xạ
     Customer toCustomerRequest(CustomerRequest request);
+
     CustomerResponse toCustomer(Customer customer);
 
     @Mapping(target = "email", ignore = true) // Bỏ qua trường email khi ánh xạ

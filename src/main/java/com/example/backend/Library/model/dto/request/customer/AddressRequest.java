@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class AddressRequest {
+    @NotBlank(message = "Nhập tên người nhận")
     String recipientName;
     @NotBlank(message = "Nhập số điện thoại người nhận")
     String recipientPhone;

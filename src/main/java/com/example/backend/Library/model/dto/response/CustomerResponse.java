@@ -1,6 +1,7 @@
 package com.example.backend.Library.model.dto.response;
 
 import lombok.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -14,6 +15,8 @@ public class CustomerResponse extends BaseResponse{
     Integer gender;
     String email;
     String phone;
+
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     LocalDate birthDate;
     String imageURL;
     Integer status;

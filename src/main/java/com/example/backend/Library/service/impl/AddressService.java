@@ -11,7 +11,9 @@ import com.example.backend.Library.repository.customer.CustomerRepository;
 import com.example.backend.Library.service.interfaces.IAddressService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AddressService implements IAddressService {
@@ -30,9 +32,9 @@ public class AddressService implements IAddressService {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new DataNotFoundException("Customer not found"));
         Address address = addressMapper.toAddress(request);
-        if (!addressRepository.findAllByCustomerId(customerId).isEmpty()) {
+        if (!addressRepository.findAllByCustomer(customer).isEmpty()) {
             // Đặt địa chỉ default -> non-default
-            addressRepository.findAllByCustomerId(customerId)
+            addressRepository.findAllByCustomer(customer)
                     .forEach(exists -> {
                         exists.setStatus(0);
                         addressRepository.save(exists);
@@ -48,7 +50,7 @@ public class AddressService implements IAddressService {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new DataNotFoundException("Customer not found"));
         return addressMapper
-                .toAddressResponses(addressRepository.findAllByCustomerId(customer.getId()));
+                .toAddressResponses(addressRepository.findAllByCustomer(customer));
     }
 
     @Override
@@ -73,7 +75,7 @@ public class AddressService implements IAddressService {
     public void deleteAddress(Integer id) {
         try {
             Address address = addressRepository.findById(id)
-                    .orElseThrow(() -> new DataNotFoundException("Address not found"));
+                    .orElseThrow(() -> new DataNotFoundException("Địa chỉ đã xóa hoặc không tồn tại"));
             addressRepository.delete(address);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
@@ -86,7 +88,7 @@ public class AddressService implements IAddressService {
             Address existsAddress = addressRepository.findById(id)
                     .orElseThrow(() -> new DataNotFoundException("Address not found"));
             // Đặt địa chỉ default -> non-default
-            addressRepository.findAllByCustomerId(existsAddress.getCustomer().getId())
+            addressRepository.findAllByCustomer(existsAddress.getCustomer())
                             .forEach(exists -> {
                                 if (!exists.getId().equals(id)) {
                                     exists.setStatus(0);
@@ -96,7 +98,7 @@ public class AddressService implements IAddressService {
 
             existsAddress.setStatus(1);
             addressRepository.save(existsAddress);
-        } catch (DataNotFoundException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

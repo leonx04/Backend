@@ -14,10 +14,11 @@ public class Address extends BaseEntity {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "Customerid", nullable = false)
+    @JoinColumn(name = "Customerid")
     private Customer customer;
 
     @Column(name = "Detailaddress", nullable = false, length = 255)
+
     private String detailAddress;
 
     @Column(name = "Recipientname", nullable = false, length = 255)

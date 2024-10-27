@@ -5,13 +5,24 @@ import com.example.backend.Library.model.dto.request.LoginRequest;
 import com.example.backend.Library.model.dto.request.RegisterRequest;
 import com.example.backend.Library.model.dto.request.customer.CustomerRequest;
 import com.example.backend.Library.model.dto.response.CustomerResponse;
+import com.example.backend.Library.model.entity.Cart;
+import com.example.backend.Library.model.entity.CartDetail;
+import com.example.backend.Library.model.entity.Order;
+import com.example.backend.Library.model.entity.OrderDetail;
+import com.example.backend.Library.model.entity.customer.Address;
 import com.example.backend.Library.model.entity.customer.Customer;
 import com.example.backend.Library.model.mapper.customer.CustomerMapper;
+import com.example.backend.Library.repository.CartDetailRepository;
+import com.example.backend.Library.repository.CartRepository;
+import com.example.backend.Library.repository.OrderDetailRepository;
+import com.example.backend.Library.repository.customer.AddressRepository;
 import com.example.backend.Library.repository.customer.CustomerRepository;
+import com.example.backend.Library.repository.OrderRepository;
 import com.example.backend.Library.service.interfaces.ICustomerService;
 import com.github.javafaker.Faker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +36,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 
@@ -35,18 +45,28 @@ public class CustomerService implements ICustomerService {
     private static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
 
     private final CustomerRepository customerRepository;
+    private final CartDetailRepository cartDetailRepository;
+    private final OrderDetailRepository orderDetailRepository;
+    private final AddressRepository addressRepository;
+    private final OrderRepository orderRepository;
+    private final CartRepository cartRepository;
     private final CustomerMapper customerMapper;
     private final PasswordEncoder encoder;
 
-    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper, PasswordEncoder encoder) {
+    public CustomerService(CustomerRepository customerRepository, CartDetailRepository cartDetailRepository, OrderDetailRepository orderDetailRepository, CustomerMapper customerMapper, PasswordEncoder encoder, OrderRepository orderRepository, CartRepository cartRepository, AddressRepository addressRepository) {
         this.customerRepository = customerRepository;
+        this.cartDetailRepository = cartDetailRepository;
+        this.orderDetailRepository = orderDetailRepository;
+        this.orderRepository = orderRepository;
+        this.cartRepository = cartRepository;
         this.customerMapper = customerMapper;
         this.encoder = encoder;
+        this.addressRepository = addressRepository;
     }
 
     // Tạo mới khách hàng
     @Override
-    public Customer createCustomer(RegisterRequest request) {
+    public Customer registerCustomer(RegisterRequest request) {
         String username = request.getUserName();
         String email = request.getEmail();
         if (customerRepository.existsByUserName(username)) {
@@ -61,6 +81,37 @@ public class CustomerService implements ICustomerService {
         customer.setStatus(1);
 
         return customerRepository.save(customer);
+    }
+
+    @Override
+    public Customer createCustomer(CustomerRequest request) {
+        String email = request.getEmail();
+        if (customerRepository.existsByEmail(email)) {
+            throw new DataIntegrityViolationException("Email đã được sử dụng");
+        }
+        if (customerRepository.existsByPhone(request.getPhone())) {
+            throw new DataIntegrityViolationException("Số điện thoại đã được sử dụng");
+        }
+        Customer customer = customerMapper.toCustomerRequest(request);
+        customer.setCode(generateNextCode());
+        customer.setPassword(encoder.encode("12345678"));
+        customer.setStatus(1);
+        return customerRepository.save(customer);
+    }
+
+    @Override
+    public Customer updateAdminCustomer(int id, CustomerRequest request) throws Exception {
+        Customer customerOld = customerRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Customer not found with id: " + id));
+        Customer customerUpdate = customerMapper.updateCustomer(request);
+        customerUpdate.setId(id);
+        customerUpdate.setEmail(customerOld.getEmail());
+        customerUpdate.setCode(customerOld.getCode());
+        customerUpdate.setImageURL(customerOld.getImageURL());
+
+        getOldValue(customerOld, request, customerUpdate);
+
+        return customerRepository.save(customerUpdate);
     }
 
     // Lấy danh sách khách hàng
@@ -100,12 +151,33 @@ public class CustomerService implements ICustomerService {
 
     // Khách hàng xoá tk vĩnh viễn
     @Override
-    public void deleteCustomer(int id) throws Exception {
-        Optional<Customer> customer = customerRepository.findById(id);
-        if (customer.isPresent()) {
-            customerRepository.delete(customer.get());
-        } else {
-            throw new DataNotFoundException("Customer not found with id: " + id);
+    public void deleteCustomer(int id) {
+        Optional<Customer> customerOpt = customerRepository.findById(id);
+        try {
+            if (customerOpt.isPresent()) {
+                Customer customer = customerOpt.get();
+                List<Address> addresses = addressRepository.findAllByCustomer(customer);
+                addressRepository.deleteAll(addresses);
+                Cart cart = cartRepository.findByCustomerId(id);
+                if (cart != null) {
+                    List<CartDetail> cartDetails = cartDetailRepository.findByCartId(cart.getId());
+                    cartDetailRepository.deleteAll(cartDetails);
+                    cartRepository.delete(cart);
+                }
+                List<Order> orders = orderRepository.findByCustomerId(id);
+                if (orders != null) {
+                    for (Order order : orders) {
+                        List<OrderDetail> orderDetails = orderDetailRepository.findByOrderId(order.getId());
+                        orderDetailRepository.deleteAll(orderDetails);
+                    }
+                    orderRepository.deleteAll(orders);
+                }
+                customerRepository.delete(customer);
+            } else {
+                throw new DataNotFoundException("Customer not found with id: " + id);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -137,30 +209,27 @@ public class CustomerService implements ICustomerService {
     }
 
     // Hàm kiểm tra và lưu ảnh
-//    @Override
-//    public ResponseEntity<?> checkCreateImage(CustomerRequest request, MultipartFile avatar) {
-//        if (avatar != null && !avatar.isEmpty()) {
-//            // Kiểm tra kích thước file và định dạng
-//            if(avatar.getSize() > 10 * 1024 * 1024) { // Kích thước > 10MB
-//                return ResponseEntity.badRequest()
-//                        .body("Dung lượng ảnh vượt quá 10MB");
-//            }
-//            String contentType = avatar.getContentType();
-//            if(contentType == null || !contentType.startsWith("image/")) {
-//                return ResponseEntity.badRequest()
-//                        .body("Chọn một file ảnh");
-//            }
-//
-//            String fileName = null;
-//            try {
-//                fileName = storeFile(avatar);
-//            } catch (IOException e) {
-//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi khi lưu file ảnh");
-//            }
-//            request.setImageURL(fileName);
-//        }
-//        return null;
-//    }
+    @Override
+    public void checkCreateImage(CustomerRequest request, MultipartFile avatar) {
+        if (avatar != null && !avatar.isEmpty()) {
+            // Kiểm tra kích thước file và định dạng
+            if(avatar.getSize() > 10 * 1024 * 1024) { // Kích thước > 10MB
+                throw new RuntimeException("Dung lượng ảnh vượt quá 10MB");
+            }
+            String contentType = avatar.getContentType();
+            if(contentType == null || !contentType.startsWith("image/")) {
+                throw new RuntimeException("File không phải là ảnh");
+            }
+
+            String fileName = null;
+            try {
+                fileName = storeFile(avatar);
+            } catch (IOException e) {
+                throw new RuntimeException("Lỗi khi lưu file ảnh");
+            }
+            request.setImageURL(fileName);
+        }
+    }
 
     // Hàm cập nhật ảnh
     @Override
@@ -250,9 +319,6 @@ public class CustomerService implements ICustomerService {
     @Override
     public Page<CustomerResponse> searchCustomers(String fullName, String email, String phone, Integer gender, Integer status, Pageable pageable) {
         // Tìm kiếm khách hàng theo các thuộc tính của khách hàng
-//        return customerRepository.findByFullNameContainingAndEmailContainingAndPhoneContainingAndGenderContainingAndStatusContaining(
-//                fullName, email, phone, gender, status, pageable)
-//                .map(customerMapper::toCustomer);
         return customerRepository.searchCustomers(fullName, email, phone, gender, status, pageable)
                 .map(customerMapper::toCustomer);
     }

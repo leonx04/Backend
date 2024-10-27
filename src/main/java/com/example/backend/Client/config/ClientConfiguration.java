@@ -63,15 +63,16 @@ public class ClientConfiguration {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 // Cấu hình quyền truy cập cho các URL
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/ecm/register", "/api/ecm/user/login",
-                                "/api/ecm/auth/**",
-                                "/api/ecm/admin/customers/search",
-                                 "/api/ecm/user/**",
-//                                "/api/ecm/admin/customers/fake-data",
-                                "/api/ecm/admin/customers/**"
-                        ).permitAll() // Cho phép truy cập không cần xác thực
-                        .requestMatchers("/api/confirm-order/**", "/api/order/**", "/api/order-detail/**", "/api/admin/**").authenticated() // Yêu cầu xác thực
-                        .anyRequest().authenticated() // Tất cả các yêu cầu khác đều cần xác thực
+//                        .requestMatchers("/api/ecm/register", "/api/ecm/user/login",
+//                                "/api/ecm/auth/**",
+//                                "/api/ecm/admin/customers/search",
+//                                 "/api/ecm/user/**",
+////                                "/api/ecm/admin/customers/fake-data",
+//                                "/api/ecm/admin/customers/**"
+//                        ).permitAll() // Cho phép truy cập không cần xác thực
+//                        .requestMatchers("/api/confirm-order/**", "/api/order/**", "/api/order-detail/**", "/api/admin/**").authenticated() // Yêu cầu xác thực
+//                        .anyRequest().authenticated() // Tất cả các yêu cầu khác đều cần xác thực
+                                .anyRequest().permitAll()
                 )
                 // Quản lý session ở chế độ STATELESS vì ta sử dụng token để xác thực
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

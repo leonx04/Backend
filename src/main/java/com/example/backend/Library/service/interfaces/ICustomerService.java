@@ -14,19 +14,23 @@ import java.io.IOException;
 import java.util.Optional;
 
 public interface ICustomerService {
-    Customer createCustomer(RegisterRequest request);
+    Customer registerCustomer(RegisterRequest request);
+    Customer createCustomer(CustomerRequest request);
+
+    Customer updateAdminCustomer(int id, CustomerRequest request) throws Exception;
+
     Page<CustomerResponse> getCustomers(Pageable pageable);
     Customer getCustomerById(int id) throws Exception;
     Optional<Customer> getCustomerByEmail(String email);
     Customer updateCustomer(int id, CustomerRequest request) throws Exception;
-    void deleteCustomer(int id) throws Exception;
+    void deleteCustomer(int id);
 
     void softDeleteCustomer(int id) throws Exception;
 
     Customer updateCustomerStatus(int id, int status) throws Exception;
 
     boolean existsByEmail(String email);
-//    ResponseEntity<?> checkCreateImage(CustomerRequest request, MultipartFile avatar);
+    void checkCreateImage(CustomerRequest request, MultipartFile avatar);
     void updateImage(int id, CustomerRequest request, MultipartFile avatar) throws IOException;
 
     boolean authenticateCustomer(LoginRequest loginRequest);
