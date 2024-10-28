@@ -19,10 +19,11 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-@Table(name = "ProductDetail")
+@Table(name = "ProductVariant")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class ProductDetail extends BaseEntity {
 //    private String code;
     private int quantity;

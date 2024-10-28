@@ -1,4 +1,4 @@
-package com.example.backend.Library.repository;
+package com.example.backend.Library.repository.promotion;
 
 import com.example.backend.Library.model.entity.promotion.Promotion;
 import org.springframework.data.domain.Page;

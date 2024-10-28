@@ -1,7 +1,7 @@
 package com.example.backend.Library.component;
 
 import com.example.backend.Library.model.entity.voucher.Voucher;
-import com.example.backend.Library.repository.Voucher_Repository;
+import com.example.backend.Library.repository.voucher.Voucher_Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,11 +77,17 @@ public class VoucherScheduler {
      * @param now     Thời gian hiện tại
      */
     private void updateVoucherStatus(Voucher voucher, LocalDateTime now) {
+        int oldStatus = voucher.getStatus(); // Lấy trạng thái hiện tại (trạng thái cũ)
         int newStatus = determineVoucherStatus(voucher, now); // Xác định trạng thái mới
-        voucher.setStatus(newStatus); // Cập nhật trạng thái cho voucher
-        voucherRepository.save(voucher); // Lưu thay đổi vào cơ sở dữ liệu
-        LOGGER.info("Đã cập nhật voucher: Mã = {}, Trạng thái mới = {}", voucher.getCode(), newStatus); // Ghi lại cập nhật
+
+        if (oldStatus != newStatus) { // Chỉ cập nhật nếu trạng thái thay đổi
+            voucher.setStatus(newStatus); // Cập nhật trạng thái cho voucher
+            voucherRepository.save(voucher); // Lưu thay đổi vào cơ sở dữ liệu
+            LOGGER.info("Voucher cập nhật: Mã = {}, Trạng thái cũ = {}, Trạng thái mới = {}",
+                    voucher.getCode(), oldStatus, newStatus); // Ghi lại thông tin vào log
+        }
     }
+
 
     /**
      * Xác định trạng thái của voucher dựa trên ngày bắt đầu, ngày kết thúc và số lượng.

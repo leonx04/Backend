@@ -1,10 +1,9 @@
 package com.example.backend.Library.service.impl.promotion;
 
-import com.example.backend.Library.exception.ExceptionHandles;
 import com.example.backend.Library.model.dto.request.promotion.Promotion_Admin_DTO;
 import com.example.backend.Library.model.entity.products.ProductDetail;
 import com.example.backend.Library.model.entity.promotion.Promotion;
-import com.example.backend.Library.repository.Promotion_Repository;
+import com.example.backend.Library.repository.promotion.Promotion_Repository;
 import com.example.backend.Library.service.interfaces.products.ProductDetailService;
 import com.example.backend.Library.service.interfaces.promotion.Promotion_Service;
 import jakarta.transaction.Transactional;
@@ -123,8 +122,8 @@ public class PromotionProductServiceImpl {
      * @param productDetail Product detail cần kiểm tra
      */
     private void validateProductDetailForPromotion(ProductDetail productDetail) {
-        if (productDetail.getStatus() != 1) {
-            throw new IllegalStateException("Product detail không trong trạng thái hoạt động");
+        if (productDetail.getStatus() != 3) {
+            throw new IllegalStateException("Product detail không trong trạng thái chờ hoạt động");
         }
         if (productDetail.getPromotion() != null) {
             throw new IllegalStateException("Product detail đã có promotion khác");

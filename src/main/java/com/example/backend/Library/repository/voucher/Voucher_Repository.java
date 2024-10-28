@@ -1,4 +1,4 @@
-package com.example.backend.Library.repository;
+package com.example.backend.Library.repository.voucher;
 
 import com.example.backend.Library.model.entity.voucher.Voucher;
 import org.springframework.data.domain.Page;
@@ -76,4 +76,17 @@ public interface Voucher_Repository extends JpaRepository<Voucher, Integer> {
 
 
     Optional<Voucher> findByCode(String code);
+
+
+    Page<Voucher> findByStatusIn(List<Integer> statuses, Pageable pageable);
+
+    Page<Voucher> findByStatus(Integer status, Pageable pageable);
+
+    Optional<Voucher> findByCodeAndStatusIn(String code, List<Integer> statuses);
+
+    @Query("SELECT v FROM Voucher v WHERE LOWER(v.code) LIKE LOWER(CONCAT('%', :code, '%')) AND v.status = :status")
+    Page<Voucher> searchByCodeAndStatus(String code, Integer status, Pageable pageable);
+
+    @Query("SELECT v FROM Voucher v WHERE LOWER(v.code) LIKE LOWER(CONCAT('%', :code, '%')) AND v.status IN :statuses")
+    Page<Voucher> searchByCodeAndStatusIn(String code, List<Integer> statuses, Pageable pageable);
 }

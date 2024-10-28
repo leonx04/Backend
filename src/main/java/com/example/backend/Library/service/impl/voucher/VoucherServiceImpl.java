@@ -4,7 +4,7 @@ import com.example.backend.Library.exception.ExceptionHandles;
 import com.example.backend.Library.model.dto.request.voucher.Voucher_Admin_DTO;
 import com.example.backend.Library.model.entity.voucher.Voucher;
 import com.example.backend.Library.model.mapper.voucher.VoucherMapper;
-import com.example.backend.Library.repository.Voucher_Repository;
+import com.example.backend.Library.repository.voucher.Voucher_Repository;
 import com.example.backend.Library.service.interfaces.voucher.VoucherService;
 import com.example.backend.Library.validation.VoucherValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -163,8 +163,8 @@ public class VoucherServiceImpl implements VoucherService {
      */
     @Override
     public Voucher_Admin_DTO updateVoucher(Integer id, Voucher_Admin_DTO voucherDto) {
-        // Xác thực thông tin voucher
-        validateVoucher(voucherDto);
+//        // Xác thực thông tin voucher
+//        validateVoucher(voucherDto);
 
         // Tìm voucher hiện có theo id
         Voucher existingVoucher = findVoucherById(id);

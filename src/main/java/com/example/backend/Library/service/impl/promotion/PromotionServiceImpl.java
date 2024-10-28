@@ -4,7 +4,7 @@ import com.example.backend.Library.exception.ExceptionHandles;
 import com.example.backend.Library.model.dto.request.promotion.Promotion_Admin_DTO;
 import com.example.backend.Library.model.entity.promotion.Promotion;
 import com.example.backend.Library.model.mapper.promotion.PromotionMapper;
-import com.example.backend.Library.repository.Promotion_Repository;
+import com.example.backend.Library.repository.promotion.Promotion_Repository;
 import com.example.backend.Library.service.interfaces.promotion.Promotion_Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
