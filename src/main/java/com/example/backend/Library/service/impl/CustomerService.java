@@ -4,7 +4,7 @@ import com.example.backend.Library.exception.DataNotFoundException;
 import com.example.backend.Library.model.dto.request.LoginRequest;
 import com.example.backend.Library.model.dto.request.RegisterRequest;
 import com.example.backend.Library.model.dto.request.customer.CustomerRequest;
-import com.example.backend.Library.model.dto.response.CustomerResponse;
+import com.example.backend.Library.model.dto.response.customer.CustomerResponse;
 import com.example.backend.Library.model.entity.Cart;
 import com.example.backend.Library.model.entity.CartDetail;
 import com.example.backend.Library.model.entity.Order;
@@ -22,7 +22,6 @@ import com.example.backend.Library.service.interfaces.ICustomerService;
 import com.github.javafaker.Faker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -360,7 +359,7 @@ public class CustomerService implements ICustomerService {
         // Thêm UUID vào trước tên file để đảm bảo tên file là duy nhất
         String uniqueFilename = UUID.randomUUID().toString() + "_" + filename;
         // Đường dẫn đến thư mục mà bạn muốn lưu file
-        java.nio.file.Path uploadDir = Paths.get("uploads");
+        java.nio.file.Path uploadDir = Paths.get("uploads/customers");
         // Kiểm tra và tạo thư mục nếu nó không tồn tại
         if (!Files.exists(uploadDir)) {
             Files.createDirectories(uploadDir);

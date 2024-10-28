@@ -2,7 +2,7 @@ package com.example.backend.Library.service.impl;
 
 import com.example.backend.Library.exception.DataNotFoundException;
 import com.example.backend.Library.model.dto.request.customer.AddressRequest;
-import com.example.backend.Library.model.dto.response.AddressResponse;
+import com.example.backend.Library.model.dto.response.customer.AddressResponse;
 import com.example.backend.Library.model.entity.customer.Address;
 import com.example.backend.Library.model.entity.customer.Customer;
 import com.example.backend.Library.model.mapper.customer.AddressMapper;
@@ -11,9 +11,7 @@ import com.example.backend.Library.repository.customer.CustomerRepository;
 import com.example.backend.Library.service.interfaces.IAddressService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AddressService implements IAddressService {

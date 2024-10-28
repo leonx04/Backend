@@ -55,8 +55,8 @@ public class Customer extends BaseEntity {
 //    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
 //    private List<Address> addresses;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "customer")
-    private List<Order> orders;
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "customer")
+//    private List<Order> orders;
 
 }

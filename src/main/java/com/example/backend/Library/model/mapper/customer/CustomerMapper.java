@@ -2,7 +2,7 @@ package com.example.backend.Library.model.mapper.customer;
 
 import com.example.backend.Library.model.dto.request.RegisterRequest;
 import com.example.backend.Library.model.dto.request.customer.CustomerRequest;
-import com.example.backend.Library.model.dto.response.CustomerResponse;
+import com.example.backend.Library.model.dto.response.customer.CustomerResponse;
 import com.example.backend.Library.model.entity.customer.Customer;
 import org.mapstruct.*;
 

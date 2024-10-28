@@ -2,6 +2,7 @@ package com.example.backend.Client.config;
 
 import com.example.backend.Library.security.JwtAuthenticationFilter;
 import com.example.backend.Library.security.customer.CustomerDetailService;
+import com.example.backend.Library.security.employee.EmployeeDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -31,11 +32,13 @@ public class ClientConfiguration {
     // Khai báo các thành phần cần thiết: bộ lọc JWT, dịch vụ chi tiết người dùng và bộ mã hóa mật khẩu
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomerDetailService customerDetailService;
+    private final EmployeeDetailService employeeDetailService;
     private final PasswordEncoder passwordEncoder;
 
-    public ClientConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter, CustomerDetailService customerDetailService, PasswordEncoder passwordEncoder) {
+    public ClientConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter, CustomerDetailService customerDetailService, EmployeeDetailService employeeDetailService, PasswordEncoder passwordEncoder) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.customerDetailService = customerDetailService;
+        this.employeeDetailService = employeeDetailService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -44,11 +47,11 @@ public class ClientConfiguration {
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         // Cấu hình AuthenticationManagerBuilder để sử dụng dịch vụ chi tiết người dùng và bộ mã hóa mật khẩu
         return http.getSharedObject(AuthenticationManagerBuilder.class)
-                // Sử dụng dịch vụ chi tiết người dùng
                 .userDetailsService(customerDetailService)
-                // Sử dụng bộ mã hóa mật khẩu
                 .passwordEncoder(passwordEncoder)
-                // Xây dựng AuthenticationManager
+                .and()
+                .userDetailsService(employeeDetailService)
+                .passwordEncoder(passwordEncoder)
                 .and()
                 .build();
     }
@@ -57,27 +60,17 @@ public class ClientConfiguration {
     @Bean
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Vô hiệu hóa CSRF vì ta sử dụng token JWT
-                .csrf(AbstractHttpConfigurer::disable)
-                // Cấu hình CORS cho phép các yêu cầu từ nguồn khác
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                // Cấu hình quyền truy cập cho các URL
+                .csrf(AbstractHttpConfigurer::disable) // Vô hiệu hóa CSRF vì ta sử dụng token JWT
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Cấu hình CORS
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/ecm/register", "/api/ecm/user/login",
-//                                "/api/ecm/auth/**",
-//                                "/api/ecm/admin/customers/search",
-//                                 "/api/ecm/user/**",
-////                                "/api/ecm/admin/customers/fake-data",
-//                                "/api/ecm/admin/customers/**"
-//                        ).permitAll() // Cho phép truy cập không cần xác thực
-//                        .requestMatchers("/api/confirm-order/**", "/api/order/**", "/api/order-detail/**", "/api/admin/**").authenticated() // Yêu cầu xác thực
-//                        .anyRequest().authenticated() // Tất cả các yêu cầu khác đều cần xác thực
+//                        .requestMatchers("/api/ecm/user/login", "/api/ecm/register", "/api/ecm/admin/login", "/admin/forgot-password").permitAll() // Cho phép truy cập không cần xác thực với các endpoint đăng ký và đăng nhập
+//                        .requestMatchers("/api/ecm/admin/**").hasRole("ADMIN") // Chỉ cho phép ADMIN truy cập các endpoint admin
+//                        .requestMatchers("/admin/dashboard").hasAnyRole("ADMIN", "STAFF") // Cho phép ADMIN và STAFF truy cập dashboard
+//                        .anyRequest().authenticated() // Các yêu cầu còn lại đều cần xác thực
                                 .anyRequest().permitAll()
                 )
-                // Quản lý session ở chế độ STATELESS vì ta sử dụng token để xác thực
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // Thêm bộ lọc JWT trước UsernamePasswordAuthenticationFilter
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Quản lý session ở chế độ STATELESS
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Thêm bộ lọc JWT trước UsernamePasswordAuthenticationFilter
 
         return http.build(); // Xây dựng và trả về cấu hình bảo mật
     }
@@ -86,19 +79,13 @@ public class ClientConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Chỉ cho phép các yêu cầu từ địa chỉ "http://127.0.0.1:5500"
-        configuration.setAllowedOrigins(List.of("http://127.0.0.1:5500"));
-        // Cho phép các phương thức HTTP: GET, POST, PUT, DELETE, OPTIONS
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        // Cho phép tất cả các header trong request
-        configuration.setAllowedHeaders(List.of("*"));
-        // Cho phép gửi thông tin xác thực (cookie, authorization header)
-        configuration.setAllowCredentials(true);
+        configuration.setAllowedOrigins(List.of("http://127.0.0.1:5500")); // Chỉ cho phép các yêu cầu từ địa chỉ "http://127.0.0.1:5500"
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Cho phép các phương thức HTTP
+        configuration.setAllowedHeaders(List.of("*")); // Cho phép tất cả các header trong request
+        configuration.setAllowCredentials(true); // Cho phép gửi thông tin xác thực
 
-        // Tạo và đăng ký cấu hình CORS cho tất cả các URL
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // Đăng ký cấu hình CORS cho tất cả các URL
-        source.registerCorsConfiguration("/**", configuration);
-        return source; // Trả về cấu hình nguồn CORS
+        source.registerCorsConfiguration("/**", configuration); // Đăng ký cấu hình CORS cho tất cả các URL
+        return source;
     }
 }

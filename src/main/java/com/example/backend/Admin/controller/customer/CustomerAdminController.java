@@ -1,6 +1,7 @@
 package com.example.backend.Admin.controller.customer;
 
 import com.example.backend.Library.model.dto.request.customer.CustomerRequest;
+import com.example.backend.Library.model.dto.response.customer.CustomerResponse;
 import com.example.backend.Library.model.dto.response.*;
 import com.example.backend.Library.model.entity.customer.Customer;
 import com.example.backend.Library.service.interfaces.ICustomerService;
@@ -10,7 +11,6 @@ import org.springframework.data.domain.*;
 import org.springframework.http.*;
 import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -30,6 +30,7 @@ public class CustomerAdminController {
         try {
             customerService.createCustomer(request);
             response.put("message", "Thêm khách hàng thành công");
+            response.put("status", "success");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             System.out.println(e.getMessage());

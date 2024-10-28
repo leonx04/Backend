@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping("${api.prefix}")
+@RequestMapping("${api.prefix}/admin")
+@CrossOrigin(origins = "http://127.0.0.1:5500/")
 public class LoginAdminController {
     private static final Logger logger = LoggerFactory.getLogger(LoginAdminController.class);
 
@@ -27,7 +28,7 @@ public class LoginAdminController {
     }
 
     // Method đăng nhập => sử lý yêu cầu đăng nhập
-    @PostMapping("admin/login")
+    @PostMapping("login")
     public ResponseEntity<?> loginCustomer(
             @Valid @RequestBody LoginRequest request,
             BindingResult result) {
