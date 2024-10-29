@@ -2,6 +2,7 @@ package com.example.backend.Library.service.interfaces.orders;
 
 import com.example.backend.Library.model.dto.request.orders.ListOrderDTO;
 import com.example.backend.Library.model.dto.request.orders.OrderDTO;
+import com.example.backend.Library.model.dto.request.orders.OrderStatusLogDTO;
 import com.example.backend.Library.model.dto.request.orders.PageDTO;
 import org.springframework.data.domain.Page;
 
@@ -12,4 +13,5 @@ public interface OrderInterface {
     PageDTO<OrderDTO> getOrder(int pageNo, int pageSize);
 
     PageDTO<OrderDTO> getOrderfindStatus(int pageNo, int pageSize);
+
 }

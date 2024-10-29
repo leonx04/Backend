@@ -1,12 +1,10 @@
 package com.example.backend.Library.service.impl.orders;
 
-import com.example.backend.Library.model.dto.request.orders.ListOrderDTO;
-import com.example.backend.Library.model.dto.request.orders.OrderDTO;
+import com.example.backend.Library.model.dto.request.orders.*;
 
-import com.example.backend.Library.model.dto.request.orders.OrderItemDTO;
 import com.example.backend.Library.model.entity.orders.Order;
-import com.example.backend.Library.model.dto.request.orders.PageDTO;
 import com.example.backend.Library.model.entity.orders.OrderStatus;
+import com.example.backend.Library.model.entity.orders.OrderStatusLog;
 import com.example.backend.Library.model.mapper.Orders.MapOrderFields;
 import com.example.backend.Library.repository.orders.OrderDetailRepository;
 import com.example.backend.Library.repository.orders.OrderRepository;
@@ -17,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,7 +35,12 @@ public class OrderImpl implements OrderInterface {
             ListOrderDTO dto = new ListOrderDTO();
             mapOrderFields.mapCommonOrderFields(order, dto);
             dto.setNotes(order.getNotes());
-            dto.setVoucherCode(order.getVoucher().getDiscountValue());
+            if(order.getVoucher() == null)  {
+                dto.setVoucherCode(BigDecimal.valueOf(0));
+
+            }else{
+                dto.setVoucherCode(order.getVoucher().getDiscountValue());
+            }
             dto.setRecipientName(order.getRecipientName());
             dto.setRecipientPhone(order.getRecipientPhone());
             dto.setDetailAddress(order.getOrdersAddress());
@@ -109,6 +113,8 @@ public class OrderImpl implements OrderInterface {
 
         return pageDTO;
     }
+
+
 
 
 }

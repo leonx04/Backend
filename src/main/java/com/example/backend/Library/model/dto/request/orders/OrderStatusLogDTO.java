@@ -5,8 +5,9 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class OrderStatusUpdateDTO {
+public class OrderStatusLogDTO {
+    private String nameEmployee;
+    private String status;
     private String code;
-    private Integer status;
-//    private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;
 }
