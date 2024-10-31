@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("${api.prefix}/admin/customers")
-@CrossOrigin(origins = "http://127.0.0.1:5500/")
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 public class CustomerAdminController {
     @Autowired
     private ICustomerService customerService;
@@ -54,6 +55,7 @@ public class CustomerAdminController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<?> getAllCustomers(
             @RequestParam(value = "page", defaultValue = "0") int page

@@ -2,6 +2,7 @@ package com.example.backend.Client.controller.login;
 
 import com.example.backend.Library.service.interfaces.ICustomerService;
 import com.example.backend.Library.service.interfaces.IPasswordResetService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/${api.prefix}/auth")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
-public class AuthController {
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+public class AuthClientController {
+    private static final Logger logger = LoggerFactory.getLogger(AuthClientController.class);
 
     @Autowired
     private IPasswordResetService passwordResetService;
@@ -34,7 +35,7 @@ public class AuthController {
 
     // Quên mật khẩu
     @PostMapping("/forgot-password")
-    public ResponseEntity<Object> forgotPassword(@RequestParam String email) {
+    public ResponseEntity<?> getOtp(HttpServletRequest request, @RequestParam String email) {
         Map<String, String> response = new HashMap<>();
         // Kiem tra loi
         if (!isValidEmail(email)) {
@@ -52,7 +53,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         // Gửi mã OTP đến email
-        passwordResetService.initiatePasswordReset(email);
+        passwordResetService.initiatePasswordReset(request, email);
         // Trả về thông báo thành công
         return ResponseEntity.ok().body(Map.of("message", "Mã OTP đã được gửi đến email của bạn."));
     }
@@ -72,7 +73,9 @@ public class AuthController {
 
     @PostMapping("/reset-password")
     public ResponseEntity<Map<String, String>> resetPassword(
+            HttpServletRequest request,
             @RequestParam("email") String email,
+            @RequestParam("otp") String otp,
             @RequestParam("password") String newPassword,
             @RequestParam("reTypePassword") String retypePassword) {
 
@@ -87,8 +90,16 @@ public class AuthController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        return ResponseEntity.ok().body(
-                passwordResetService.resetPassword(email, newPassword));
+        try {
+            passwordResetService.resetPassword(request ,email, newPassword, otp);
+            response.put("message", "Đặt lại mật khẩu thành công.");
+            response.put("status", "success");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("message", "Đặt lại mật khẩu thất bại.");
+            response.put("status", "error");
+            return ResponseEntity.ok(response);
+        }
     }
 
 }

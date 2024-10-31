@@ -87,4 +87,10 @@ public class EmployeeService {
         imageFile.transferTo(file); // Lưu file
         return "images/" + imageFile.getOriginalFilename(); // Trả về đường dẫn hình ảnh tương đối
     }
+
+
+    // Son
+    public Employee findByEmail(String email) {
+        return employeeRepository.findByEmail(email).orElse(null);
+    }
 }

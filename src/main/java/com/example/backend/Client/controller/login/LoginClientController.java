@@ -2,6 +2,7 @@ package com.example.backend.Client.controller.login;
 
 import com.example.backend.Library.model.dto.request.LoginRequest;
 import com.example.backend.Library.model.dto.request.RegisterRequest;
+import com.example.backend.Library.model.entity.customer.Customer;
 import com.example.backend.Library.service.interfaces.ICustomerService;
 import com.example.backend.Library.util.JwtUtil;
 import jakarta.validation.Valid;
@@ -17,13 +18,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
-@RequestMapping("${api.prefix}")
+@RequestMapping("${api.prefix}/user")
 public class LoginClientController {
     // Khai báo đối tượng Logger
     private static final Logger logger // Đối tượng Logger
@@ -103,8 +101,13 @@ public class LoginClientController {
 
             // Lấy thông tin chi tiết của người dùng sau khi xác thực thành công
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Optional<Customer> cus = customerService.getCustomerByEmail(request.getEmail());
+            Customer customer = cus.get();
+            if (customer == null) {
+                return ResponseEntity.badRequest().body("Tài khoản không tồn tại");
+            }
             // Tạo JWT token cho người dùng
-            String jwt = jwtUtil.generateToken(userDetails);
+            String jwt = jwtUtil.generateToken(userDetails, customer.getFullName());
 
             // Chuẩn bị phản hồi trả về cho client với token và thông báo đăng nhập thành công
             Map<String, Object> response = new HashMap<>();
