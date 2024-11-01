@@ -49,7 +49,7 @@ public class Order {
     private Integer orderPayment;
 
 
-    private int orderStatus;
+    private Integer orderStatus;
     private int shippingStatus;
     private Double subtotal;
     private Double shippingCost;

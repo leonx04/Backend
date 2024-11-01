@@ -1,4 +1,4 @@
-package com.example.backend.Library.model.dto.request.orders;
+package com.example.backend.Library.model.dto.Response.orders;
 
 import lombok.Data;
 

@@ -1,6 +1,6 @@
 package com.example.backend.Library.model.mapper.Orders;
 
-import com.example.backend.Library.model.dto.request.orders.OrderDTO;
+import com.example.backend.Library.model.dto.Response.orders.OrderDTO;
 import com.example.backend.Library.model.entity.orders.Order;
 import com.example.backend.Library.repository.orders.OrderDetailRepository;
 import com.example.backend.Library.repository.orders.OrderRepository;

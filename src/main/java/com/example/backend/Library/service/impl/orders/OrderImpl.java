@@ -1,10 +1,10 @@
 package com.example.backend.Library.service.impl.orders;
 
-import com.example.backend.Library.model.dto.request.orders.*;
+import com.example.backend.Library.model.dto.Request.FindByOrderStatusAndOrderType;
+import com.example.backend.Library.model.dto.Response.orders.*;
 
 import com.example.backend.Library.model.entity.orders.Order;
 import com.example.backend.Library.model.entity.orders.OrderStatus;
-import com.example.backend.Library.model.entity.orders.OrderStatusLog;
 import com.example.backend.Library.model.mapper.Orders.MapOrderFields;
 import com.example.backend.Library.repository.orders.OrderDetailRepository;
 import com.example.backend.Library.repository.orders.OrderRepository;
@@ -16,8 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -114,7 +116,38 @@ public class OrderImpl implements OrderInterface {
         return pageDTO;
     }
 
+    @Override
+    public Optional<Order> updateOrder(String code, Integer orderStatus, LocalDateTime updatedAt) {
+        Optional<Order> orderOptional = orderRepository.findByCode(code);
+        if (orderOptional.isPresent()) {
+            Order order = orderOptional.get();
+            order.setOrderStatus(orderStatus);
+            order.setUpdatedAt(updatedAt);
+            orderRepository.save(order);
+            return Optional.of(order);
+        }
+        return Optional.empty();
+    }
 
+    @Override
+    public PageDTO<OrderDTO> getOrderfindByStatusAndType(FindByOrderStatusAndOrderType request, int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Order> orderPage =  orderRepository.findByOrderStatusAndOrderType(request.getOrderStatus(),request.getOrderType(),pageable);
+        List<Order> orders = orderPage.getContent();
+        List<OrderDTO> orderDTOs = orders.stream().map(order -> {
+            OrderDTO dto = new OrderDTO();
+            mapOrderFields.mapCommonOrderFields(order, dto);
+            return dto;
+        }).collect(Collectors.toList());
+        PageDTO<OrderDTO> pageDTO = new PageDTO<>();
+        pageDTO.setContent(orderDTOs);
+        pageDTO.setPageNo(orderPage.getNumber());
+        pageDTO.setPageSize(orderPage.getSize());
+        pageDTO.setTotalElements(orderPage.getTotalElements());
+        pageDTO.setTotalPages(orderPage.getTotalPages());
+        pageDTO.setLast(orderPage.isLast());
+        return pageDTO;
+    }
 
 
 }

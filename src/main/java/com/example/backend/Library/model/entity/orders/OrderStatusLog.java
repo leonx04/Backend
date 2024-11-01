@@ -4,6 +4,8 @@ import com.example.backend.Library.model.entity.employee.Employee;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -23,5 +25,10 @@ public class OrderStatusLog {
     @ManyToOne
     @JoinColumn(name = "orderId", referencedColumnName = "id")
     private Order order;
-
+    private int orderStatus;
+    @Column(name = "updatedat")
+    private LocalDateTime updatedAt;
+    public String getOrderStatus() {
+        return OrderStatus.getDescriptionByCode(orderStatus);
+    }
 }
