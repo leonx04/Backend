@@ -1,14 +1,11 @@
 package com.example.backend.Library.model.entity.customer;
 
-import com.example.backend.Library.model.entity.Order;
 import com.example.backend.Library.model.entity.base.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Setter

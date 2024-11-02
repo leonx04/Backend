@@ -1,6 +1,6 @@
-package com.example.backend.Library.service.impl;
+package com.example.backend.Library.service.impl.password_email;
 
-import com.example.backend.Library.service.interfaces.IEmailService;
+import com.example.backend.Library.service.interfaces.password_email.IEmailService;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.example.backend.Library.service.interfaces;
+package com.example.backend.Library.service.interfaces.password_email;
 
 import jakarta.servlet.http.HttpServletRequest;
 

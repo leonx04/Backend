@@ -1,4 +1,4 @@
-package com.example.backend.Library.service.interfaces;
+package com.example.backend.Library.service.interfaces.customer;
 
 import com.example.backend.Library.model.dto.request.customer.AddressRequest;
 import com.example.backend.Library.model.dto.response.customer.AddressResponse;

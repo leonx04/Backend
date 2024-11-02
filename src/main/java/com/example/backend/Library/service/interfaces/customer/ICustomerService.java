@@ -1,4 +1,4 @@
-package com.example.backend.Library.service.interfaces;
+package com.example.backend.Library.service.interfaces.customer;
 
 import com.example.backend.Library.model.dto.request.LoginRequest;
 import com.example.backend.Library.model.dto.request.RegisterRequest;

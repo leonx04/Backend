@@ -4,7 +4,7 @@ import com.example.backend.Library.model.dto.request.customer.CustomerRequest;
 import com.example.backend.Library.model.dto.response.customer.CustomerResponse;
 import com.example.backend.Library.model.dto.response.*;
 import com.example.backend.Library.model.entity.customer.Customer;
-import com.example.backend.Library.service.interfaces.ICustomerService;
+import com.example.backend.Library.service.interfaces.customer.ICustomerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;

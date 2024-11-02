@@ -1,14 +1,12 @@
 package com.example.backend.Admin.controller.login;
 
 import com.example.backend.Library.model.dto.request.LoginRequest;
-import com.example.backend.Library.model.entity.Employee;
-import com.example.backend.Library.service.impl.EmployeeService;
+import com.example.backend.Library.model.entity.employee.Employee;
+import com.example.backend.Library.service.impl.employee.EmployeeService;
 import com.example.backend.Library.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.slf4j.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -74,13 +72,13 @@ public class LoginAdminController {
             Employee employee = employeeService.findByEmail(request.getEmail());
 
             // Tạo JWT token cho người dùng
-            String jwt = jwtUtil.generateToken(userDetails, employee.getFullname());
+            String jwt = jwtUtil.generateToken(userDetails, employee.getFullName());
 
             // Chuẩn bị phản hồi trả về cho client với token và thông báo đăng nhập thành công
             Map<String, Object> response = new HashMap<>();
             response.put("token", jwt);
             response.put("role", userDetails.getAuthorities().toArray()[0].toString());
-            response.put("username", employee.getUsername());
+            response.put("username", employee.getUserName());
             response.put("message", "Đăng nhập thành công");
             response.put("status", "success");
             System.out.println(response.get("role"));

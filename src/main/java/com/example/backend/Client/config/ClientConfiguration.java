@@ -54,8 +54,9 @@ public class ClientConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/ecm/admin/auth/login", "/api/ecm/admin/auth/get-otp", "/api/ecm/admin/auth/reset-password")
                         .permitAll()
+                        .requestMatchers("/api/admin/employees", "/api/ecm/admin/customers", "/api/admin/promotions",
+                                "/api/admin/vouchers").hasRole("ADMIN")
                         .requestMatchers("/api/confirm-order/**").authenticated()
-                        .requestMatchers("/api/admin/employees", "/api/ecm/admin/customers").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

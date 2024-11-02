@@ -51,7 +51,8 @@ public class AdminConfiguration {
 
                         .requestMatchers("/api/ecm/admin/customers").hasRole("ADMIN")
 
-                        .requestMatchers("/api/admin/employees").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/employees", "/api/admin/employees/**", "/api/admin/promotions",
+                                "/api/admin/vouchers", "/api/v1/admin/items/product").hasRole("ADMIN")
 
                         .requestMatchers("/staff/dashboard").hasAnyRole("STAFF", "ADMIN")
 

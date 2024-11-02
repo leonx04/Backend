@@ -3,7 +3,7 @@ package com.example.backend.Client.controller.login;
 import com.example.backend.Library.model.dto.request.LoginRequest;
 import com.example.backend.Library.model.dto.request.RegisterRequest;
 import com.example.backend.Library.model.entity.customer.Customer;
-import com.example.backend.Library.service.interfaces.ICustomerService;
+import com.example.backend.Library.service.interfaces.customer.ICustomerService;
 import com.example.backend.Library.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;

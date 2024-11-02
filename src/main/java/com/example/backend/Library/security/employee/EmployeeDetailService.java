@@ -1,6 +1,6 @@
 //package com.example.backend.Library.security.employee;
 //
-//import com.example.backend.Library.model.entity.Employee;
+//import com.example.backend.Library.model.entity.employee.Employee;
 //import com.example.backend.Library.repository.EmployeeRepo;
 //import org.springframework.security.core.authority.SimpleGrantedAuthority;
 //import org.springframework.security.core.userdetails.*;
@@ -55,7 +55,7 @@
 
 package com.example.backend.Library.security.employee;
 
-import com.example.backend.Library.model.entity.Employee;
+import com.example.backend.Library.model.entity.employee.Employee;
 import com.example.backend.Library.repository.EmployeeRepo;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -88,8 +88,8 @@ public class EmployeeDetailService implements UserDetailsService {
 
         // Cấp quyền dựa trên roleID mà không thay đổi mật khẩu
         List<SimpleGrantedAuthority> authorities = List.of(
-                new SimpleGrantedAuthority(employee.getRoleid() == 0 ? "ROLE_ADMIN" : "ROLE_STAFF"));
+                new SimpleGrantedAuthority(employee.getRoleId() == 0 ? "ROLE_ADMIN" : "ROLE_STAFF"));
 
-        return new User(employee.getEmail(), employee.getPassword(), authorities);
+        return new User(employee.getEmail(), employee.getPassWord(), authorities);
     }
 }

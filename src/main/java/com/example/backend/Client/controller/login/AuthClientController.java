@@ -1,7 +1,7 @@
 package com.example.backend.Client.controller.login;
 
-import com.example.backend.Library.service.interfaces.ICustomerService;
-import com.example.backend.Library.service.interfaces.IPasswordResetService;
+import com.example.backend.Library.service.interfaces.customer.ICustomerService;
+import com.example.backend.Library.service.interfaces.password_email.IPasswordResetService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

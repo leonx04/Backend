@@ -1,12 +1,13 @@
-package com.example.backend.Library.service.impl;
+package com.example.backend.Library.service.impl.employee;
 
-import com.example.backend.Library.model.entity.Employee;
+import com.example.backend.Library.model.entity.employee.Employee;
 import com.example.backend.Library.repository.EmployeeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -30,7 +31,7 @@ public class EmployeeService {
     public Employee createEmployee(Employee employee, MultipartFile imageFile) throws IOException {
         if (imageFile != null && !imageFile.isEmpty()) {
             String imageUrl = saveImage(imageFile);
-            employee.setImageURL(imageUrl);
+            employee.setImageUrl(imageUrl);
         }
         return employeeRepository.save(employee);
     }
@@ -42,22 +43,22 @@ public class EmployeeService {
 
         if (imageFile != null && !imageFile.isEmpty()) {
             String imageUrl = saveImage(imageFile);
-            employee.setImageURL(imageUrl);
+            employee.setImageUrl(imageUrl);
         }
         // Cập nhật thông tin
-        employee.setUsername(employeeDetails.getUsername());
-        employee.setPassword(employeeDetails.getPassword()); // Mã hóa mật khẩu nếu cần
-        employee.setFullname(employeeDetails.getFullname());
+        employee.setUserName(employeeDetails.getUserName());
+        employee.setPassWord(employeeDetails.getPassWord()); // Mã hóa mật khẩu nếu cần
+        employee.setFullName(employeeDetails.getFullName());
         employee.setGender(employeeDetails.getGender());
-        employee.setBirthdate(employeeDetails.getBirthdate());
+        employee.setBirthDate(employeeDetails.getBirthDate());
         employee.setPhone(employeeDetails.getPhone());
         employee.setEmail(employeeDetails.getEmail());
         employee.setAddress(employeeDetails.getAddress());
-        employee.setImageURL(employeeDetails.getImageURL());
-        employee.setRoleid(employeeDetails.getRoleid());
+        employee.setImageUrl(employeeDetails.getImageUrl());
+        employee.setRoleId(employeeDetails.getRoleId());
         employee.setStatus(employeeDetails.getStatus());
         employee.setNote(employeeDetails.getNote());
-        employee.setUpdatedat(new Date()); // Cập nhật ngày
+        employee.setUpdatedAt(LocalDate.now()); // Cập nhật ngày
         return employeeRepository.save(employee);
     }
 
@@ -70,7 +71,7 @@ public class EmployeeService {
 
     // Tìm kiếm nhân viên theo tên
     public List<Employee> searchEmployeesByName(String name) {
-        return employeeRepository.findByFullnameContainingIgnoreCase(name);
+        return employeeRepository.findByFullNameContainingIgnoreCase(name);
     }
 
     // Tìm kiếm nhân viên theo code

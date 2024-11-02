@@ -1,7 +1,7 @@
-package com.example.backend.Admin.controller;
+package com.example.backend.Admin.controller.employee;
 
-import com.example.backend.Library.model.entity.Employee;
-import com.example.backend.Library.service.impl.EmployeeService;
+import com.example.backend.Library.model.entity.employee.Employee;
+import com.example.backend.Library.service.impl.employee.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;

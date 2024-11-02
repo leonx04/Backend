@@ -1,4 +1,4 @@
-package com.example.backend.Library.service.impl;
+package com.example.backend.Library.service.impl.customer;
 
 import com.example.backend.Library.exception.DataNotFoundException;
 import com.example.backend.Library.model.dto.request.customer.AddressRequest;
@@ -8,7 +8,7 @@ import com.example.backend.Library.model.entity.customer.Customer;
 import com.example.backend.Library.model.mapper.customer.AddressMapper;
 import com.example.backend.Library.repository.customer.AddressRepository;
 import com.example.backend.Library.repository.customer.CustomerRepository;
-import com.example.backend.Library.service.interfaces.IAddressService;
+import com.example.backend.Library.service.interfaces.customer.IAddressService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

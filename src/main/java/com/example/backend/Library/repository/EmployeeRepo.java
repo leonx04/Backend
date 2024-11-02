@@ -1,6 +1,6 @@
 package com.example.backend.Library.repository;
 
-import com.example.backend.Library.model.entity.Employee;
+import com.example.backend.Library.model.entity.employee.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,8 +10,8 @@ import java.util.Optional;
 @Repository
 public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
     // Phuong
-    Employee findByUsername(String username);
-    List<Employee> findByFullnameContainingIgnoreCase(String fullname);
+    Employee findByUserName(String username);
+    List<Employee> findByFullNameContainingIgnoreCase(String fullname);
     Optional<Employee> findByCode(String code);
 
     // Son

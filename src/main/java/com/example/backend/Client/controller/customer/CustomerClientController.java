@@ -2,11 +2,10 @@ package com.example.backend.Client.controller.customer;
 
 import com.example.backend.Library.model.dto.request.customer.CustomerRequest;
 import com.example.backend.Library.model.entity.customer.Customer;
-import com.example.backend.Library.service.interfaces.ICustomerService;
+import com.example.backend.Library.service.interfaces.customer.ICustomerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;

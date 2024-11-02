@@ -1,0 +1,9 @@
+package com.example.backend.Library.repository.attributes;
+
+import com.example.backend.Library.model.entity.attributes.ProductImage;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ProductImageRepository extends JpaRepository<ProductImage, Integer> {
+}

@@ -2,7 +2,7 @@ package com.example.backend.Client.controller.customer;
 
 import com.example.backend.Library.model.dto.request.customer.AddressRequest;
 import com.example.backend.Library.model.dto.response.customer.AddressResponse;
-import com.example.backend.Library.service.interfaces.IAddressService;
+import com.example.backend.Library.service.interfaces.customer.IAddressService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

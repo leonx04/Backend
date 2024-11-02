@@ -1,14 +1,14 @@
-package com.example.backend.Library.service.impl;
+package com.example.backend.Library.service.impl.customer;
 
 import com.example.backend.Library.exception.DataNotFoundException;
 import com.example.backend.Library.model.dto.request.LoginRequest;
 import com.example.backend.Library.model.dto.request.RegisterRequest;
 import com.example.backend.Library.model.dto.request.customer.CustomerRequest;
 import com.example.backend.Library.model.dto.response.customer.CustomerResponse;
-import com.example.backend.Library.model.entity.Cart;
-import com.example.backend.Library.model.entity.CartDetail;
-import com.example.backend.Library.model.entity.Order;
-import com.example.backend.Library.model.entity.OrderDetail;
+import com.example.backend.Library.model.entity.cart.Cart;
+import com.example.backend.Library.model.entity.cart.CartDetail;
+import com.example.backend.Library.model.entity.orders.Order;
+import com.example.backend.Library.model.entity.orders.OrderDetail;
 import com.example.backend.Library.model.entity.customer.Address;
 import com.example.backend.Library.model.entity.customer.Customer;
 import com.example.backend.Library.model.mapper.customer.CustomerMapper;
@@ -18,7 +18,7 @@ import com.example.backend.Library.repository.OrderDetailRepository;
 import com.example.backend.Library.repository.customer.AddressRepository;
 import com.example.backend.Library.repository.customer.CustomerRepository;
 import com.example.backend.Library.repository.OrderRepository;
-import com.example.backend.Library.service.interfaces.ICustomerService;
+import com.example.backend.Library.service.interfaces.customer.ICustomerService;
 import com.github.javafaker.Faker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -157,13 +157,13 @@ public class CustomerService implements ICustomerService {
                 Customer customer = customerOpt.get();
                 List<Address> addresses = addressRepository.findAllByCustomer(customer);
                 addressRepository.deleteAll(addresses);
-                Cart cart = cartRepository.findByCustomerId(id);
+                Cart cart = cartRepository.findByUserId(id);
                 if (cart != null) {
                     List<CartDetail> cartDetails = cartDetailRepository.findByCartId(cart.getId());
                     cartDetailRepository.deleteAll(cartDetails);
                     cartRepository.delete(cart);
                 }
-                List<Order> orders = orderRepository.findByCustomerId(id);
+                List<Order> orders = orderRepository.findByUserId(id);
                 if (orders != null) {
                     for (Order order : orders) {
                         List<OrderDetail> orderDetails = orderDetailRepository.findByOrderId(order.getId());

@@ -1,13 +1,12 @@
-package com.example.backend.Library.service.impl;
+package com.example.backend.Library.service.impl.password_email;
 
-import com.example.backend.Library.model.entity.Employee;
+import com.example.backend.Library.model.entity.employee.Employee;
 import com.example.backend.Library.model.entity.customer.Customer;
 import com.example.backend.Library.repository.EmployeeRepo;
 import com.example.backend.Library.repository.customer.CustomerRepository;
-import com.example.backend.Library.service.interfaces.IEmailService;
-import com.example.backend.Library.service.interfaces.IPasswordResetService;
+import com.example.backend.Library.service.interfaces.password_email.IEmailService;
+import com.example.backend.Library.service.interfaces.password_email.IPasswordResetService;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -122,7 +121,7 @@ public class PasswordResetService implements IPasswordResetService {
                     return response;
                 }
                 // Đặt lại mật khẩu
-                employee.setPassword(passwordEncoder.encode(newPassword));
+                employee.setPassWord(passwordEncoder.encode(newPassword));
                 // Lưu thông tin khách hàng
                 employeeRepository.save(employee);
 
