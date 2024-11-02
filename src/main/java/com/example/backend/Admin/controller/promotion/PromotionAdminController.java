@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/admin/promotions")
+@RequestMapping("/api/${api.version}/admin/promotions")
 @CrossOrigin(origins = "http://127.0.0.1:5500/")
 public class PromotionAdminController {
 

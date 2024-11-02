@@ -19,7 +19,7 @@ import java.util.List;
  * Controller để quản lý các yêu cầu liên quan đến voucher từ phía admin.
  */
 @RestController
-@RequestMapping("/api/admin/vouchers")
+@RequestMapping("/api/${api.version}/admin/vouchers")
 @CrossOrigin(origins =  "http://127.0.0.1:5500/") // Cho phép truy cập từ địa chỉ này
 public class VoucherAdminController {
 

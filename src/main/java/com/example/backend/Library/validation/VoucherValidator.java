@@ -27,7 +27,7 @@ public class VoucherValidator {
         errors.addAll(validateDiscountValue(voucherDto.getDiscountValue(), voucherDto.getVoucherType())); // Xác thực giá trị giảm giá
         errors.addAll(validateMinimumOrderValue(voucherDto.getMinimumOrderValue())); // Xác thực giá trị đơn hàng tối thiểu
         errors.addAll(validateVoucherType(voucherDto.getVoucherType())); // Xác thực loại voucher
-        errors.addAll(validateMaximumDiscountAmount(voucherDto.getMaximumDiscountAmount(), voucherDto.getVoucherType(), voucherDto.getDiscountValue())); // Xác thực số tiền giảm giá tối đa
+//        errors.addAll(validateMaximumDiscountAmount(voucherDto.getMaximumDiscountAmount(), voucherDto.getVoucherType(), voucherDto.getDiscountValue())); // Xác thực số tiền giảm giá tối đa
         errors.addAll(validateQuantity(voucherDto.getQuantity())); // Xác thực số lượng
 //        errors.addAll(validateStatus(voucherDto.getStatus())); // Xác thực trạng thái
 
@@ -127,19 +127,19 @@ public class VoucherValidator {
 
 
     // Phương thức xác thực số tiền giảm giá tối đa
-    private static List<String> validateMaximumDiscountAmount(BigDecimal maximumDiscountAmount, String voucherType, BigDecimal discountValue) {
-        List<String> errors = new ArrayList<>();
-        if (maximumDiscountAmount == null) {
-            errors.add("Số tiền giảm giá tối đa là bắt buộc"); // Lỗi: số tiền giảm giá tối đa không được để trống
-        } else if (maximumDiscountAmount.compareTo(BigDecimal.ZERO) <= 0) {
-            errors.add("Số tiền giảm giá tối đa phải lớn hơn không"); // Lỗi: số tiền giảm giá tối đa không được nhỏ hơn hoặc bằng 0
-        } else if (maximumDiscountAmount.scale() > 2) {
-            errors.add("Số tiền giảm giá tối đa không được có quá 2 chữ số thập phân"); // Lỗi: số chữ số thập phân không hợp lệ
-        } else if ("FIXED_AMOUNT".equals(voucherType) && discountValue != null && maximumDiscountAmount.compareTo(discountValue) < 0) {
-            errors.add("Số tiền giảm giá tối đa phải lớn hơn hoặc bằng giá trị giảm giá cho voucher theo số tiền"); // Lỗi: số tiền giảm giá tối đa không hợp lệ
-        }
-        return errors; // Trả về danh sách lỗi
-    }
+//    private static List<String> validateMaximumDiscountAmount(BigDecimal maximumDiscountAmount, String voucherType, BigDecimal discountValue) {
+//        List<String> errors = new ArrayList<>();
+//        if (maximumDiscountAmount == null) {
+//            errors.add("Số tiền giảm giá tối đa là bắt buộc"); // Lỗi: số tiền giảm giá tối đa không được để trống
+//        } else if (maximumDiscountAmount.compareTo(BigDecimal.ZERO) <= 0) {
+//            errors.add("Số tiền giảm giá tối đa phải lớn hơn không"); // Lỗi: số tiền giảm giá tối đa không được nhỏ hơn hoặc bằng 0
+//        } else if (maximumDiscountAmount.scale() > 2) {
+//            errors.add("Số tiền giảm giá tối đa không được có quá 2 chữ số thập phân"); // Lỗi: số chữ số thập phân không hợp lệ
+//        } else if ("FIXED_AMOUNT".equals(voucherType) && discountValue != null && maximumDiscountAmount.compareTo(discountValue) < 0) {
+//            errors.add("Số tiền giảm giá tối đa phải lớn hơn hoặc bằng giá trị giảm giá cho voucher theo số tiền"); // Lỗi: số tiền giảm giá tối đa không hợp lệ
+//        }
+//        return errors; // Trả về danh sách lỗi
+//    }
 
     // Phương thức xác thực số lượng
     private static List<String> validateQuantity(Integer quantity) {
