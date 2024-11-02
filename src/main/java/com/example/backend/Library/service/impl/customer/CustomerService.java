@@ -35,6 +35,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.Normalizer;
 import java.time.ZoneId;
 import java.util.*;
 
@@ -82,6 +83,20 @@ public class CustomerService implements ICustomerService {
         return customerRepository.save(customer);
     }
 
+    private String fullnameToUsername (String fullname) {
+        // Chuyển fullname về chữ thường
+        String lowerCaseString = fullname.toLowerCase();
+        System.out.println("Lowercase: " + lowerCaseString);
+
+        // Loại bỏ dấu
+        String normalizedString = Normalizer.normalize(lowerCaseString, Normalizer.Form.NFD);
+        String withoutDiacritics = normalizedString.replaceAll("\\p{M}", "");
+        System.out.println("Without diacritics: " + withoutDiacritics);
+
+        // Loại bỏ khoảng trắng
+        return withoutDiacritics.replaceAll("\\s+", "");
+    }
+
     @Override
     public Customer createCustomer(CustomerRequest request) {
         String email = request.getEmail();
@@ -92,6 +107,15 @@ public class CustomerService implements ICustomerService {
             throw new DataIntegrityViolationException("Số điện thoại đã được sử dụng");
         }
         Customer customer = customerMapper.toCustomerRequest(request);
+        if (request.getUserName() == null || request.getUserName().isEmpty()) {
+            String username = fullnameToUsername(request.getFullName());
+            int suffix = 1;
+            while (customerRepository.existsByUserName(username)) {
+                username = fullnameToUsername(request.getFullName()) + suffix;
+                suffix++;
+            }
+            customer.setUserName(username);
+        }
         customer.setCode(generateNextCode());
         customer.setPassword(encoder.encode("12345678"));
         customer.setStatus(1);

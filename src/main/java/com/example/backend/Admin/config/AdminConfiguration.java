@@ -49,10 +49,10 @@ public class AdminConfiguration {
                                 "/api/ecm/admin/auth/get-otp", "/api/ecm/admin/auth/reset-password")
                         .permitAll()
 
-                        .requestMatchers("/api/ecm/admin/customers").hasRole("ADMIN")
+                        .requestMatchers("/api/ecm/admin/customers", "/api/v1/admin/items/product/**").hasRole("ADMIN")
 
-                        .requestMatchers("/api/admin/employees", "/api/admin/employees/**", "/api/admin/promotions",
-                                "/api/admin/vouchers", "/api/v1/admin/items/product").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/employees", "/api/admin/employees/**",
+                                "/api/admin/vouchers", "/api/admin/promotions").hasRole("ADMIN")
 
                         .requestMatchers("/staff/dashboard").hasAnyRole("STAFF", "ADMIN")
 
