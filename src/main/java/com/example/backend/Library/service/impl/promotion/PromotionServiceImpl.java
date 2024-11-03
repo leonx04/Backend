@@ -197,4 +197,5 @@ public class PromotionServiceImpl implements Promotion_Service {
             promotion.setStatus(1); // Đang diễn ra
         }
     }
+
 }
