@@ -22,40 +22,40 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
     final ProductRepository productRepo;
 
-    @Override
-    public Product create(Product product) {
-        productRepo.save(product);
-        return product;
-    }
+     @Override
+     public Product create(Product product) {
+          productRepo.save(product);
+          return product;
+     }
 
-    @Override
-    public Optional<Product> findById(Integer id) {
-        return productRepo.findById(id);//optional<Product> // empty Optional
-    }
+     @Override
+     public Optional<Product> findById(Integer id) {
+         return productRepo.findById(id);//optional<Product> // empty Optional
+     }
 
-    @Override
-    public List<Product> findAll() {
-        List<Product> products = productRepo.findAll();
-        return (products.isEmpty() ? Collections.emptyList() : products);
-    }
+     @Override
+     public List<Product> findAll() {
+         List<Product> products = productRepo.findAll();
+         return (products.isEmpty() ? Collections.emptyList() : products);
+     }
 
-    @Override
-    public Product update(Product product) {
-        if (!productRepo.existsById(product.getId())) {
-            throw new ResourceNotFoundException("Update failed: Product not found with ID: " + product.getId());
-        }
-        return productRepo.save(product);
-    }
+     @Override
+     public Product update(Product product) {
+         if (!productRepo.existsById(product.getId())) {
+             throw new ResourceNotFoundException("Update failed: Product not found with ID: " + product.getId());
+         }
+         return productRepo.save(product);
+     }
 
-    @Override
-    public boolean existsById(Integer id) {
-        return productRepo.existsById(id);
-    }
+     @Override
+     public boolean existsById(Integer id) {
+         return productRepo.existsById(id);
+     }
 
-    @Override
-    public void changeStatus(int id, int status) {
-        Product product = productRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product update status with id: " + id + " failed!"));
-        product.setStatus(status);
-        productRepo.save(product);
-    }
+     @Override
+     public void changeStatus(int id, int status) {
+         Product product = productRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product update status with id: " + id + " failed!"));
+         product.setStatus(status);
+         productRepo.save(product);
+     }
 }

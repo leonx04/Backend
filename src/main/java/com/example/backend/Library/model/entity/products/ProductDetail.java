@@ -4,6 +4,7 @@ import com.example.backend.Library.model.entity.attributes.Color;
 import com.example.backend.Library.model.entity.attributes.Size;
 import com.example.backend.Library.model.entity.promotion.Promotion;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -24,7 +25,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 
 public class ProductDetail extends BaseEntity {
-    //    private String code;
+//    private String code;
     private int quantity;
     private BigDecimal price;
     private int weight;

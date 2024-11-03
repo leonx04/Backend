@@ -1,5 +1,6 @@
 package com.example.backend.Admin.controller.promotion;
 
+import com.example.backend.Library.exception.ExceptionHandles;
 import com.example.backend.Library.model.dto.request.promotion.Promotion_Admin_DTO;
 import com.example.backend.Library.service.interfaces.promotion.Promotion_Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/admin/promotions")
+@RequestMapping("/api/${api.version}/admin/promotions")
 @CrossOrigin(origins = "http://127.0.0.1:5500/")
 public class PromotionAdminController {
 
@@ -119,5 +120,12 @@ public class PromotionAdminController {
     private void logDebugInfo(String action, Promotion_Admin_DTO dto) {
         System.out.printf("Debug - %s - startDate: %s, endDate: %s%n",
                 action, dto.getStartDate(), dto.getEndDate());
+    }
+
+    @ExceptionHandler(ExceptionHandles.ValidationException.class)
+    public ResponseEntity<Map<String, Object>> handleValidationException(ExceptionHandles.ValidationException ex) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("errors", ex.getErrors());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

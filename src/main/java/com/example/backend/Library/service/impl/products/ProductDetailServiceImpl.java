@@ -1,4 +1,3 @@
-
 package com.example.backend.Library.service.impl.products;
 
 import com.example.backend.Library.exception.exceptioncustomer.ResourceNotFoundException;
@@ -68,4 +67,3 @@ public class ProductDetailServiceImpl implements ProductDetailService {
         return productDetailRepo.findByPromotionId(promotionId);
     }
 }
-

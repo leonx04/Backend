@@ -1,18 +1,15 @@
 package com.example.backend.Admin.controller.promotion;
 
-import com.example.backend.Library.model.dto.response.ResponseData;
 import com.example.backend.Library.model.entity.products.ProductDetail;
 import com.example.backend.Library.service.impl.promotion.PromotionProductServiceImpl;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/promotion-products")
+@RequestMapping("/api/${api.version}/admin/promotion-products")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://127.0.0.1:5500/")
 public class PromotionProductController {

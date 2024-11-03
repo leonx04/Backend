@@ -3,7 +3,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-
+.rescache
 ### STS ###
 .apt_generated
 .classpath
@@ -35,3 +35,4 @@ build/
 ### Spring Framework ###
 /target/
 !src/main/resources/application.properties
+src/main/resources/application.properties
