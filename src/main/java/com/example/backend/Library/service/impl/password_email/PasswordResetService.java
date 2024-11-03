@@ -4,8 +4,7 @@ import com.example.backend.Library.model.entity.employee.Employee;
 import com.example.backend.Library.model.entity.customer.Customer;
 import com.example.backend.Library.repository.EmployeeRepo;
 import com.example.backend.Library.repository.customer.CustomerRepository;
-import com.example.backend.Library.service.interfaces.password_email.IEmailService;
-import com.example.backend.Library.service.interfaces.password_email.IPasswordResetService;
+import com.example.backend.Library.service.interfaces.password_email.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -14,10 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class PasswordResetService implements IPasswordResetService {
@@ -196,16 +192,18 @@ public class PasswordResetService implements IPasswordResetService {
         emailService.sendEmail(email, emailBody, "Thông báo: Mật khẩu của bạn đã được đặt lại thành công");
     }
 
+    // Tạo nội dung email thông báo mật khẩu đã được đặt lại thành công
     private String createPasswordResetSuccessEmailBody() {
         return "Chào bạn,\n\n" +
                 "Chúng tôi xin thông báo rằng mật khẩu của tài khoản của bạn tại Shop Shoes JN đã được đặt lại thành công.\n\n" +
-                "Nếu bạn không thực hiện yêu cầu này, vui lòng liên hệ với bộ phận hỗ trợ khách hàng của chúng tôi ngay lập tức.\n\n" +
+                "Nếu bạn không thực hiện yêu cầu này, vui lòng liên hệ với bộ phận hỗ trợ của chúng tôi ngay lập tức.\n\n" +
                 "Trân trọng,\n" +
                 "Đội ngũ hỗ trợ\n" +
                 "Shop Shoes JN\n\n" +
                 "Lưu ý: Đây là email tự động, vui lòng không trả lời email này.";
     }
 
+    // Sinh mã OTP
     private String generateOTP() {
         Random random = new Random();
         return String.format("%06d", random.nextInt(1000000));

@@ -40,23 +40,19 @@ public class AdminConfiguration {
     public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .securityMatcher("/api/ecm/admin/**", "/api/ecm/user/**")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                        .requestMatchers("/api/ecm/admin/auth/login", "/api/ecm/admin/auth/logout",
-                                "/api/ecm/admin/auth/get-otp", "/api/ecm/admin/auth/reset-password")
-                        .permitAll()
-
-                        .requestMatchers("/api/ecm/admin/customers", "/api/v1/admin/items/product/**").hasRole("ADMIN")
-
-                        .requestMatchers("/api/admin/employees", "/api/admin/employees/**",
-                                "/api/admin/vouchers", "/api/admin/promotions").hasRole("ADMIN")
-
-                        .requestMatchers("/staff/dashboard").hasAnyRole("STAFF", "ADMIN")
-
-                        .anyRequest().authenticated()
+//                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+//
+//                        .requestMatchers("/api/ecm/admin/auth/login", "/api/ecm/admin/auth/logout",
+//                                "/api/ecm/admin/auth/get-otp", "/api/ecm/admin/auth/reset-password")
+//                        .permitAll()
+//                        .requestMatchers("/api/ecm/admin/customers", "/api/v1/admin/items/product/**").hasRole("ADMIN")
+//                        .requestMatchers("/api/admin/employees", "/api/admin/employees/**", "/api/admin/vouchers/search",
+//                                "/api/admin/vouchers", "/api/admin/promotions").hasRole("ADMIN")
+//                        .requestMatchers("/staff/dashboard").hasAnyRole("STAFF", "ADMIN")
+//                        .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                             .loginPage("/api/ecm/admin/login")

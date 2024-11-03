@@ -1,23 +1,16 @@
 package com.example.backend.Library.service.impl.customer;
 
 import com.example.backend.Library.exception.DataNotFoundException;
-import com.example.backend.Library.model.dto.request.LoginRequest;
-import com.example.backend.Library.model.dto.request.RegisterRequest;
+import com.example.backend.Library.model.dto.request.*;
 import com.example.backend.Library.model.dto.request.customer.CustomerRequest;
 import com.example.backend.Library.model.dto.response.customer.CustomerResponse;
-import com.example.backend.Library.model.entity.cart.Cart;
-import com.example.backend.Library.model.entity.cart.CartDetail;
-import com.example.backend.Library.model.entity.orders.Order;
-import com.example.backend.Library.model.entity.orders.OrderDetail;
-import com.example.backend.Library.model.entity.customer.Address;
-import com.example.backend.Library.model.entity.customer.Customer;
+import com.example.backend.Library.model.entity.cart.*;
+import com.example.backend.Library.model.entity.orders.*;
+import com.example.backend.Library.model.entity.customer.*;
 import com.example.backend.Library.model.mapper.customer.CustomerMapper;
-import com.example.backend.Library.repository.CartDetailRepository;
-import com.example.backend.Library.repository.CartRepository;
-import com.example.backend.Library.repository.OrderDetailRepository;
-import com.example.backend.Library.repository.customer.AddressRepository;
-import com.example.backend.Library.repository.customer.CustomerRepository;
-import com.example.backend.Library.repository.OrderRepository;
+import com.example.backend.Library.repository.*;
+import com.example.backend.Library.repository.customer.*;
+import com.example.backend.Library.repository.orders.*;
 import com.example.backend.Library.service.interfaces.customer.ICustomerService;
 import com.github.javafaker.Faker;
 import org.slf4j.Logger;
@@ -31,10 +24,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.text.Normalizer;
 import java.time.ZoneId;
 import java.util.*;
@@ -187,7 +177,7 @@ public class CustomerService implements ICustomerService {
                     cartDetailRepository.deleteAll(cartDetails);
                     cartRepository.delete(cart);
                 }
-                List<Order> orders = orderRepository.findByUserId(id);
+                List<Order> orders = orderRepository.findByCustomerId(id);
                 if (orders != null) {
                     for (Order order : orders) {
                         List<OrderDetail> orderDetails = orderDetailRepository.findByOrderId(order.getId());
