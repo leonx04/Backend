@@ -273,6 +273,7 @@ public class VoucherServiceImpl implements VoucherService {
         updatedVoucher.setStartDate(convertToVietnamTime(voucherDto.getStartDate()));
         updatedVoucher.setEndDate(convertToVietnamTime(voucherDto.getEndDate()));
         updatedVoucher.setUpdatedAt(now);
+        updatedVoucher.setStatus(determineVoucherStatus(updatedVoucher.getStartDate(), updatedVoucher.getEndDate(), now));
 
         return updatedVoucher;
     }
