@@ -28,7 +28,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
             + "(:email IS NULL OR LOWER(c.email) LIKE LOWER(CONCAT('%', :email, '%'))) AND "
             + "(:phone IS NULL OR c.phone LIKE %:phone%) AND "
             + "(:gender IS NULL OR c.gender = :gender) AND "
-            + "(:status IS NULL OR c.status = :status)")
+            + "(:status IS NULL OR c.status = :status)"
+            + "ORDER BY c.code ASC")
     Page<Customer> searchCustomers(
             @Param("fullName") String fullName,
             @Param("email") String email,

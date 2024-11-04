@@ -1,4 +1,4 @@
-package com.example.backend.Library.repository;
+package com.example.backend.Library.repository.cart;
 
 import com.example.backend.Library.model.entity.cart.CartDetail;
 import org.springframework.data.jpa.repository.JpaRepository;

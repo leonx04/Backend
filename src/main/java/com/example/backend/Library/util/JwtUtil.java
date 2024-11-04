@@ -129,8 +129,6 @@ public class JwtUtil {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", userDetails.getAuthorities().toArray()[0].toString());
         claims.put("fullname", name);
-        claims.put("phone", phone);
-        claims.put("username", username);
         System.out.println("Claims: " + claims);
         return createToken(claims, userDetails.getUsername());
     }

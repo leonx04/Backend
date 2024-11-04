@@ -1,7 +1,7 @@
 //package com.example.backend.Library.security.employee;
 //
 //import com.example.backend.Library.model.entity.employee.Employee;
-//import com.example.backend.Library.repository.EmployeeRepo;
+//import com.example.backend.Library.repository.employee.EmployeeRepo;
 //import org.springframework.security.core.authority.SimpleGrantedAuthority;
 //import org.springframework.security.core.userdetails.*;
 //import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,7 +56,7 @@
 package com.example.backend.Library.security.employee;
 
 import com.example.backend.Library.model.entity.employee.Employee;
-import com.example.backend.Library.repository.EmployeeRepo;
+import com.example.backend.Library.repository.employee.EmployeeRepo;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

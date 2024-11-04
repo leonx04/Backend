@@ -2,7 +2,7 @@ package com.example.backend.Library.service.impl.password_email;
 
 import com.example.backend.Library.model.entity.employee.Employee;
 import com.example.backend.Library.model.entity.customer.Customer;
-import com.example.backend.Library.repository.EmployeeRepo;
+import com.example.backend.Library.repository.employee.EmployeeRepo;
 import com.example.backend.Library.repository.customer.CustomerRepository;
 import com.example.backend.Library.service.interfaces.password_email.*;
 import jakarta.servlet.http.HttpServletRequest;

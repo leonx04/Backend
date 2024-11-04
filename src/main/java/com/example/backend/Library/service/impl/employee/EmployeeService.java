@@ -1,7 +1,7 @@
 package com.example.backend.Library.service.impl.employee;
 
 import com.example.backend.Library.model.entity.employee.Employee;
-import com.example.backend.Library.repository.EmployeeRepo;
+import com.example.backend.Library.repository.employee.EmployeeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
