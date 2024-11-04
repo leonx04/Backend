@@ -125,8 +125,9 @@ public class JwtUtil {
         return expiration != null && expiration.before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails, String name, String phone, String username) {
+    public String generateToken(UserDetails userDetails, String name, int id) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("id", id);
         claims.put("role", userDetails.getAuthorities().toArray()[0].toString());
         claims.put("fullname", name);
         System.out.println("Claims: " + claims);

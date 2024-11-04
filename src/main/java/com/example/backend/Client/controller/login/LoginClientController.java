@@ -107,7 +107,7 @@ public class LoginClientController {
                 return ResponseEntity.badRequest().body("Tài khoản không tồn tại");
             }
             // Tạo JWT token cho người dùng
-            String jwt = jwtUtil.generateToken(userDetails, customer.getFullName(), customer.getPhone(), customer.getUserName());
+            String jwt = jwtUtil.generateToken(userDetails, customer.getFullName(), customer.getId());
 
             // Chuẩn bị phản hồi trả về cho client với token và thông báo đăng nhập thành công
             Map<String, Object> response = new HashMap<>();

@@ -72,7 +72,7 @@ public class LoginAdminController {
             Employee employee = employeeService.findByEmail(request.getEmail());
 
             // Tạo JWT token cho người dùng
-            String jwt = jwtUtil.generateToken(userDetails, employee.getFullName(), employee.getPhone(), employee.getUserName());
+            String jwt = jwtUtil.generateToken(userDetails, employee.getFullName(), employee.getId());
 
             // Chuẩn bị phản hồi trả về cho client với token và thông báo đăng nhập thành công
             Map<String, Object> response = new HashMap<>();
