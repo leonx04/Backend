@@ -1,7 +1,7 @@
 package com.example.backend.Admin.controller.invoice;
 
-import com.example.backend.Library.model.dto.Request.FindByOrderStatusAndOrderType;
-import com.example.backend.Library.model.dto.Request.UpdateStatus;
+import com.example.backend.Library.model.dto.Request.order.FindByOrderStatusAndOrderType;
+import com.example.backend.Library.model.dto.Request.order.UpdateStatus;
 import com.example.backend.Library.model.dto.Response.orders.ApiResponse;
 import com.example.backend.Library.model.dto.Response.orders.OrderDTO;
 import com.example.backend.Library.model.dto.Response.orders.OrderStatusLogDTO;

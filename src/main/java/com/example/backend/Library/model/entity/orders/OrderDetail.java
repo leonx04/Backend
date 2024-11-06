@@ -35,7 +35,7 @@ public class OrderDetail {
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "productDetailId", referencedColumnName = "id")
+    @JoinColumn(name = "productVariantId", referencedColumnName = "id")
     private ProductDetail productDetail;
 
     private int quantity;

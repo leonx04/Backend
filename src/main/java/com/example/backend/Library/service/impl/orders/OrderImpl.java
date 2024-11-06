@@ -1,6 +1,6 @@
 package com.example.backend.Library.service.impl.orders;
 
-import com.example.backend.Library.model.dto.Request.FindByOrderStatusAndOrderType;
+import com.example.backend.Library.model.dto.Request.order.FindByOrderStatusAndOrderType;
 import com.example.backend.Library.model.dto.Response.orders.*;
 
 import com.example.backend.Library.model.entity.orders.Order;
@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -30,7 +31,7 @@ public class OrderImpl implements OrderInterface {
     private MapOrderFields mapOrderFields;
     @Autowired
     private OrderDetailRepository orderDetailRepository;
-
+    @Transactional
     @Override
     public List<ListOrderDTO> OrderListAllfindCode(String code) {
         return orderRepository.findByCodeContaining(code).stream().map(order -> {
