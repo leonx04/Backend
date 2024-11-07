@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/client/vouchers")
-@CrossOrigin(origins = "http://127.0.0.1:5501/")
+@CrossOrigin(origins = "*")
 public class VoucherClientController {
     @Autowired
     private VoucherClientService voucherClientService;

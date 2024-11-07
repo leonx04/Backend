@@ -57,9 +57,9 @@ public class Order {
     private String orderType;
     private String trackingNumber;
     private String notes;
-    @Column(name = "createdat")
+    @Column(name = "createdAt")
     private LocalDateTime  createdAt;
-    @Column(name = "updatedat")
+    @Column(name = "updatedAt")
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "order")
