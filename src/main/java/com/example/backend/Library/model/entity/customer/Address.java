@@ -1,53 +1,42 @@
 package com.example.backend.Library.model.entity.customer;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.example.backend.Library.model.entity.base.BaseEntity;
+import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.cglib.core.Local;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "Address")
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class Address {
+public class Address extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
+    @ManyToOne
+    @JoinColumn(name = "Customerid")
+    private Customer customer;
 
-    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
-    private List<Customer> customer;
+    @Column(name = "Detailaddress", nullable = false, length = 255)
 
     private String detailAddress;
 
+    @Column(name = "Recipientname", nullable = false, length = 255)
     private String recipientName;
 
+    @Column(name = "Recipientphone", nullable = false, length = 20)
     private String recipientPhone;
 
+    @Column(name = "City", nullable = false, length = 255)
     private String city;
 
+    @Column(name = "District", nullable = false, length = 255)
     private String district;
 
+    @Column(name = "Commune", nullable = false, length = 255)
     private String commune;
 
-    private int status;
+    @Column(name = "Status", nullable = false)
+    private Integer status;
 
-    private LocalDate createAt;
-    private LocalDate updateAt;
 }

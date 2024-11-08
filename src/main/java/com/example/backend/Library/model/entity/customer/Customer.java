@@ -1,45 +1,59 @@
 package com.example.backend.Library.model.entity.customer;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.example.backend.Library.model.entity.base.BaseEntity;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "Customer")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Customer {
-
+public class Customer extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
-    private String code;
+    @Column(name = "Code", nullable = false, length = 255)
+    private String code = "CUS";
+
+    @Column(name = "Username", nullable = false, length = 100)
     private String userName;
-    private String passWord;
+
+    @Column(name = "Password", nullable = false)
+    private String password;
+
+    @Column(name = "Fullname")
     private String fullName;
-    private int gender;
+
+    private Integer gender;
+
+    @Column(name = "Email", nullable = false)
     private String email;
+
+    @Column(name = "Phone", length = 20)
     private String phone;
+
+    @Column(name = "Birthdate")
     private LocalDate birthDate;
-    private String imageUrl;
 
-    private LocalDate createAt;
-    private LocalDate updateAt;
+    @Column(name = "Imageurl")
+    private String imageURL;
 
+    @ColumnDefault("1")
+    @Column(name = "Status")
+    private Integer status;
+
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+//    private List<Address> addresses;
+
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "customer")
+//    private List<Order> orders;
 
 }
