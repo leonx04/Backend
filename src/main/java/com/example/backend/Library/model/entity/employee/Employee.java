@@ -1,18 +1,10 @@
 package com.example.backend.Library.model.entity.employee;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -32,7 +24,7 @@ public class Employee {
 
     private String fullName;
     private int gender;
-    private LocalDate birthDate;
+    private Date birthDate;
     private String phone;
     private String email;
     private String address;

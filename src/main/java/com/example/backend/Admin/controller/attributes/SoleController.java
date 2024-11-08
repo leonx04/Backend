@@ -1,6 +1,6 @@
 package com.example.backend.Admin.controller.attributes;
 
-import com.example.backend.Library.model.dto.reponse.ResponseData;
+import com.example.backend.Library.model.dto.response.ResponseData;
 import com.example.backend.Library.model.entity.attributes.Sole;
 import com.example.backend.Library.service.interfaces.attributes.SoleService;
 import jakarta.validation.Valid;

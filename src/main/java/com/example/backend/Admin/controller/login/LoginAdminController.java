@@ -1,11 +1,20 @@
+/*
+ * Author: Phạm Thái Sơn || JavaDEV
+ * Facebook:https://www.facebook.com/son4k2
+ * Github: https://github.com/SONPC-Developer
+ * Youtube: https://www.youtube.com
+ */
+
 package com.example.backend.Admin.controller.login;
 
-import com.example.backend.Library.model.dto.request.LoginRequest;
+import com.example.backend.Library.model.dto.request.auth.LoginRequest;
 import com.example.backend.Library.model.entity.employee.Employee;
+import com.example.backend.Library.security.employee.EmployeeDetailService;
 import com.example.backend.Library.service.impl.employee.EmployeeService;
 import com.example.backend.Library.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.slf4j.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
@@ -23,12 +32,14 @@ public class LoginAdminController {
 
     private final EmployeeService employeeService;
     private final AuthenticationManager authenticationManager;
+    private final EmployeeDetailService employeeDetailService;
     private final JwtUtil jwtUtil;
 
-    public LoginAdminController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, EmployeeService employeeService) {
+    public LoginAdminController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, EmployeeService employeeService, EmployeeDetailService employeeDetailService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.employeeService = employeeService;
+        this.employeeDetailService = employeeDetailService;
     }
 
     // Method đăng nhập => sử lý yêu cầu đăng nhập
@@ -73,22 +84,20 @@ public class LoginAdminController {
 
             // Tạo JWT token cho người dùng
             String jwt = jwtUtil.generateToken(userDetails, employee.getFullName(), employee.getId());
+            String refreshToken = jwtUtil.generateRefreshToken(request.getEmail());
 
             // Chuẩn bị phản hồi trả về cho client với token và thông báo đăng nhập thành công
             Map<String, Object> response = new HashMap<>();
             response.put("token", jwt);
-            response.put("role", userDetails.getAuthorities().toArray()[0].toString());
-            response.put("username", employee.getUserName());
+            response.put("RFTK", refreshToken);
             response.put("message", "Đăng nhập thành công");
             response.put("status", "success");
-            System.out.println(response.get("role"));
+//            System.out.println(response.get("role"));
 
             // Ghi log khi đăng nhập thành công
             logger.info("Login successful for user: {}" , request.getEmail());
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            // Ghi log lỗi khi đăng nhập thất bại
-//            logger.error("Error during login for user: {}" , request.getEmail(), e);
             results.put("message", "Thông tin đăng nhập không chính xác");
             results.put("status", "error");
             System.out.println(e.getMessage());
@@ -110,6 +119,23 @@ public class LoginAdminController {
             response.put("message", "Đăng xuất không thành công");
             response.put("status", "error");
             System.out.println(response);
+            return ResponseEntity.ok(response);
+        }
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<Map> refreshToken(@RequestBody String refreshToken) {
+        Map response = new HashMap();
+        if (jwtUtil.validateRefreshToken(refreshToken)) {
+            String username = jwtUtil.extractUsername(refreshToken);
+            UserDetails userDetails = employeeDetailService.loadUserByUsername(username);
+            Employee employee = employeeService.findByEmail(username);
+            String newToken = jwtUtil.generateToken(userDetails, employee.getFullName(), employee.getId());
+            response.put("token", newToken);
+            response.put("status", "success");
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("status", "error");
             return ResponseEntity.ok(response);
         }
     }

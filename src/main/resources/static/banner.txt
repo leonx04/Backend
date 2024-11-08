@@ -1,0 +1,31 @@
+
+${AnsiColor.BRIGHT_CYAN} ██████╗   █████╗   ██████╗                   ███████╗   ███╗   ██╗  ███████╗   █████╗   ██╗  ██╗  ███████╗  ██████╗
+${AnsiColor.BRIGHT_YELLOW}  ╚═══██╗ ██╔═══╝  ██╔═══██╗                 ██╔════╝   ████╗  ██║  ██╔════╝  ██╔══██╗  ██║ ██╔╝  ██╔════╝  ██╔══██╗
+${AnsiColor.BRIGHT_GREEN} █████╔╝  ██████╗  ██║   ██║    ████████╗    ███████╗   ██╔██╗ ██║  █████╗    ███████║  █████╔╝   █████╗    ██████╔╝
+${AnsiColor.BRIGHT_MAGENTA}  ╚═══██╗ ██╔══██╗ ██║   ██║    ╚══════╝      ╚════██║  ██║╚██╗██║  ██╔══╝    ██╔══██║  ██╔═██╗   ██╔══╝    ██╔══██╗
+${AnsiColor.BRIGHT_RED} █████╔╝  ╚█████╔╝ ╚██████╔╝                 ███████║   ██║ ╚████║  ███████╗  ██║  ██║  ██║  ██╗  ███████╗  ██║  ██║
+${AnsiColor.BRIGHT_BLUE} ╚════╝    ╚════╝   ╚═════╝                 ╚══════╝  ╚═╝   ╚═══╝  ╚══════╝  ╚═╝  ╚═╝  ╚═╝  ╚═╝  ╚══════╝  ╚═╝  ╚═╝
+
+${AnsiColor.BRIGHT_BLUE}                                               Welcome to the ${AnsiColor.BRIGHT_YELLOW}360 Sneaker!${AnsiColor.BRIGHT_BLUE}
+${AnsiColor.GREEN}                                   ---------------------------------------------------
+${AnsiColor.CYAN}                                        Project: ${AnsiColor.BRIGHT_YELLOW}360 Sneaker - Shoe E-Commerce
+${AnsiColor.CYAN}                                        Group: ${AnsiColor.BRIGHT_YELLOW}SD**
+${AnsiColor.CYAN}                                     🚀 Spring Boot Version: ${AnsiColor.WHITE}(0.0.1-SNAPSHOT)
+
+${AnsiColor.BRIGHT_GREEN}                                   🌟 Explore our amazing Shoe collection! 🌟
+${AnsiColor.BRIGHT_BLUE}                                   Your gateway to stylish and comfortable wear!
+${AnsiColor.YELLOW}                                   💡 Let's make your shopping experience enjoyable! 💡
+${AnsiColor.RED}                                        Powered by ${AnsiColor.BRIGHT_WHITE}Team SD**
+
+${AnsiColor.BRIGHT_YELLOW}                                   ---------------------------------------------------
+${AnsiColor.CYAN}                                           Members:
+${AnsiColor.BRIGHT_YELLOW}                                         - Phạm Thái Sơn - PH43120
+${AnsiColor.BRIGHT_YELLOW}                                         - Lê Văn Sơn - PH*****
+${AnsiColor.BRIGHT_YELLOW}                                         - Đỗ Đại Phương - PH*****
+${AnsiColor.BRIGHT_YELLOW}                                         - Ngô Văn Dũng - PH*****
+${AnsiColor.BRIGHT_YELLOW}                                         - Trần Văn Mạnh - PH*****
+${AnsiColor.BRIGHT_YELLOW}                                   ---------------------------------------------------
+${AnsiColor.BRIGHT_CYAN}                                   🎉 Thank you for choosing us! 🎉
+${AnsiColor.MAGENTA}                                   Let's make this journey memorable! 💖
+${AnsiColor.BRIGHT_WHITE}                                   ---------------------------------------------------
+${AnsiColor.BRIGHT_WHITE}                                    🚀 ${AnsiColor.BRIGHT_YELLOW}360 Sneaker - Shoe E-Commerce${AnsiColor.BRIGHT_WHITE} 🚀

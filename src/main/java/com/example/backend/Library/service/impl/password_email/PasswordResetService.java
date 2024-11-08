@@ -203,6 +203,17 @@ public class PasswordResetService implements IPasswordResetService {
                 "Lưu ý: Đây là email tự động, vui lòng không trả lời email này.";
     }
 
+    // Tạo nội dung email thông báo thay đổi email thành công
+//    private String createEmailChangeSuccessBody() {
+//        return "Chào bạn,\n\n" +
+//                "Chúng tôi xin thông báo rằng địa chỉ email của tài khoản của bạn tại Shop Shoes JN đã được thay đổi thành công.\n\n" +
+//                "Nếu bạn không thực hiện yêu cầu này, vui lòng liên hệ với bộ phận hỗ trợ của chúng tôi ngay lập tức để bảo vệ tài khoản của bạn.\n\n" +
+//                "Trân trọng,\n" +
+//                "Đội ngũ hỗ trợ\n" +
+//                "Shop Shoes JN\n\n" +
+//                "Lưu ý: Đây là email tự động, vui lòng không trả lời email này.";
+//    }
+
     // Sinh mã OTP
     private String generateOTP() {
         Random random = new Random();
@@ -215,6 +226,14 @@ public class PasswordResetService implements IPasswordResetService {
             cache.put(email, new OTPInfo(otp, Instant.now().plus(OTP_VALIDITY)));
         }
     }
+
+    //
+//    private void cacheEmailOTP(String email, String otp) {
+//        Cache cache = cacheManager.getCache("changeEmailOTPs");
+//        if (cache != null) {
+//            cache.put(email, new OTPInfo(otp, Instant.now().plus(OTP_VALIDITY)));
+//        }
+//    }
 
     private String createEmailBody(String otp) {
         return String.format(
@@ -233,6 +252,25 @@ public class PasswordResetService implements IPasswordResetService {
                 otp
         );
     }
+
+    //
+//    private String createEmailChangeEmailBody(String otp) {
+//        return String.format(
+//                "Chào bạn,\n\n" +
+//                        "Chúng tôi đã nhận được yêu cầu thay đổi địa chỉ email cho tài khoản của bạn tại Shop Shoes JN.\n\n" +
+//                        "Mã OTP của bạn để xác nhận thay đổi email là: %s\n\n" +
+//                        "Lưu ý quan trọng:\n" +
+//                        "1. Mã OTP này sẽ hết hạn sau 50 giây kể từ khi yêu cầu được gửi.\n" +
+//                        "2. Nếu bạn không yêu cầu thay đổi địa chỉ email, vui lòng bỏ qua email này và liên hệ ngay với bộ phận hỗ trợ của chúng tôi.\n" +
+//                        "3. Vì lý do bảo mật, chúng tôi khuyến nghị bạn không chia sẻ mã OTP này với bất kỳ ai.\n\n" +
+//                        "Nếu bạn gặp bất kỳ vấn đề nào trong quá trình thay đổi email, đừng ngần ngại liên hệ với đội ngũ hỗ trợ của chúng tôi.\n\n" +
+//                        "Trân trọng,\n" +
+//                        "Đội ngũ hỗ trợ\n" +
+//                        "Shop Shoes JN\n\n" +
+//                        "Lưu ý: Đây là email tự động, vui lòng không trả lời email này.",
+//                otp
+//        );
+//    }
 
     // Lớp chứa thông tin mã OTP
     private static class OTPInfo {

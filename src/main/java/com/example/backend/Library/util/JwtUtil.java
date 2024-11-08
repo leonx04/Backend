@@ -1,76 +1,9 @@
-//package com.example.backend.Library.util;
-//
-//import io.github.cdimascio.dotenv.Dotenv;
-//import io.jsonwebtoken.Claims;
-//import io.jsonwebtoken.Jwts;
-//import io.jsonwebtoken.SignatureAlgorithm;
-//import jakarta.annotation.PostConstruct;
-//import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.Date;
-//import java.util.HashMap;
-//import java.util.Map;
-//import java.util.function.Function;
-//
-//@Service
-//public class JwtUtil {
-//
-//    // Biến chứa khóa bí mật dùng để ký JWT
-//    private String SECRET_KEY;
-//
-//    // Phương thức khởi tạo, lấy khóa bí mật từ file .env
-//    @PostConstruct
-//    public void init() {
-//        Dotenv dotenv = Dotenv.load();
-//        this.SECRET_KEY = dotenv.get("JWT_SECRET");
-//    }
-//
-//    // Phương thức trích xuất tên người dùng từ token JWT
-//    public String extractUsername(String token) {
-//        return extractClaim(token, Claims::getSubject);
-//    }
-//
-//    // Phương thức trích xuất thời hạn hết hạn của token JWT
-//    public Date extractExpiration(String token) {
-//        return extractClaim(token, Claims::getExpiration);
-//    }
-//
-//    // Phương thức chung để trích xuất các thông tin (claims) từ token JWT
-//    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-//        final Claims claims = extractAllClaims(token);
-//        return claimsResolver.apply(claims);
-//    }
-//
-//    // Phương thức lấy tất cả các thông tin (claims) từ token JWT
-//    private Claims extractAllClaims(String token) {
-//        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
-//    }
-//
-//    // Phương thức kiểm tra token đã hết hạn hay chưa
-//    private Boolean isTokenExpired(String token) {
-//        return extractExpiration(token).before(new Date());
-//    }
-//
-//    // Phương thức tạo token JWT từ thông tin của người dùng
-//    public String generateToken(UserDetails userDetails) {
-//        Map<String, Object> claims = new HashMap<>();
-//        return createToken(claims, userDetails.getUsername());
-//    }
-//
-//    // Phương thức xây dựng token JWT với các thông tin (claims) và subject (username)
-//    private String createToken(Map<String, Object> claims, String subject) {
-//        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-//                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // Thời hạn token 10 giờ
-//                .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact(); // Ký token với thuật toán HS256
-//    }
-//
-//    // Phương thức kiểm tra token có hợp lệ hay không (so sánh username và kiểm tra thời hạn)
-//    public Boolean validateToken(String token, UserDetails userDetails) {
-//        final String username = extractUsername(token);
-//        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
-//    }
-//}
+/*
+ * Author: Phạm Thái Sơn || JavaDEV
+ * Facebook:https://www.facebook.com/son4k2
+ * Github: https://github.com/SONPC-Developer
+ * Youtube: https://www.youtube.com
+ */
 
 package com.example.backend.Library.util;
 
@@ -121,8 +54,8 @@ public class JwtUtil {
     }
 
     private Boolean isTokenExpired(String token) {
-        Date expiration = extractExpiration(token);
-        return expiration != null && expiration.before(new Date());
+        Date expiration = extractExpiration(token); // Lấy thời gian hết hạn của token
+        return expiration != null && expiration.before(new Date()); // Kiểm tra xem thời gian hết hạn của token có trước thời gian hiện tại không
     }
 
     public String generateToken(UserDetails userDetails, String name, int id) {
@@ -139,7 +72,7 @@ public class JwtUtil {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 giờ
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15)) // 15 phút
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
@@ -147,5 +80,24 @@ public class JwtUtil {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username != null && username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    // Tạo refresh token
+    public String generateRefreshToken(String username) {
+        Map<String, Object> claims = new HashMap<>();
+
+        claims.put("username", username);
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(username)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)) // 1 tuần
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
+    }
+
+    // Kiểm tra refresh token
+    public boolean validateRefreshToken(String token) {
+        return !isTokenExpired(token);
     }
 }

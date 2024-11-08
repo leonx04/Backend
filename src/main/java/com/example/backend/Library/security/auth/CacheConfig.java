@@ -1,4 +1,4 @@
-package com.example.backend.Library.security;
+package com.example.backend.Library.security.auth;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;

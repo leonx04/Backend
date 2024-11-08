@@ -1,0 +1,65 @@
+spring:
+  application:
+    name: Backend
+
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;database=DB_DATN_V4;encrypt=true;trustServerCertificate=true
+    username: sa
+    password: son123
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+      show-sql: false
+      dialect: org.hibernate.dialect.SQLServer2012Dialect
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    open-in-view: false
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: phamdainguyen3@gmail.com
+    password: gnqg zbgj fbmv ajgr
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+  thymeleaf:
+    cache: false
+
+  main:
+    allow-bean-definition-overriding: true
+    banner-mode: console
+
+  banner:
+    location: static/banner.txt
+
+  cloudinary:
+    cloud_name: dctxfvuuv
+    api_key: 161361653443488
+    api_secret: uIAieQ-S-1U8tz76VH-LdEMMxeY
+
+jwt:
+  key: LEADER_ECM_PTS$2a$10$abXksKg8QtJ9yq9knJJ6subwzKjYkNK4gF4eLJEGDqwbG8X/z4R/W
+  expiryMinute: 1000
+  expiryDay: 3
+  secretKey: eXichFXjdV1KKCGCgM60p0PlDnQIEqUPry1sgLczNZ6crNP1HAU1H5FVOSxtzT56ztSiY63UbNnjQG6X6c/deA==
+  refreshKey: 4P0F6YQfIEFwXAtx2xAU+qM+4N5Q946KeEyX5U+z5HI8LpreLnJC9kwtkvdz+qxfyw2hCmC+4vs+dctz3p71Zw==
+  resetKey: ThlSMsXf38tCJQJGTFJXFBW58UAWzZJJa3+whlZle0zx6zqFFHK1nKv3eK2SQCkafUf7pFafu2ldd2WonAGYTg==
+
+api:
+  prefix: api/ecm
+  version: v1
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

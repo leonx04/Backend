@@ -1,7 +1,6 @@
 package com.example.backend.Admin.controller.invoice;
 
-import com.example.backend.Library.model.dto.Request.InsertOrderStatusLogRequest;
-import com.example.backend.Library.model.entity.employee.Employee;
+import com.example.backend.Library.model.dto.request.order.InsertOrderStatusLogRequest;
 import com.example.backend.Library.model.entity.orders.OrderStatusLog;
 import com.example.backend.Library.service.impl.orders.OrderStatusLogImpl;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.example.backend.Admin.controller.products;
 
 
-import com.example.backend.Library.model.dto.reponse.ResponseData;
+import com.example.backend.Library.model.dto.response.ResponseData;
 import com.example.backend.Library.model.entity.products.Product;
 import com.example.backend.Library.service.interfaces.products.ProductService;
 import jakarta.validation.Valid;

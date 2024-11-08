@@ -1,18 +1,14 @@
 package com.example.backend.Library.service.impl.orders;
 
-import com.example.backend.Library.model.dto.Request.FindByOrderStatusAndOrderType;
-import com.example.backend.Library.model.dto.Response.orders.*;
+import com.example.backend.Library.model.dto.request.order.FindByOrderStatusAndOrderType;
+import com.example.backend.Library.model.dto.response.orders.*;
 
-import com.example.backend.Library.model.entity.orders.Order;
-import com.example.backend.Library.model.entity.orders.OrderStatus;
+import com.example.backend.Library.model.entity.orders.*;
 import com.example.backend.Library.model.mapper.Orders.MapOrderFields;
-import com.example.backend.Library.repository.orders.OrderDetailRepository;
-import com.example.backend.Library.repository.orders.OrderRepository;
+import com.example.backend.Library.repository.orders.*;
 import com.example.backend.Library.service.interfaces.orders.OrderInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

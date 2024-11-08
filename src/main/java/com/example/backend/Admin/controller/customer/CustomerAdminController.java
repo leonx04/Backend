@@ -5,14 +5,20 @@ import com.example.backend.Library.model.dto.response.customer.CustomerResponse;
 import com.example.backend.Library.model.dto.response.*;
 import com.example.backend.Library.model.entity.customer.Customer;
 import com.example.backend.Library.service.interfaces.customer.ICustomerService;
+import com.example.backend.Library.service.interfaces.excel.customer.ICustomerExcelService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.*;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 @RestController
@@ -21,6 +27,8 @@ import java.util.*;
 public class CustomerAdminController {
     @Autowired
     private ICustomerService customerService;
+    @Autowired
+    private ICustomerExcelService customerExcelService;
 
     @PostMapping
     public ResponseEntity<?> createCustomer(
@@ -149,9 +157,52 @@ public class CustomerAdminController {
         );
     }
 
+    @PostMapping("/export/excel")
+    public ResponseEntity<?> exportCustomersToExcel(
+            @RequestParam(value = "filePath", required = false) String customFilePath) {
+        Map response = new HashMap();
+        try {
+            // Lấy đường dẫn từ customFilePath hoặc đường dẫn mặc định
+            Path filePath = (customFilePath != null) ? Paths.get(customFilePath) : null;
+
+            List<Customer> customers = customerService.getAll();
+            String savedFilePath = customerExcelService.exportCustomerExcelFile(customers, filePath);
+
+            response.put("message", "Xuất file thành công");
+            response.put("filePath", savedFilePath);
+            response.put("status", "success");
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            response.put("message", "Xuất file không thành công");
+            response.put("status", "error");
+            return ResponseEntity.ok(response);
+        }
+    }
+
+    @PostMapping("/import/excel")
+    public ResponseEntity<Resource> importCustomersFromExcel() {
+        try {
+//            List<Customer> customers = customerService.getAll();
+//            Path filePath = customerExcelService.exportCustomerExcelFile(customers, null);
+
+            Path filePath = Paths.get("E:/exports/customers.xlsx");
+            // Tạo Resource để gửi về phía client
+            Resource resource = new UrlResource(filePath.toUri());
+
+            return ResponseEntity.ok()
+//                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filePath.getFileName())
+//                    .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                    .body(resource);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     // Method tạo dữ liệu giả cho khách hàng
-//    @PostMapping("/fake-data")
+    // @PostMapping("/fake-data")
     public ResponseEntity<?> createFakeCustomers(@RequestParam int count) {
         try {
             customerService.createFakeCustomers(count);

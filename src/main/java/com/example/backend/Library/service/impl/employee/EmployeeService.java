@@ -1,6 +1,11 @@
 package com.example.backend.Library.service.impl.employee;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import com.example.backend.Library.exception.DataNotFoundException;
+import com.example.backend.Library.model.dto.request.employee.EmployeeRequest;
 import com.example.backend.Library.model.entity.employee.Employee;
+import com.example.backend.Library.model.mapper.employee.EmployeeMapper;
 import com.example.backend.Library.repository.employee.EmployeeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +19,11 @@ import java.util.*;
 public class EmployeeService {
     @Autowired
     private EmployeeRepo employeeRepository; // Tiêm dependency của repository
+    @Autowired
+    private EmployeeMapper employeeMapper;
+    @Autowired
+    private Cloudinary cloudinary;
+
 
     private final String IMAGE_PATH = "H:\\FPOLY\\DATN\\qlnhanvien\\Backend\\src\\main\\java\\com\\example\\backend\\Library\\service\\impl\\images";
 
@@ -94,4 +104,40 @@ public class EmployeeService {
     public Employee findByEmail(String email) {
         return employeeRepository.findByEmail(email).orElse(null);
     }
+
+    public void updateEmployee(Integer id, EmployeeRequest request, MultipartFile avatar) throws Exception {
+        Optional<Employee> existEpl = employeeRepository.findById(id);
+        if (existEpl.isEmpty()) {
+            throw new DataNotFoundException("Nhân viên không tồn tại");
+        }
+        if (employeeRepository.findByUserName(request.getUserName()) != null
+                && !existEpl.get().getUserName().equals(request.getUserName())) {
+            throw new DataNotFoundException("Tên đăng nhập đã tồn tại");
+        }
+        if (employeeRepository.findByPhone(request.getPhone()).isPresent()
+                && !existEpl.get().getPhone().equals(request.getPhone())) {
+            throw new DataNotFoundException("Số điện thoại đã được sử dụng bởi nhân viên khác");
+        }
+        Employee employee = employeeMapper.toEmployeeRequest(request);
+        employee.setId(id);
+        employee.setRoleId(existEpl.get().getRoleId());
+        if (avatar != null) {
+            String imageUrl = uploadFile(avatar);
+            System.out.println(imageUrl);
+            employee.setImageUrl(imageUrl);
+        } else {
+            employee.setImageUrl(existEpl.get().getImageUrl());
+        }
+        employee.setUpdatedAt(LocalDate.now());
+        employeeRepository.save(employee);
+    }
+
+    public String uploadFile(MultipartFile file) throws IOException {
+        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+        return uploadResult.get("url").toString();
+    }
+
+
+
+
 }

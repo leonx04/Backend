@@ -14,4 +14,10 @@ public interface IPasswordResetService {
 
     void sendPasswordResetSuccessEmail(String email);
 
+//    boolean validateChangeEmailOTP(String email, String otp);
+//
+//    Map<String, String> changeEmail(HttpServletRequest request, String email, String newEmail, String otp);
+//
+//    void sendChangeEmailSuccessEmail(String email);
+
 }
