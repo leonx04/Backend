@@ -1,6 +1,5 @@
 package com.example.backend.Admin.controller.invoice;
 
-import com.example.backend.Library.model.dto.Request.order.FindByOrderStatusAndOrderType;
 import com.example.backend.Library.model.dto.Request.order.UpdateStatus;
 import com.example.backend.Library.model.dto.Response.orders.ApiResponse;
 import com.example.backend.Library.model.dto.Response.orders.OrderDTO;
@@ -56,33 +55,16 @@ public class ControllerGetOrderList {
                     .body(new ApiResponse("Order not found", "Đơn hàng với mã '" + code + "' không tồn tại."));
         }
     }
-    @GetMapping("/search")
+    @PostMapping("/search")
     public ResponseEntity<?> findByStatusAndType(
-            @RequestParam(required = false) Integer orderStatus,
-            @RequestParam(required = false) String orderType,
+
+            @RequestParam(required = false) Integer status,
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize) {
 
         PageDTO<OrderDTO> result;
 
-        // Chuyển đổi "null" string thành null thực sự
-        if ("null".equalsIgnoreCase(orderType)) {
-            orderType = null;
-        }
-
-        // Nếu status = 0 hoặc null VÀ orderType = null thì lấy tất cả
-        if ((orderStatus == null || orderStatus == 0) && orderType == null) {
-            result = orderImpl.getOrder(pageNo, pageSize);
-        }
-        // Ngược lại thì tìm theo điều kiện
-        else {
-            FindByOrderStatusAndOrderType request = new FindByOrderStatusAndOrderType(
-                    orderStatus != null ? orderStatus : 0,
-                    orderType
-            );
-            result = orderImpl.getOrderfindByStatusAndType(request, pageNo, pageSize);
-        }
-
+            result = orderImpl.getOrderfindByStatus(status, pageNo, pageSize);
         return ResponseEntity.ok(result);
     }
 

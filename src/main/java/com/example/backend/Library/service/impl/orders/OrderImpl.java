@@ -1,6 +1,5 @@
 package com.example.backend.Library.service.impl.orders;
 
-import com.example.backend.Library.model.dto.Request.order.FindByOrderStatusAndOrderType;
 import com.example.backend.Library.model.dto.Response.orders.*;
 
 import com.example.backend.Library.model.entity.orders.Order;
@@ -131,9 +130,9 @@ public class OrderImpl implements OrderInterface {
     }
 
     @Override
-    public PageDTO<OrderDTO> getOrderfindByStatusAndType(FindByOrderStatusAndOrderType request, int pageNo, int pageSize) {
+    public PageDTO<OrderDTO> getOrderfindByStatus(Integer request, int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Order> orderPage =  orderRepository.findByOrderStatusAndOrderType(request.getOrderStatus(),request.getOrderType(),pageable);
+        Page<Order> orderPage =  orderRepository.findByOrderStatus(request,pageable);
         List<Order> orders = orderPage.getContent();
         List<OrderDTO> orderDTOs = orders.stream().map(order -> {
             OrderDTO dto = new OrderDTO();

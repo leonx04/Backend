@@ -17,7 +17,7 @@ public interface OrderRepository extends JpaRepository<Order,Integer> {
     Page<Order> findAll(Pageable pageable);
     Page<Order> findByOrderStatusNotIn(List<Integer> statuses, Pageable pageable);
 
-    Page<Order> findByOrderStatusAndOrderType(Integer orderStatus, String orderType, Pageable pageable);
+    Page<Order> findByOrderStatus(Integer orderStatus, Pageable pageable);
 
     List<Order> findByCustomerId(int customerId);
 }
