@@ -123,8 +123,9 @@ public class VoucherScheduler {
      */
     private boolean isActive(Voucher voucher, LocalDateTime now) {
         return Objects.nonNull(voucher.getStartDate()) &&
-                voucher.getStartDate().toLocalDate().equals(now.toLocalDate()) && // Ngày bắt đầu phải là hôm nay
-                voucher.getQuantity() > 0; // Voucher phải còn số lượng khả dụng
+                now.isAfter(voucher.getStartDate()) &&  // Thời gian hiện tại sau ngày bắt đầu
+                now.isBefore(voucher.getEndDate()) &&   // Thời gian hiện tại trước ngày kết thúc
+                voucher.getQuantity() > 0;              // Còn số lượng
     }
 
     /**
