@@ -1,8 +1,8 @@
 package com.example.backend.Library.service.interfaces.orders;
 
-import com.example.backend.Library.model.dto.Response.orders.ListOrderDTO;
-import com.example.backend.Library.model.dto.Response.orders.OrderDTO;
-import com.example.backend.Library.model.dto.Response.orders.PageDTO;
+import com.example.backend.Library.model.dto.reponse.orders.ListOrderDTO;
+import com.example.backend.Library.model.dto.reponse.orders.OrderDTO;
+import com.example.backend.Library.model.dto.reponse.orders.PageDTO;
 import com.example.backend.Library.model.entity.orders.Order;
 
 import java.time.LocalDateTime;

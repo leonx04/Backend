@@ -1,7 +1,7 @@
 package com.example.backend.Library.service.interfaces.customer;
 
 import com.example.backend.Library.model.dto.request.customer.AddressRequest;
-import com.example.backend.Library.model.dto.response.customer.AddressResponse;
+import com.example.backend.Library.model.dto.reponse.customer.AddressResponse;
 import com.example.backend.Library.model.entity.customer.Address;
 
 import java.util.List;

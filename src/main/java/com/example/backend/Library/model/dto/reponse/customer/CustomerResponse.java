@@ -1,4 +1,4 @@
-package com.example.backend.Library.model.dto.response.customer;
+package com.example.backend.Library.model.dto.reponse.customer;
 
 import lombok.Value;
 import org.springframework.format.annotation.DateTimeFormat;

@@ -3,7 +3,7 @@ package com.example.backend.Library.service.interfaces.customer;
 import com.example.backend.Library.model.dto.request.LoginRequest;
 import com.example.backend.Library.model.dto.request.RegisterRequest;
 import com.example.backend.Library.model.dto.request.customer.CustomerRequest;
-import com.example.backend.Library.model.dto.response.customer.CustomerResponse;
+import com.example.backend.Library.model.dto.reponse.customer.CustomerResponse;
 import com.example.backend.Library.model.entity.customer.Customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

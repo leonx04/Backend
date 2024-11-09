@@ -1,4 +1,4 @@
-package com.example.backend.Library.model.dto.response.customer;
+package com.example.backend.Library.model.dto.reponse.customer;
 
 import jakarta.persistence.Column;
 import lombok.Getter;

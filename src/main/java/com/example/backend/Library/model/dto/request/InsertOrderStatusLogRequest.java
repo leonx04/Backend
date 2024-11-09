@@ -1,7 +1,5 @@
-package com.example.backend.Library.model.dto.Request;
+package com.example.backend.Library.model.dto.request;
 
-import com.example.backend.Library.model.entity.employee.Employee;
-import com.example.backend.Library.model.entity.orders.Order;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
