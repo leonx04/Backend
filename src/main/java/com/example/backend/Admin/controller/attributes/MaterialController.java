@@ -1,8 +1,7 @@
 package com.example.backend.Admin.controller.attributes;
 
-import com.example.backend.Library.model.dto.reponse.ResponseData;
+import com.example.backend.Library.model.dto.response.ResponseData;
 import com.example.backend.Library.model.entity.attributes.Material;
-import com.example.backend.Library.service.interfaces.attributes.BrandService;
 import com.example.backend.Library.service.interfaces.attributes.MaterialService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;

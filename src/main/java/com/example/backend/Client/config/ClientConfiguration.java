@@ -1,6 +1,6 @@
 package com.example.backend.Client.config;
 
-import com.example.backend.Library.security.JwtAuthenticationFilter;
+import com.example.backend.Library.security.auth.JwtAuthenticationFilter;
 import com.example.backend.Library.security.customer.CustomerDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -72,6 +72,7 @@ public class ClientConfiguration {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:5500", "http://127.0.0.1:5500","http://localhost:8080", "http://127.0.0.1:5501" ));
+
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

@@ -1,7 +1,8 @@
 package com.example.backend.Library.service.impl.customer;
 
 import com.example.backend.Library.exception.DataNotFoundException;
-import com.example.backend.Library.model.dto.request.*;
+import com.example.backend.Library.model.dto.request.auth.LoginRequest;
+import com.example.backend.Library.model.dto.request.auth.RegisterRequest;
 import com.example.backend.Library.model.dto.request.customer.CustomerRequest;
 import com.example.backend.Library.model.dto.response.customer.CustomerResponse;
 import com.example.backend.Library.model.entity.cart.*;
@@ -337,6 +338,11 @@ public class CustomerService implements ICustomerService {
                 .map(customerMapper::toCustomer);
     }
 
+    @Override
+    public List<Customer> getAll() {
+        return customerRepository.findAll();
+    }
+
     /* Các hàm hỗ trợ */
 
 
@@ -394,7 +400,7 @@ public class CustomerService implements ICustomerService {
 
     // Hàm xóa ảnh cũ
     private void deleteOldAvatar(String filename) throws IOException {
-        Path filePath = Paths.get("uploads", filename);
+        Path filePath = Paths.get("uploads ", filename);
         Files.deleteIfExists(filePath);
     }
 

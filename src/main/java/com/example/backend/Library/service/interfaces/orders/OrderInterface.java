@@ -1,14 +1,11 @@
 package com.example.backend.Library.service.interfaces.orders;
 
-import com.example.backend.Library.model.dto.Request.FindByOrderStatusAndOrderType;
-import com.example.backend.Library.model.dto.Response.orders.ListOrderDTO;
-import com.example.backend.Library.model.dto.Response.orders.OrderDTO;
-import com.example.backend.Library.model.dto.Response.orders.PageDTO;
+import com.example.backend.Library.model.dto.request.order.FindByOrderStatusAndOrderType;
+import com.example.backend.Library.model.dto.response.orders.*;
 import com.example.backend.Library.model.entity.orders.Order;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public interface OrderInterface {
     List<ListOrderDTO> OrderListAllfindCode(String code);
