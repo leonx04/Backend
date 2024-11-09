@@ -1,9 +1,7 @@
 package com.example.backend.Library.model.entity.employee;
 
-<<<<<<< HEAD
 import jakarta.persistence.*;
 import lombok.*;
-=======
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,7 +12,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
->>>>>>> 8036a2dcda10800fec1c9aedc9fbb82687ff570f
 
 import java.time.LocalDate;
 import java.util.Date;

@@ -77,7 +77,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-<<<<<<< HEAD
 
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -117,13 +116,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
-=======
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.security</groupId>-->
 <!--            <artifactId>spring-security-test</artifactId>-->
 <!--            <scope>test</scope>-->
 <!--        </dependency>-->
->>>>>>> 8036a2dcda10800fec1c9aedc9fbb82687ff570f
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
@@ -135,7 +132,6 @@
             <version>1.5.3.Final</version>
             <scope>provided</scope>
         </dependency>
-<<<<<<< HEAD
 
         <dependency>
             <groupId>javax.activation</groupId>
@@ -191,11 +187,10 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.2.0</version>
-=======
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
->>>>>>> 8036a2dcda10800fec1c9aedc9fbb82687ff570f
         </dependency>
 
     </dependencies>
