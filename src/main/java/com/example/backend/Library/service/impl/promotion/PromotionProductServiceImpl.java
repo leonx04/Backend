@@ -40,7 +40,7 @@ public class PromotionProductServiceImpl {
     public List<ProductDetail> applyPromotionToProducts(Integer promotionId, List<Integer> productDetailIds) {
         // Lấy thông tin promotion và kiểm tra tính hợp lệ
         Promotion_Admin_DTO promotionDTO = promotionService.getPromotionById(promotionId);
-        validatePromotion(promotionDTO);
+//        validatePromotion(promotionDTO);
 
         // Tìm promotion trong repository hoặc ném ngoại lệ nếu không tìm thấy
         Promotion promotion = promotionRepository.findById(promotionId)
@@ -106,15 +106,15 @@ public class PromotionProductServiceImpl {
      *
      * @param promotion DTO chứa thông tin của promotion cần kiểm tra
      */
-    private void validatePromotion(Promotion_Admin_DTO promotion) {
-        LocalDateTime now = LocalDateTime.now();
-        if (promotion.getStatus() != 1) {
-            throw new IllegalStateException("Promotion không trong trạng thái hoạt động");
-        }
-        if (promotion.getStartDate().isAfter(now) || promotion.getEndDate().isBefore(now)) {
-            throw new IllegalStateException("Promotion không trong thời gian hiệu lực");
-        }
-    }
+//    private void validatePromotion(Promotion_Admin_DTO promotion) {
+//        LocalDateTime now = LocalDateTime.now();
+//        if (promotion.getStatus() != 1) {
+//            throw new IllegalStateException("Promotion không trong trạng thái hoạt động");
+//        }
+//        if (promotion.getStartDate().isAfter(now) || promotion.getEndDate().isBefore(now)) {
+//            throw new IllegalStateException("Promotion không trong thời gian hiệu lực");
+//        }
+//    }
 
     /**
      * Kiểm tra tính hợp lệ của product detail để áp dụng promotion.
