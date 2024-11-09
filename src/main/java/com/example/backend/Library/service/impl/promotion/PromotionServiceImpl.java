@@ -132,10 +132,10 @@ public class PromotionServiceImpl implements Promotion_Service {
         }
 
         LocalDateTime now = LocalDateTime.now(VIETNAM_ZONE);
-//        if (startDate.isBefore(now)) {
-//            throw new ExceptionHandles.ValidationException(
-//                    Collections.singletonList("Ngày bắt đầu phải sau thời điểm hiện tại"));
-//        }
+        if (startDate.isBefore(now)) {
+            throw new ExceptionHandles.ValidationException(
+                    Collections.singletonList("Ngày bắt đầu phải sau thời điểm hiện tại"));
+        }
 
         if (endDate.isBefore(startDate)) {
             throw new ExceptionHandles.ValidationException(
