@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -29,6 +28,7 @@ public class Employee {
     private String code;
     private String userName;
     private String passWord;
+
 
     private String fullName;
     private int gender;
