@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
-public class ControllerGetListOrder {
+public class ControllerGetOrderDetail {
     @Autowired
     private OrderImpl orderImpl;
     @GetMapping("/{code}")

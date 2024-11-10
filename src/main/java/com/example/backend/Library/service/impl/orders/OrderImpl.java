@@ -7,7 +7,7 @@ import com.example.backend.Library.model.dto.reponse.orders.PageDTO;
 
 import com.example.backend.Library.model.entity.orders.Order;
 import com.example.backend.Library.model.entity.orders.OrderStatus;
-import com.example.backend.Library.model.mapper.Orders.MapOrderFields;
+import com.example.backend.Library.model.mapper.orders.MapOrderFields;
 import com.example.backend.Library.repository.orders.OrderDetailRepository;
 import com.example.backend.Library.repository.orders.OrderRepository;
 import com.example.backend.Library.service.interfaces.orders.OrderInterface;
@@ -136,6 +136,26 @@ public class OrderImpl implements OrderInterface {
     public PageDTO<OrderDTO> getOrderfindByStatus(Integer request, int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Order> orderPage =  orderRepository.findByOrderStatus(request,pageable);
+        List<Order> orders = orderPage.getContent();
+        List<OrderDTO> orderDTOs = orders.stream().map(order -> {
+            OrderDTO dto = new OrderDTO();
+            mapOrderFields.mapCommonOrderFields(order, dto);
+            return dto;
+        }).collect(Collectors.toList());
+        PageDTO<OrderDTO> pageDTO = new PageDTO<>();
+        pageDTO.setContent(orderDTOs);
+        pageDTO.setPageNo(orderPage.getNumber());
+        pageDTO.setPageSize(orderPage.getSize());
+        pageDTO.setTotalElements(orderPage.getTotalElements());
+        pageDTO.setTotalPages(orderPage.getTotalPages());
+        pageDTO.setLast(orderPage.isLast());
+        return pageDTO;
+    }
+
+    @Override
+    public PageDTO<OrderDTO> searchOrders(String keyword, int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Order> orderPage = orderRepository.searchOrders(keyword, pageable);
         List<Order> orders = orderPage.getContent();
         List<OrderDTO> orderDTOs = orders.stream().map(order -> {
             OrderDTO dto = new OrderDTO();

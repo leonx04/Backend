@@ -67,5 +67,12 @@ public class ControllerGetOrderList {
             result = orderImpl.getOrderfindByStatus(status, pageNo, pageSize);
         return ResponseEntity.ok(result);
     }
-
+    @GetMapping("/searchAll")
+    public ResponseEntity<?> searchByKeyword(@RequestParam(required = false) String keyword,
+                                            @RequestParam(defaultValue = "0") int pageNo,
+                                            @RequestParam(defaultValue = "10") int pageSize) {
+        PageDTO<OrderDTO> result;
+        result = orderImpl.searchOrders(keyword, pageNo, pageSize);
+        return ResponseEntity.ok(result);
+    }
 }

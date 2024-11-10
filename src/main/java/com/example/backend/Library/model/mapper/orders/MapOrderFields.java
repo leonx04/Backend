@@ -1,4 +1,4 @@
-package com.example.backend.Library.model.mapper.Orders;
+package com.example.backend.Library.model.mapper.orders;
 
 import com.example.backend.Library.model.dto.reponse.orders.OrderDTO;
 import com.example.backend.Library.model.entity.orders.Order;

@@ -18,4 +18,5 @@ public interface OrderInterface {
     Optional<Order> updateOrder(String code, Integer orderStatus, LocalDateTime updatedAt);
     PageDTO<OrderDTO> getOrderfindByStatus(Integer status, int pageNo, int pageSize);
 
+    PageDTO<OrderDTO> searchOrders(String keyword, int pageNo, int pageSize);
 }
