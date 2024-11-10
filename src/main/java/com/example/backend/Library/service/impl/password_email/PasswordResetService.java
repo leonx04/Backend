@@ -206,11 +206,11 @@ public class PasswordResetService implements IPasswordResetService {
     // Tạo nội dung email thông báo thay đổi email thành công
 //    private String createEmailChangeSuccessBody() {
 //        return "Chào bạn,\n\n" +
-//                "Chúng tôi xin thông báo rằng địa chỉ email của tài khoản của bạn tại Shop Shoes JN đã được thay đổi thành công.\n\n" +
+//                "Chúng tôi xin thông báo rằng địa chỉ email của tài khoản của bạn tại Shop 360 Sneaker đã được thay đổi thành công.\n\n" +
 //                "Nếu bạn không thực hiện yêu cầu này, vui lòng liên hệ với bộ phận hỗ trợ của chúng tôi ngay lập tức để bảo vệ tài khoản của bạn.\n\n" +
 //                "Trân trọng,\n" +
 //                "Đội ngũ hỗ trợ\n" +
-//                "Shop Shoes JN\n\n" +
+//                "Shop 360 Sneaker\n\n" +
 //                "Lưu ý: Đây là email tự động, vui lòng không trả lời email này.";
 //    }
 
@@ -227,7 +227,7 @@ public class PasswordResetService implements IPasswordResetService {
         }
     }
 
-    //
+    // Gửi mã OTP đến email
 //    private void cacheEmailOTP(String email, String otp) {
 //        Cache cache = cacheManager.getCache("changeEmailOTPs");
 //        if (cache != null) {
