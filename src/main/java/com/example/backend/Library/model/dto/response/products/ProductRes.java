@@ -1,4 +1,4 @@
-package com.example.backend.Library.model.dto.Response.products;
+package com.example.backend.Library.model.dto.response.products;
 
 public class ProductRes {
 }
