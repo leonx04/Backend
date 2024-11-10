@@ -2,7 +2,6 @@ package com.example.backend.Admin.controller.customer;
 
 import com.example.backend.Library.model.dto.request.customer.CustomerRequest;
 import com.example.backend.Library.model.dto.response.customer.CustomerResponse;
-import com.example.backend.Library.model.dto.response.*;
 import com.example.backend.Library.model.entity.customer.Customer;
 import com.example.backend.Library.service.interfaces.customer.ICustomerService;
 import com.example.backend.Library.service.interfaces.excel.customer.ICustomerExcelService;
@@ -75,7 +74,7 @@ public class CustomerAdminController {
         List<CustomerResponse> customerList = customers.getContent();
 
         return ResponseEntity.ok().body(
-                EntityResponse.builder()
+                com.example.backend.Library.model.dto.response.EntityResponse.builder()
                         .data(Collections.singletonList(customerList))
                         .totalPage(totalPage)
                         .build()
@@ -150,7 +149,7 @@ public class CustomerAdminController {
 
         // Trả về danh sách khách hàng tìm thấy
         return ResponseEntity.ok().body(
-                EntityResponse.builder()
+                com.example.backend.Library.model.dto.response.EntityResponse.builder()
                         .data(Collections.singletonList(customerList))
                         .totalPage(totalPage)
                         .build()

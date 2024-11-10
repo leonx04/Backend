@@ -21,9 +21,9 @@ ${AnsiColor.BRIGHT_YELLOW}                                   -------------------
 ${AnsiColor.CYAN}                                           Members:
 ${AnsiColor.BRIGHT_YELLOW}                                         - Phạm Thái Sơn - PH43120
 ${AnsiColor.BRIGHT_YELLOW}                                         - Lê Văn Sơn - PH*****
-${AnsiColor.BRIGHT_YELLOW}                                         - Đỗ Đại Phương - PH*****
-${AnsiColor.BRIGHT_YELLOW}                                         - Ngô Văn Dũng - PH*****
-${AnsiColor.BRIGHT_YELLOW}                                         - Trần Văn Mạnh - PH*****
+${AnsiColor.BRIGHT_YELLOW}                                         - Phạm Thị Thu Phương - PH*****
+${AnsiColor.BRIGHT_YELLOW}                                         - Nguyễn Xuân Dũng - PH40503
+${AnsiColor.BRIGHT_YELLOW}                                         - Hoàng Bá Mạnh - PH*****
 ${AnsiColor.BRIGHT_YELLOW}                                   ---------------------------------------------------
 ${AnsiColor.BRIGHT_CYAN}                                   🎉 Thank you for choosing us! 🎉
 ${AnsiColor.MAGENTA}                                   Let's make this journey memorable! 💖
