@@ -20,6 +20,8 @@ import org.springframework.web.cors.*;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.example.backend.Client.config.Endpoints.CLIENT_ENDPOINTS;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -52,12 +54,8 @@ public class ClientConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/ecm/admin/auth/login", "/api/ecm/admin/auth/get-otp", "/api/ecm/admin/auth/reset-password")
-//                        .permitAll()
-//                        .requestMatchers("/api/admin/employees", "/api/ecm/admin/customers", "/api/admin/promotions",
-//                                "/api/admin/vouchers").hasRole("ADMIN")
-//                        .requestMatchers("/api/confirm-order/**").authenticated()
-//                        .anyRequest().authenticated()
+                        .requestMatchers(CLIENT_ENDPOINTS).permitAll()
+//                        .hasAnyRole("USER")
                                 .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session

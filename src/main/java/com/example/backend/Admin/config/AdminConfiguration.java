@@ -15,6 +15,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import static com.example.backend.Admin.config.Endpoints.ADMIN_ENDPOINTS;
+
 @Configuration
 @EnableWebSecurity
 @Order(1)
@@ -35,16 +37,8 @@ public class AdminConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .securityMatcher("/api/ecm/admin/**", "/api/ecm/user/**")
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-//
-//                        .requestMatchers("/api/ecm/admin/auth/login", "/api/ecm/admin/auth/logout",
-//                                "/api/ecm/admin/auth/get-otp", "/api/ecm/admin/auth/reset-password")
-//                        .permitAll()
-//                        .requestMatchers("/api/ecm/admin/customers", "/api/v1/admin/items/product/**").hasRole("ADMIN")
-//                        .requestMatchers("/api/admin/employees", "/api/admin/employees/**", "/api/admin/vouchers/search",
-//                                "/api/admin/vouchers", "/api/admin/promotions").hasRole("ADMIN")
-//                        .requestMatchers("/staff/dashboard").hasAnyRole("STAFF", "ADMIN")
-//                        .anyRequest().authenticated()
+                        .requestMatchers(ADMIN_ENDPOINTS).permitAll()
+//                        .hasAnyRole("ADMIN", "STAFF")
                                 .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
