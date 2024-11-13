@@ -1,7 +1,7 @@
 package com.example.backend.Admin.config;
 
 import com.example.backend.Library.security.auth.JwtAuthenticationFilter;
-import com.example.backend.Library.security.employee.EmployeeDetailService;
+import com.example.backend.Library.service.impl.employee.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -19,11 +20,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @Order(1)
 public class AdminConfiguration {
-    private final EmployeeDetailService employeeDetailService;
+    private final EmployeeService employeeDetailService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final PasswordEncoder passwordEncoder;
 
-    public AdminConfiguration(EmployeeDetailService employeeDetailService, PasswordEncoder passwordEncoder, JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public AdminConfiguration(EmployeeService employeeDetailService, PasswordEncoder passwordEncoder, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.employeeDetailService = employeeDetailService;
         this.passwordEncoder = passwordEncoder;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
@@ -64,7 +65,7 @@ public class AdminConfiguration {
                 .rememberMe(remember -> remember
                             .key("uniqueAndSecretKey")
                             .tokenValiditySeconds(86400)
-                            .userDetailsService(employeeDetailService)
+                            .userDetailsService((UserDetailsService) employeeDetailService)
                 )
                 .exceptionHandling(exceptions -> exceptions
                             .authenticationEntryPoint((request, response, authException) ->
