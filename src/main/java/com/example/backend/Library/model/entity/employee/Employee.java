@@ -32,6 +32,7 @@ public class Employee {
     private String userName;
     private String passWord;
 
+
     private String fullName;
     private int gender;
     private Date birthDate;

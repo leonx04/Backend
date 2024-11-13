@@ -39,5 +39,5 @@ public class OrderDetail {
     private ProductDetail productDetail;
 
     private int quantity;
-    private Double price;
+    private BigDecimal price;
 }
