@@ -190,17 +190,12 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-<<<<<<< HEAD
-            <artifactId>spring-boot-starter-test</artifactId></dependency>
-=======
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
->>>>>>> b0b48a7732613c087528c38d95a538cd294f5ced
-
     </dependencies>
 
     <build>
