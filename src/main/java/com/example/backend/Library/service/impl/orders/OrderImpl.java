@@ -1,7 +1,8 @@
 package com.example.backend.Library.service.impl.orders;
 
+import com.example.backend.Library.model.dto.Response.orders.ListOrderDTO;
 import com.example.backend.Library.model.dto.request.order.FindByOrderStatusAndOrderType;
-import com.example.backend.Library.model.dto.response.orders.*;
+//import com.example.backend.Library.model.dto.response.orders.*;
 
 import com.example.backend.Library.model.entity.orders.*;
 import com.example.backend.Library.model.mapper.Orders.MapOrderFields;
@@ -47,9 +48,9 @@ public class OrderImpl implements OrderInterface {
             dto.setTotal(order.getTotal());
             dto.setShippingCost(order.getShippingCost());
             dto.setTrackingNumber(order.getTrackingNumber());
-            List<OrderItemDTO> dtos = order.getOrderDetails().stream().map(orderDetail ->
+            List<com.example.backend.Library.model.dto.response.orders.OrderItemDTO> dtos = order.getOrderDetails().stream().map(orderDetail ->
             {
-                OrderItemDTO item = new OrderItemDTO();
+                com.example.backend.Library.model.dto.response.orders.OrderItemDTO item = new com.example.backend.Library.model.dto.response.orders.OrderItemDTO();
                 item.setProductName(orderDetail.getProductDetail().getProduct().getName());
                 item.setQuantity(orderDetail.getQuantity());
                 item.setPrice(orderDetail.getPrice());
@@ -62,18 +63,18 @@ public class OrderImpl implements OrderInterface {
     }
 
     @Override
-    public PageDTO<OrderDTO> getOrder(int pageNo, int pageSize) {
+    public com.example.backend.Library.model.dto.response.orders.PageDTO<com.example.backend.Library.model.dto.response.orders.OrderDTO> getOrder(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Order> orderPage = orderRepository.findAll(pageable);
         List<Order> orders = orderPage.getContent();
-        List<OrderDTO> orderDTOs = orders.stream()
+        List<com.example.backend.Library.model.dto.response.orders.OrderDTO> orderDTOs = orders.stream()
                 .map(order -> {
-                    OrderDTO dto = new OrderDTO();
+                    com.example.backend.Library.model.dto.response.orders.OrderDTO dto = new com.example.backend.Library.model.dto.response.orders.OrderDTO();
                     mapOrderFields.mapCommonOrderFields(order, dto);
                     return dto;
                 })
                 .collect(Collectors.toList());
-        PageDTO<OrderDTO> pageDTO = new PageDTO<>();
+        com.example.backend.Library.model.dto.response.orders.PageDTO<com.example.backend.Library.model.dto.response.orders.OrderDTO> pageDTO = new com.example.backend.Library.model.dto.response.orders.PageDTO<>();
         pageDTO.setContent(orderDTOs);
         pageDTO.setPageNo(orderPage.getNumber());
         pageDTO.setPageSize(orderPage.getSize());
@@ -85,7 +86,7 @@ public class OrderImpl implements OrderInterface {
     }
 
     @Override
-    public PageDTO<OrderDTO> getOrderfindStatus(int pageNo, int pageSize) {
+    public com.example.backend.Library.model.dto.response.orders.PageDTO<com.example.backend.Library.model.dto.response.orders.OrderDTO> getOrderfindStatus(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         List<Integer> excludeStatuses = Arrays.asList(
                 OrderStatus.COMPLETED.ordinal() + 1,
@@ -93,15 +94,15 @@ public class OrderImpl implements OrderInterface {
         );
         Page<Order> orderPage = orderRepository.findByOrderStatusNotIn(excludeStatuses, pageable);
         List<Order> orders = orderPage.getContent();
-        List<OrderDTO> orderDTOs = orders.stream()
+        List<com.example.backend.Library.model.dto.response.orders.OrderDTO> orderDTOs = orders.stream()
                 .map(order -> {
-                    OrderDTO dto = new OrderDTO();
+                    com.example.backend.Library.model.dto.response.orders.OrderDTO dto = new com.example.backend.Library.model.dto.response.orders.OrderDTO();
                     mapOrderFields.mapCommonOrderFields(order, dto);
                     return dto;
                 })
                 .collect(Collectors.toList());
 
-        PageDTO<OrderDTO> pageDTO = new PageDTO<>();
+        com.example.backend.Library.model.dto.response.orders.PageDTO<com.example.backend.Library.model.dto.response.orders.OrderDTO> pageDTO = new com.example.backend.Library.model.dto.response.orders.PageDTO<>();
         pageDTO.setContent(orderDTOs);
         pageDTO.setPageNo(orderPage.getNumber());
         pageDTO.setPageSize(orderPage.getSize());
@@ -126,16 +127,16 @@ public class OrderImpl implements OrderInterface {
     }
 
     @Override
-    public PageDTO<OrderDTO> getOrderfindByStatusAndType(FindByOrderStatusAndOrderType request, int pageNo, int pageSize) {
+    public com.example.backend.Library.model.dto.response.orders.PageDTO<com.example.backend.Library.model.dto.response.orders.OrderDTO> getOrderfindByStatusAndType(FindByOrderStatusAndOrderType request, int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Order> orderPage =  orderRepository.findByOrderStatusAndOrderType(request.getOrderStatus(),request.getOrderType(),pageable);
         List<Order> orders = orderPage.getContent();
-        List<OrderDTO> orderDTOs = orders.stream().map(order -> {
-            OrderDTO dto = new OrderDTO();
+        List<com.example.backend.Library.model.dto.response.orders.OrderDTO> orderDTOs = orders.stream().map(order -> {
+            com.example.backend.Library.model.dto.response.orders.OrderDTO dto = new com.example.backend.Library.model.dto.response.orders.OrderDTO();
             mapOrderFields.mapCommonOrderFields(order, dto);
             return dto;
         }).collect(Collectors.toList());
-        PageDTO<OrderDTO> pageDTO = new PageDTO<>();
+        com.example.backend.Library.model.dto.response.orders.PageDTO<com.example.backend.Library.model.dto.response.orders.OrderDTO> pageDTO = new com.example.backend.Library.model.dto.response.orders.PageDTO<>();
         pageDTO.setContent(orderDTOs);
         pageDTO.setPageNo(orderPage.getNumber());
         pageDTO.setPageSize(orderPage.getSize());
