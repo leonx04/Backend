@@ -1,7 +1,6 @@
 package com.example.backend.Library.model.entity.cart;
 
-import com.example.backend.Library.model.entity.products.BaseEntity;
-import com.example.backend.Library.model.entity.products.ProductDetail;
+import com.example.backend.Library.model.entity.products.ProductVariant;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,7 +32,7 @@ public class CartDetail {
 
     @ManyToOne
     @JoinColumn(name = "productDetailId", referencedColumnName = "id")
-    private ProductDetail productDetail;
+    private ProductVariant productVariantDetail;
     private int quantity;
 
 }
