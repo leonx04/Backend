@@ -145,7 +145,7 @@ public class CustomerService implements ICustomerService {
 
     // Lấy thông tin khách hàng dựa trên email
     @Override
-    public Optional<Customer> getCustomerByEmail(String email) {
+    public Optional<Customer> findByEmail(String email) {
         return customerRepository.findByEmail(email);
     }
 

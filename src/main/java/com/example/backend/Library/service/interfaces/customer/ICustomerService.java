@@ -21,7 +21,7 @@ public interface ICustomerService {
 
     Page<CustomerResponse> getCustomers(Pageable pageable);
     Customer getCustomerById(int id) throws Exception;
-    Optional<Customer> getCustomerByEmail(String email);
+    Optional<Customer> findByEmail(String email);
     Customer updateCustomer(int id, CustomerRequest request) throws Exception;
     void deleteCustomer(int id);
 
