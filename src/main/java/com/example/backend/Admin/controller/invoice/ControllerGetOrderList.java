@@ -1,10 +1,10 @@
 package com.example.backend.Admin.controller.invoice;
 
 import com.example.backend.Library.model.dto.request.order.UpdateStatus;
-import com.example.backend.Library.model.dto.reponse.orders.ApiResponse;
-import com.example.backend.Library.model.dto.reponse.orders.OrderDTO;
-import com.example.backend.Library.model.dto.reponse.orders.OrderStatusLogDTO;
-import com.example.backend.Library.model.dto.reponse.orders.PageDTO;
+import com.example.backend.Library.model.dto.response.orders.ApiResponse;
+import com.example.backend.Library.model.dto.response.orders.OrderDTO;
+import com.example.backend.Library.model.dto.response.orders.OrderStatusLogDTO;
+import com.example.backend.Library.model.dto.response.orders.PageDTO;
 import com.example.backend.Library.model.entity.orders.Order;
 import com.example.backend.Library.service.impl.orders.OrderImpl;
 import com.example.backend.Library.service.impl.orders.OrderStatusLogImpl;
