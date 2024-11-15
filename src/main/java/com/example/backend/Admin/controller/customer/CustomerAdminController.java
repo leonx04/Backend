@@ -75,7 +75,7 @@ public class CustomerAdminController {
         List<CustomerResponse> customerList = customers.getContent();
 
         return ResponseEntity.ok().body(
-                EntityResponse.builder()
+                com.example.backend.Library.model.dto.response.EntityResponse.builder()
                         .data(Collections.singletonList(customerList))
                         .totalPage(totalPage)
                         .build()
@@ -150,7 +150,7 @@ public class CustomerAdminController {
 
         // Trả về danh sách khách hàng tìm thấy
         return ResponseEntity.ok().body(
-                EntityResponse.builder()
+                com.example.backend.Library.model.dto.response.EntityResponse.builder()
                         .data(Collections.singletonList(customerList))
                         .totalPage(totalPage)
                         .build()

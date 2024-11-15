@@ -37,32 +37,32 @@ public class AdminConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .securityMatcher("/api/ecm/admin/**", "/api/ecm/user/**")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(ADMIN_ENDPOINTS).permitAll()
+                                .requestMatchers(ADMIN_ENDPOINTS).permitAll()
 //                        .hasAnyRole("ADMIN", "STAFF")
                                 .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
-                            .loginPage("/api/ecm/admin/login")
-                            .loginProcessingUrl("/api/ecm/admin/login")
-                            .defaultSuccessUrl("/api/ecm/admin/dashboard")
-                            .failureUrl("/api/ecm/admin/login?error=true")
-                            .permitAll()
+                        .loginPage("/api/ecm/admin/login")
+                        .loginProcessingUrl("/api/ecm/admin/login")
+                        .defaultSuccessUrl("/api/ecm/admin/dashboard")
+                        .failureUrl("/api/ecm/admin/login?error=true")
+                        .permitAll()
                 )
                 .logout(logout -> logout
-                            .logoutRequestMatcher(new AntPathRequestMatcher("/api/ecm/admin/logout"))
-                            .logoutSuccessUrl("/api/ecm/admin/login?logout=true")
-                            .deleteCookies("JSESSIONID")
-                            .invalidateHttpSession(true)
-                            .permitAll()
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/api/ecm/admin/logout"))
+                        .logoutSuccessUrl("/api/ecm/admin/login?logout=true")
+                        .deleteCookies("JSESSIONID")
+                        .invalidateHttpSession(true)
+                        .permitAll()
                 )
                 .rememberMe(remember -> remember
-                            .key("uniqueAndSecretKey")
-                            .tokenValiditySeconds(86400)
-                            .userDetailsService(employeeDetailService)
+                        .key("uniqueAndSecretKey")
+                        .tokenValiditySeconds(86400)
+                        .userDetailsService(employeeDetailService)
                 )
                 .exceptionHandling(exceptions -> exceptions
-                            .authenticationEntryPoint((request, response, authException) ->
-                                    response.sendRedirect("/api/ecm/admin/login"))
+                        .authenticationEntryPoint((request, response, authException) ->
+                                response.sendRedirect("/api/ecm/admin/login"))
                 )
                 .sessionManagement(session -> session
                         .maximumSessions(1)
