@@ -1,6 +1,6 @@
 package com.example.backend.Library.service.interfaces.orders;
 
-import com.example.backend.Library.model.dto.Response.orders.ListOrderDTO;
+import com.example.backend.Library.model.dto.response.orders.ListOrderDTO;
 import com.example.backend.Library.model.dto.request.order.FindByOrderStatusAndOrderType;
 //import com.example.backend.Library.model.dto.response.orders.*;
 import com.example.backend.Library.model.entity.orders.Order;
