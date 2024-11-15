@@ -1,15 +1,22 @@
 package com.example.backend.Library.service.impl.orders;
 
-import com.example.backend.Library.model.dto.request.order.FindByOrderStatusAndOrderType;
-import com.example.backend.Library.model.dto.response.orders.*;
+import com.example.backend.Library.model.dto.response.orders.ListOrderDTO;
+import com.example.backend.Library.model.dto.response.orders.OrderDTO;
+import com.example.backend.Library.model.dto.response.orders.OrderItemDTO;
+import com.example.backend.Library.model.dto.response.orders.PageDTO;
 
-import com.example.backend.Library.model.entity.orders.*;
-import com.example.backend.Library.model.mapper.Orders.MapOrderFields;
-import com.example.backend.Library.repository.orders.*;
+import com.example.backend.Library.model.entity.orders.Order;
+import com.example.backend.Library.model.entity.orders.OrderStatus;
+import com.example.backend.Library.model.mapper.orders.MapOrderFields;
+import com.example.backend.Library.repository.orders.OrderDetailRepository;
+import com.example.backend.Library.repository.orders.OrderRepository;
 import com.example.backend.Library.service.interfaces.orders.OrderInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -26,7 +33,7 @@ public class OrderImpl implements OrderInterface {
     private MapOrderFields mapOrderFields;
     @Autowired
     private OrderDetailRepository orderDetailRepository;
-
+    @Transactional
     @Override
     public List<ListOrderDTO> OrderListAllfindCode(String code) {
         return orderRepository.findByCodeContaining(code).stream().map(order -> {
@@ -126,9 +133,29 @@ public class OrderImpl implements OrderInterface {
     }
 
     @Override
-    public PageDTO<OrderDTO> getOrderfindByStatusAndType(FindByOrderStatusAndOrderType request, int pageNo, int pageSize) {
+    public PageDTO<OrderDTO> getOrderfindByStatus(Integer request, int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Order> orderPage =  orderRepository.findByOrderStatusAndOrderType(request.getOrderStatus(),request.getOrderType(),pageable);
+        Page<Order> orderPage =  orderRepository.findByOrderStatus(request,pageable);
+        List<Order> orders = orderPage.getContent();
+        List<OrderDTO> orderDTOs = orders.stream().map(order -> {
+            OrderDTO dto = new OrderDTO();
+            mapOrderFields.mapCommonOrderFields(order, dto);
+            return dto;
+        }).collect(Collectors.toList());
+        PageDTO<OrderDTO> pageDTO = new PageDTO<>();
+        pageDTO.setContent(orderDTOs);
+        pageDTO.setPageNo(orderPage.getNumber());
+        pageDTO.setPageSize(orderPage.getSize());
+        pageDTO.setTotalElements(orderPage.getTotalElements());
+        pageDTO.setTotalPages(orderPage.getTotalPages());
+        pageDTO.setLast(orderPage.isLast());
+        return pageDTO;
+    }
+
+    @Override
+    public PageDTO<OrderDTO> searchOrders(String keyword, int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Order> orderPage = orderRepository.searchOrders(keyword, pageable);
         List<Order> orders = orderPage.getContent();
         List<OrderDTO> orderDTOs = orders.stream().map(order -> {
             OrderDTO dto = new OrderDTO();

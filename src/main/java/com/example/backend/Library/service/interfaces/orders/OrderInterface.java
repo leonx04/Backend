@@ -1,11 +1,13 @@
 package com.example.backend.Library.service.interfaces.orders;
 
-import com.example.backend.Library.model.dto.request.order.FindByOrderStatusAndOrderType;
-import com.example.backend.Library.model.dto.response.orders.*;
+import com.example.backend.Library.model.dto.response.orders.ListOrderDTO;
+import com.example.backend.Library.model.dto.response.orders.OrderDTO;
+import com.example.backend.Library.model.dto.response.orders.PageDTO;
 import com.example.backend.Library.model.entity.orders.Order;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 public interface OrderInterface {
     List<ListOrderDTO> OrderListAllfindCode(String code);
@@ -14,6 +16,7 @@ public interface OrderInterface {
     PageDTO<OrderDTO> getOrderfindStatus(int pageNo, int pageSize);
 
     Optional<Order> updateOrder(String code, Integer orderStatus, LocalDateTime updatedAt);
-    PageDTO<OrderDTO> getOrderfindByStatusAndType(FindByOrderStatusAndOrderType request, int pageNo, int pageSize);
+    PageDTO<OrderDTO> getOrderfindByStatus(Integer status, int pageNo, int pageSize);
 
+    PageDTO<OrderDTO> searchOrders(String keyword, int pageNo, int pageSize);
 }

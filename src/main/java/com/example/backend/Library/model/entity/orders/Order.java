@@ -62,7 +62,7 @@ public class Order {
     @Column(name = "updatedat")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<OrderDetail> orderDetails;
     public String getOrderStatus() {
         return OrderStatus.getDescriptionByCode(orderStatus);

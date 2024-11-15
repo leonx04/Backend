@@ -1,7 +1,9 @@
 package com.example.backend.Library.service.interfaces.orders;
 
-import com.example.backend.Library.model.dto.response.orders.*;
+
 import com.example.backend.Library.model.dto.request.order.InsertOrderStatusLogRequest;
+import com.example.backend.Library.model.dto.response.orders.OrderStatusLogDTO;
+import com.example.backend.Library.model.dto.response.orders.PageDTO;
 import com.example.backend.Library.model.entity.orders.OrderStatusLog;
 
 public interface OrderStatusLogInterface {
