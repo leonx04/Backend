@@ -1,4 +1,4 @@
-package com.example.backend.Library.model.dto.request;
+package com.example.backend.Library.model.dto.request.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

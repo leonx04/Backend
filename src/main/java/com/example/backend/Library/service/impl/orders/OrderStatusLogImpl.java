@@ -1,6 +1,7 @@
 package com.example.backend.Library.service.impl.orders;
 
-import com.example.backend.Library.model.dto.request.InsertOrderStatusLogRequest;
+
+import com.example.backend.Library.model.dto.request.order.InsertOrderStatusLogRequest;
 import com.example.backend.Library.model.dto.response.orders.OrderStatusLogDTO;
 import com.example.backend.Library.model.dto.response.orders.PageDTO;
 import com.example.backend.Library.model.entity.employee.Employee;

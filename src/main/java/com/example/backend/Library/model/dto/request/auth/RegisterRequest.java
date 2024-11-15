@@ -1,4 +1,4 @@
-package com.example.backend.Library.model.dto.request;
+package com.example.backend.Library.model.dto.request.auth;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;

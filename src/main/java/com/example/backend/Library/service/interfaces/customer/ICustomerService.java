@@ -1,7 +1,7 @@
 package com.example.backend.Library.service.interfaces.customer;
 
-import com.example.backend.Library.model.dto.request.LoginRequest;
-import com.example.backend.Library.model.dto.request.RegisterRequest;
+import com.example.backend.Library.model.dto.request.auth.LoginRequest;
+import com.example.backend.Library.model.dto.request.auth.RegisterRequest;
 import com.example.backend.Library.model.dto.request.customer.CustomerRequest;
 import com.example.backend.Library.model.dto.response.customer.CustomerResponse;
 import com.example.backend.Library.model.entity.customer.Customer;
@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 public interface ICustomerService {
@@ -20,7 +21,7 @@ public interface ICustomerService {
 
     Page<CustomerResponse> getCustomers(Pageable pageable);
     Customer getCustomerById(int id) throws Exception;
-    Optional<Customer> getCustomerByEmail(String email);
+    Optional<Customer> findByEmail(String email);
     Customer updateCustomer(int id, CustomerRequest request) throws Exception;
     void deleteCustomer(int id);
 
@@ -40,5 +41,8 @@ public interface ICustomerService {
     // Method tìm kiếm khách hàng theo các thuộc tính của khách hàng
     Page<CustomerResponse> searchCustomers(
             String fullName, String email, String phone, Integer gender, Integer status, Pageable pageable);
+
+    // Lấy danh sách để xuất file excel
+    List<Customer> getAll();
 
 }

@@ -1,7 +1,8 @@
 package com.example.backend.Library.service.impl.customer;
 
 import com.example.backend.Library.exception.DataNotFoundException;
-import com.example.backend.Library.model.dto.request.*;
+import com.example.backend.Library.model.dto.request.auth.LoginRequest;
+import com.example.backend.Library.model.dto.request.auth.RegisterRequest;
 import com.example.backend.Library.model.dto.request.customer.CustomerRequest;
 import com.example.backend.Library.model.dto.response.customer.CustomerResponse;
 import com.example.backend.Library.model.entity.cart.*;
@@ -144,7 +145,7 @@ public class CustomerService implements ICustomerService {
 
     // Lấy thông tin khách hàng dựa trên email
     @Override
-    public Optional<Customer> getCustomerByEmail(String email) {
+    public Optional<Customer> findByEmail(String email) {
         return customerRepository.findByEmail(email);
     }
 
@@ -337,6 +338,11 @@ public class CustomerService implements ICustomerService {
                 .map(customerMapper::toCustomer);
     }
 
+    @Override
+    public List<Customer> getAll() {
+        return customerRepository.findAll();
+    }
+
     /* Các hàm hỗ trợ */
 
 
@@ -374,13 +380,13 @@ public class CustomerService implements ICustomerService {
         // Thêm UUID vào trước tên file để đảm bảo tên file là duy nhất
         String uniqueFilename = UUID.randomUUID().toString() + "_" + filename;
         // Đường dẫn đến thư mục mà bạn muốn lưu file
-        java.nio.file.Path uploadDir = Paths.get("uploads/customers");
+        Path uploadDir = Paths.get("uploads/customers");
         // Kiểm tra và tạo thư mục nếu nó không tồn tại
         if (!Files.exists(uploadDir)) {
             Files.createDirectories(uploadDir);
         }
         // Đường dẫn đầy đủ đến file
-        java.nio.file.Path destination = Paths.get(uploadDir.toString(), uniqueFilename);
+        Path destination = Paths.get(uploadDir.toString(), uniqueFilename);
         // Sao chép file vào thư mục đích
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
         return uniqueFilename;
@@ -394,7 +400,7 @@ public class CustomerService implements ICustomerService {
 
     // Hàm xóa ảnh cũ
     private void deleteOldAvatar(String filename) throws IOException {
-        Path filePath = Paths.get("uploads", filename);
+        Path filePath = Paths.get("uploads ", filename);
         Files.deleteIfExists(filePath);
     }
 

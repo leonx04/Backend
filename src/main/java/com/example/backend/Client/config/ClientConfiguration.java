@@ -1,6 +1,6 @@
 package com.example.backend.Client.config;
 
-import com.example.backend.Library.security.JwtAuthenticationFilter;
+import com.example.backend.Library.security.auth.JwtAuthenticationFilter;
 import com.example.backend.Library.security.customer.CustomerDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +19,8 @@ import org.springframework.web.cors.*;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static com.example.backend.Client.config.Endpoints.CLIENT_ENDPOINTS;
 
 @Configuration
 @EnableWebSecurity
@@ -52,12 +54,8 @@ public class ClientConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/ecm/admin/auth/login", "/api/ecm/admin/auth/get-otp", "/api/ecm/admin/auth/reset-password")
-//                        .permitAll()
-//                        .requestMatchers("/api/admin/employees", "/api/ecm/admin/customers", "/api/admin/promotions",
-//                                "/api/admin/vouchers").hasRole("ADMIN")
-//                        .requestMatchers("/api/confirm-order/**").authenticated()
-//                        .anyRequest().authenticated()
+                        .requestMatchers(CLIENT_ENDPOINTS).permitAll()
+//                        .hasAnyRole("USER")
                                 .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session
@@ -71,7 +69,7 @@ public class ClientConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5500", "http://127.0.0.1:5500"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5500", "http://127.0.0.1:5500", "http://localhost:8080", "http://127.0.0.1:5501"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

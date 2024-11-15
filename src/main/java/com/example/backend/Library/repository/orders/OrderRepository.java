@@ -30,4 +30,5 @@ public interface OrderRepository extends JpaRepository<Order,Integer> {
             "OR c.fullName LIKE %:keyword% )")
     Page<Order> searchOrders(@Param("keyword") String keyword,Pageable pageable);
 
+    List<Order> findById(int id);
 }

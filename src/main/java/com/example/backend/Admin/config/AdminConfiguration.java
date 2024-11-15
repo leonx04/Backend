@@ -1,12 +1,11 @@
 package com.example.backend.Admin.config;
 
-import com.example.backend.Library.security.JwtAuthenticationFilter;
+import com.example.backend.Library.security.auth.JwtAuthenticationFilter;
 import com.example.backend.Library.security.employee.EmployeeDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,12 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.List;
+import static com.example.backend.Admin.config.Endpoints.ADMIN_ENDPOINTS;
 
 @Configuration
 @EnableWebSecurity
@@ -42,16 +37,8 @@ public class AdminConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .securityMatcher("/api/ecm/admin/**", "/api/ecm/user/**")
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-//
-//                        .requestMatchers("/api/ecm/admin/auth/login", "/api/ecm/admin/auth/logout",
-//                                "/api/ecm/admin/auth/get-otp", "/api/ecm/admin/auth/reset-password")
-//                        .permitAll()
-//                        .requestMatchers("/api/ecm/admin/customers", "/api/v1/admin/items/product/**").hasRole("ADMIN")
-//                        .requestMatchers("/api/admin/employees", "/api/admin/employees/**", "/api/admin/vouchers/search",
-//                                "/api/admin/vouchers", "/api/admin/promotions").hasRole("ADMIN")
-//                        .requestMatchers("/staff/dashboard").hasAnyRole("STAFF", "ADMIN")
-//                        .anyRequest().authenticated()
+                        .requestMatchers(ADMIN_ENDPOINTS).permitAll()
+//                        .hasAnyRole("ADMIN", "STAFF")
                                 .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
