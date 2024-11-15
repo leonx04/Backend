@@ -91,7 +91,7 @@ public class AuthClientController {
         }
 
         try {
-            passwordResetService.resetPassword(request ,email, newPassword, otp);
+            passwordResetService.resetPassword(request ,email, newPassword, retypePassword, otp);
             response.put("message", "Đặt lại mật khẩu thành công.");
             response.put("status", "success");
             return ResponseEntity.ok(response);

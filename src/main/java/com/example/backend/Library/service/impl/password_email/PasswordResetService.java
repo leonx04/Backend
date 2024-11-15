@@ -8,6 +8,7 @@ import com.example.backend.Library.service.interfaces.password_email.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -84,7 +85,7 @@ public class PasswordResetService implements IPasswordResetService {
 
     // Đặt lại mật khẩu
     @Override
-    public Map<String, String> resetPassword(HttpServletRequest request, String email, String newPassword, String otp) {
+    public Map<String, String> resetPassword(HttpServletRequest request, String email, String newPassword, String confirmPassword, String otp) {
         Map<String, String> response = new HashMap<>();
 
         Optional<Employee> existsEmployee = null;
@@ -110,6 +111,28 @@ public class PasswordResetService implements IPasswordResetService {
                     response.put("status", "error");
                     return response;
                 }
+
+                // Kiểm tra mật khẩu mới có hợp lệ không
+                if (newPassword.length() < 8) {
+                    response.put("message", "Mật khẩu phải chứa ít nhất 8 ký tự.");
+                    response.put("status", "errorPassword");
+                    return response;
+                }
+
+                // kiểm tra confirmPassword
+                if (confirmPassword == null || confirmPassword.isEmpty()) {
+                    response.put("message", "Mật khẩu không được để trống.");
+                    response.put("status", "errorPassword");
+                    return response;
+                }
+
+                // password and confirmPassword
+                if (!newPassword.equals(confirmPassword)) {
+                    response.put("message", "Mật khẩu không khớp.");
+                    response.put("status", "errorPassword");
+                    return response;
+                }
+
                 // Kiểm tra mã OTP có hợp lệ không
                 if (!validateOTP(email, otp)) {
                     response.put("message", "Mã OTP không hợp lệ hoặc đã hết hạn.");
@@ -220,6 +243,7 @@ public class PasswordResetService implements IPasswordResetService {
         return String.format("%06d", random.nextInt(1000000));
     }
 
+    // Lưu mã OTP vào cache
     private void cacheOTP(String email, String otp) {
         Cache cache = cacheManager.getCache("passwordResetOTPs");
         if (cache != null) {
@@ -235,6 +259,7 @@ public class PasswordResetService implements IPasswordResetService {
 //        }
 //    }
 
+    // Tạo nội dung email chứa mã OTP
     private String createEmailBody(String otp) {
         return String.format(
                 "Chào bạn,\n\n" +

@@ -86,21 +86,7 @@ public class AuthAdminController {
         Map<String, String> response = new HashMap<>();
 
         try {
-            // Kiểm tra mật khẩu mới có hợp lệ không
-            if (newPassword.length() < 8) {
-                response.put("message", "Mật khẩu phải chứa ít nhất 8 ký tự.");
-                response.put("status", "errorPassword");
-                return ResponseEntity.ok(response);
-            }
-            if (!newPassword.equals(confirmPassword)) {
-                response.put("message", "Mật khẩu không khớp.");
-                response.put("status", "errorPassword");
-                return ResponseEntity.ok(response);
-            }
-            passwordResetService.resetPassword(request ,email, newPassword, otp);
-            response.put("message", "Đặt lại mật khẩu thành công.");
-            response.put("status", "success");
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(passwordResetService.resetPassword(request ,email, newPassword, confirmPassword, otp));
         } catch (Exception e) {
             response.put("message", e.getMessage());
             response.put("status", "error");

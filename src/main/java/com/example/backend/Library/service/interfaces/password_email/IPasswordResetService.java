@@ -10,7 +10,7 @@ public interface IPasswordResetService {
 
     boolean validateOTP(String email, String otp);
 
-    Map<String, String> resetPassword(HttpServletRequest request, String email, String newPassword, String otp);
+    Map<String, String> resetPassword(HttpServletRequest request, String email, String newPassword, String confirmPassword, String otp);
 
     void sendPasswordResetSuccessEmail(String email);
 
