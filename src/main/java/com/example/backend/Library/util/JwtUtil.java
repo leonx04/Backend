@@ -77,6 +77,7 @@ public class JwtUtil {
                 .compact();
     }
 
+    // Kiểm tra token
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username != null && username.equals(userDetails.getUsername()) && !isTokenExpired(token));

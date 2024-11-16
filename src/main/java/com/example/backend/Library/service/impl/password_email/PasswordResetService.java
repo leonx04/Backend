@@ -105,40 +105,9 @@ public class PasswordResetService implements IPasswordResetService {
         if (check) {
             if (existsEmployee.isPresent()) {
                 Employee employee = existsEmployee.get();
-                // Kiểm tra mật khẩu mới có hợp lệ không
-                if (newPassword == null || newPassword.isEmpty()) {
-                    response.put("message", "Mật khẩu không được để trống.");
-                    response.put("status", "error");
-                    return response;
-                }
 
-                // Kiểm tra mật khẩu mới có hợp lệ không
-                if (newPassword.length() < 8) {
-                    response.put("message", "Mật khẩu phải chứa ít nhất 8 ký tự.");
-                    response.put("status", "errorPassword");
-                    return response;
-                }
+                validateCheck(response, email, newPassword, confirmPassword, otp);
 
-                // kiểm tra confirmPassword
-                if (confirmPassword == null || confirmPassword.isEmpty()) {
-                    response.put("message", "Mật khẩu không được để trống.");
-                    response.put("status", "errorPassword");
-                    return response;
-                }
-
-                // password and confirmPassword
-                if (!newPassword.equals(confirmPassword)) {
-                    response.put("message", "Mật khẩu không khớp.");
-                    response.put("status", "errorPassword");
-                    return response;
-                }
-
-                // Kiểm tra mã OTP có hợp lệ không
-                if (!validateOTP(email, otp)) {
-                    response.put("message", "Mã OTP không hợp lệ hoặc đã hết hạn.");
-                    response.put("status", "error");
-                    return response;
-                }
                 // Đặt lại mật khẩu
                 employee.setPassWord(passwordEncoder.encode(newPassword));
                 // Lưu thông tin khách hàng
@@ -213,6 +182,45 @@ public class PasswordResetService implements IPasswordResetService {
         String emailBody = createPasswordResetSuccessEmailBody();
         // Gửi email
         emailService.sendEmail(email, emailBody, "Thông báo: Mật khẩu của bạn đã được đặt lại thành công");
+    }
+
+    // Hàm kiểm tra
+    private Map validateCheck(Map response, String email, String newPassword, String confirmPassword, String otp) {
+        // Kiểm tra mật khẩu mới có hợp lệ không
+        if (newPassword == null || newPassword.isEmpty()) {
+            response.put("message", "Mật khẩu không được để trống.");
+            response.put("status", "error");
+            return response;
+        }
+
+        // Kiểm tra mật khẩu mới có hợp lệ không
+        if (newPassword.length() < 8) {
+            response.put("message", "Mật khẩu phải chứa ít nhất 8 ký tự.");
+            response.put("status", "errorPassword");
+            return response;
+        }
+
+        // kiểm tra confirmPassword
+        if (confirmPassword == null || confirmPassword.isEmpty()) {
+            response.put("message", "Mật khẩu không được để trống.");
+            response.put("status", "errorPassword");
+            return response;
+        }
+
+        // password and confirmPassword
+        if (!newPassword.equals(confirmPassword)) {
+            response.put("message", "Mật khẩu không khớp.");
+            response.put("status", "errorPassword");
+            return response;
+        }
+
+        // Kiểm tra mã OTP có hợp lệ không
+        if (!validateOTP(email, otp)) {
+            response.put("message", "Mã OTP không hợp lệ hoặc đã hết hạn.");
+            response.put("status", "error");
+            return response;
+        }
+        return null;
     }
 
     // Tạo nội dung email thông báo mật khẩu đã được đặt lại thành công

@@ -3,9 +3,9 @@ spring:
     name: Backend
 
   datasource:
-    url: jdbc:sqlserver://localhost:1433;database=DB_DATNS;encrypt=true;trustServerCertificate=true
+    url: jdbc:sqlserver://localhost:1433;database=DB_DATN_V4;encrypt=true;trustServerCertificate=true
     username: sa
-    password: 123456
+    password: son123
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
   jpa:
