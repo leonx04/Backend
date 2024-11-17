@@ -14,7 +14,7 @@ import org.springframework.web.context.request.WebRequest;
 import java.time.LocalDateTime;
 
 @Slf4j
-@RestControllerAdvice
+//@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     //Nguyên nhân : tham số đầu vào ko qua đc xác thực bằng annotation (@Valid hoặc @Validated).

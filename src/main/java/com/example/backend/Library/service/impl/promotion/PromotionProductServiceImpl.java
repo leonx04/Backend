@@ -1,20 +1,22 @@
 package com.example.backend.Library.service.impl.promotion;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.example.backend.Library.repository.products.productVariant.ProductVariantRepository;
+import org.springframework.stereotype.Service;
+
 import com.example.backend.Library.model.dto.request.promotion.Promotion_Admin_DTO;
-import com.example.backend.Library.model.entity.products.ProductDetail;
+import com.example.backend.Library.model.entity.products.ProductVariant;
 import com.example.backend.Library.model.entity.promotion.Promotion;
 import com.example.backend.Library.repository.promotion.Promotion_Repository;
-import com.example.backend.Library.service.interfaces.products.ProductDetailService;
+import com.example.backend.Library.service.interfaces.products.ProductVariantService;
 import com.example.backend.Library.service.interfaces.promotion.Promotion_Service;
+
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 // Đánh dấu lớp này là một service của Spring
 @Service
@@ -25,7 +27,7 @@ import java.util.List;
 public class PromotionProductServiceImpl {
 
     // Khai báo các dependency cần thiết
-    final ProductDetailService productDetailService;
+    final ProductVariantService ProductVariantService;
     final Promotion_Service promotionService;
     final Promotion_Repository promotionRepository;
 
@@ -33,11 +35,11 @@ public class PromotionProductServiceImpl {
      * Áp dụng promotion cho danh sách các product detail.
      *
      * @param promotionId ID của promotion cần áp dụng
-     * @param productDetailIds Danh sách ID của các product detail cần áp dụng
+     * @param ProductVariantIds Danh sách ID của các product detail cần áp dụng
      * @return Danh sách các product detail đã được cập nhật
      */
     @Transactional
-    public List<ProductDetail> applyPromotionToProducts(Integer promotionId, List<Integer> productDetailIds) {
+    public List<ProductVariant> applyPromotionToProducts(Integer promotionId, List<Integer> ProductVariantIds) {
         // Lấy thông tin promotion và kiểm tra tính hợp lệ
         Promotion_Admin_DTO promotionDTO = promotionService.getPromotionById(promotionId);
 //        validatePromotion(promotionDTO);
@@ -46,26 +48,26 @@ public class PromotionProductServiceImpl {
         Promotion promotion = promotionRepository.findById(promotionId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy promotion với id: " + promotionId));
 
-        List<ProductDetail> updatedProducts = new ArrayList<>();
+        List<ProductVariant> updatedProducts = new ArrayList<>();
 
         // Áp dụng promotion cho từng product detail
-        for (Integer productDetailId : productDetailIds) {
+        for (Integer ProductVariantId : ProductVariantIds) {
             try {
                 // Tìm product detail hoặc ném ngoại lệ nếu không tìm thấy
-                ProductDetail productDetail = productDetailService.findById(productDetailId)
-                        .orElseThrow(() -> new RuntimeException("Không tìm thấy product detail với id: " + productDetailId));
+                ProductVariant ProductVariant = ProductVariantService.findById(ProductVariantId)
+                        .orElseThrow(() -> new RuntimeException("Không tìm thấy product detail với id: " + ProductVariantId));
 
                 // Kiểm tra tính hợp lệ của product detail và cập nhật status nếu cần
-//                validateProductDetailForPromotion(productDetail);
-                ensureValidStatus(productDetail);
+//                validateProductVariantForPromotion(ProductVariant);
+                ensureValidStatus(ProductVariant);
 
                 // Gán promotion cho product detail và lưu vào danh sách kết quả
-                productDetail.setPromotion(promotion);
-                updatedProducts.add(productDetailService.update(productDetail));
+                ProductVariant.setPromotion(promotion);
+                updatedProducts.add(ProductVariantService.update(ProductVariant));
             } catch (Exception e) {
                 // Ném ngoại lệ nếu có lỗi trong quá trình áp dụng promotion
                 throw new RuntimeException(
-                        "Lỗi khi áp dụng promotion cho product detail " + productDetailId + ": " + e.getMessage());
+                        "Lỗi khi áp dụng promotion cho product detail " + ProductVariantId + ": " + e.getMessage());
             }
         }
         return updatedProducts;
@@ -74,28 +76,28 @@ public class PromotionProductServiceImpl {
     /**
      * Gỡ bỏ promotion khỏi danh sách các product detail.
      *
-     * @param productDetailIds Danh sách ID của các product detail cần gỡ bỏ promotion
+     * @param ProductVariantIds Danh sách ID của các product detail cần gỡ bỏ promotion
      * @return Danh sách các product detail đã được cập nhật
      */
     @Transactional
-    public List<ProductDetail> removePromotionFromProducts(List<Integer> productDetailIds) {
-        List<ProductDetail> updatedProducts = new ArrayList<>();
+    public List<ProductVariant> removePromotionFromProducts(List<Integer> ProductVariantIds) {
+        List<ProductVariant> updatedProducts = new ArrayList<>();
 
         // Gỡ bỏ promotion cho từng product detail
-        for (Integer productDetailId : productDetailIds) {
+        for (Integer ProductVariantId : ProductVariantIds) {
             try {
                 // Tìm product detail hoặc ném ngoại lệ nếu không tìm thấy
-                ProductDetail productDetail = productDetailService.findById(productDetailId)
-                        .orElseThrow(() -> new RuntimeException("Không tìm thấy product detail với id: " + productDetailId));
+                ProductVariant ProductVariant = ProductVariantService.findById(ProductVariantId)
+                        .orElseThrow(() -> new RuntimeException("Không tìm thấy product detail với id: " + ProductVariantId));
 
                 // Đảm bảo status hợp lệ trước khi gỡ bỏ promotion
-                ensureValidStatus(productDetail);
-                productDetail.setPromotion(null); // Bỏ gán promotion
-                updatedProducts.add(productDetailService.update(productDetail));
+                ensureValidStatus(ProductVariant);
+                ProductVariant.setPromotion(null); // Bỏ gán promotion
+                updatedProducts.add(ProductVariantService.update(ProductVariant));
             } catch (Exception e) {
                 // Ném ngoại lệ nếu có lỗi trong quá trình gỡ bỏ promotion
                 throw new RuntimeException(
-                        "Lỗi khi xóa promotion khỏi product detail " + productDetailId + ": " + e.getMessage());
+                        "Lỗi khi xóa promotion khỏi product detail " + ProductVariantId + ": " + e.getMessage());
             }
         }
         return updatedProducts;
@@ -119,13 +121,13 @@ public class PromotionProductServiceImpl {
     /**
      * Kiểm tra tính hợp lệ của product detail để áp dụng promotion.
      *
-     * @param productDetail Product detail cần kiểm tra
+     * @param ProductVariant Product detail cần kiểm tra
      */
-    private void validateProductDetailForPromotion(ProductDetail productDetail) {
-        if (productDetail.getStatus() != 3) {
+    private void validateProductVariantForPromotion(ProductVariant ProductVariant) {
+        if (ProductVariant.getStatus() != 3) {
             throw new IllegalStateException("Product detail không trong trạng thái chờ hoạt động");
         }
-        if (productDetail.getPromotion() != null) {
+        if (ProductVariant.getPromotion() != null) {
             throw new IllegalStateException("Product detail đã có promotion khác");
         }
     }
@@ -133,19 +135,12 @@ public class PromotionProductServiceImpl {
     /**
      * Đảm bảo product detail có status và các thông tin khác hợp lệ.
      *
-     * @param productDetail Product detail cần kiểm tra và cập nhật
+     * @param ProductVariant Product detail cần kiểm tra và cập nhật
      */
-    private void ensureValidStatus(ProductDetail productDetail) {
+    private void ensureValidStatus(ProductVariant ProductVariant) {
         // Kiểm tra và cập nhật status nếu cần
-        if (productDetail.getStatus() < 1) {
-            productDetail.setStatus(1);
-        }
-        // Kiểm tra các trường createdBy và updatedBy từ BaseEntity
-        if (productDetail.getCreatedBy() < 1) {
-            productDetail.setCreatedBy(1);
-        }
-        if (productDetail.getUpdatedBy() < 1) {
-            productDetail.setUpdatedBy(1);
+        if (ProductVariant.getStatus() < 1) {
+            ProductVariant.setStatus(1);
         }
     }
 }

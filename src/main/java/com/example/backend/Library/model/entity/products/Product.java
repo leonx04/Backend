@@ -4,19 +4,27 @@ import com.example.backend.Library.model.entity.attributes.Brand;
 import com.example.backend.Library.model.entity.attributes.Category;
 import com.example.backend.Library.model.entity.attributes.Material;
 import com.example.backend.Library.model.entity.attributes.Sole;
+import com.example.backend.Library.model.entity.employee.Employee;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -25,27 +33,43 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product extends BaseEntity implements Serializable {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Product  {
 
-    private String name;
-    private String description;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
+     String name;
+     String description;
 
     @ManyToOne()
     @JoinColumn(name = "categoryId" , referencedColumnName = "id")
-    private Category category;
+     Category category;
 
     @ManyToOne()
     @JoinColumn(name = "brandId" , referencedColumnName = "id")
-    private Brand brand;
+     Brand brand;
 
     @ManyToOne()
     @JoinColumn(name = "materialId" , referencedColumnName = "id")
-    private Material material;
+     Material material;
 
     @ManyToOne()
     @JoinColumn(name = "soleId" , referencedColumnName = "id")
-    private Sole sole;
+     Sole sole;
 
-    private int status;
+    int status;
+    @CreationTimestamp
+    LocalDate createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "createdBy", nullable = false)
+    Employee createdBy;
+
+    @CreationTimestamp
+    LocalDate updatedAt;
+    @ManyToOne
+    @JoinColumn(name = "updatedBy", nullable = false)
+    Employee updatedBy;
 
 }

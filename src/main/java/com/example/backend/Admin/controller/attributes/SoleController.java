@@ -19,39 +19,39 @@ import org.springframework.web.bind.annotation.*;
 public class SoleController {
 
     private final SoleService soleService;
-
-    @PostMapping
-    public ResponseData<?> create(
-            @Valid @RequestBody Sole sole
-    ) {
-        return new ResponseData<>(HttpStatus.CREATED.value(), "Successfully created sole", this.soleService.create(sole));
-    }
-
-    @GetMapping
-    public ResponseData<?> getList() {
-        return new ResponseData<>(HttpStatus.OK.value(), "Retrieved all sole successfully", this.soleService.findAll());
-    }
-
-    @GetMapping("{id}")
-    public ResponseData<?> getById(
-            @PathVariable @Min(value = 1) Integer id
-    ) {
-        return new ResponseData<>(HttpStatus.OK.value(), "Successfully retrieved sole list", this.soleService.findById(id));
-    }
-
-    @PutMapping("{id}")
-    public ResponseData<?> updateById(
-            @PathVariable @Min(value = 1) Integer id,
-            @Valid @RequestBody Sole sole
-    ) {
-        return new ResponseData<>(HttpStatus.OK.value(), "Successfully updated sole", this.soleService.update(sole));
-    }
-
-    @PatchMapping("{id}")
-    public ResponseData<?> deleteById(
-            @PathVariable @Min(value = 1) Integer id
-    ) {
-        soleService.changeStatus(id, 2);
-        return new ResponseData<>(HttpStatus.OK.value(), "Successfully deleted sole", null);
-    }
+//
+//    @PostMapping
+//    public ResponseData<?> create(
+//            @Valid @RequestBody Sole sole
+//    ) {
+//        return new ResponseData<>(HttpStatus.CREATED.value(), "Successfully created sole", this.soleService.create(sole));
+//    }
+//
+//    @GetMapping
+//    public ResponseData<?> getList() {
+//        return new ResponseData<>(HttpStatus.OK.value(), "Retrieved all sole successfully", this.soleService.findAll());
+//    }
+//
+//    @GetMapping("{id}")
+//    public ResponseData<?> getById(
+//            @PathVariable @Min(value = 1) Integer id
+//    ) {
+//        return new ResponseData<>(HttpStatus.OK.value(), "Successfully retrieved sole list", this.soleService.findById(id));
+//    }
+//
+//    @PutMapping("{id}")
+//    public ResponseData<?> updateById(
+//            @PathVariable @Min(value = 1) Integer id,
+//            @Valid @RequestBody Sole sole
+//    ) {
+//        return new ResponseData<>(HttpStatus.OK.value(), "Successfully updated sole", this.soleService.update(sole));
+//    }
+//
+//    @PatchMapping("{id}")
+//    public ResponseData<?> deleteById(
+//            @PathVariable @Min(value = 1) Integer id
+//    ) {
+//        soleService.changeStatus(id, 2);
+//        return new ResponseData<>(HttpStatus.OK.value(), "Successfully deleted sole", null);
+//    }
 }

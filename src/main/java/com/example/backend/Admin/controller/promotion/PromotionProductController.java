@@ -1,12 +1,19 @@
 package com.example.backend.Admin.controller.promotion;
 
-import com.example.backend.Library.model.entity.products.ProductDetail;
-import com.example.backend.Library.service.impl.promotion.PromotionProductServiceImpl;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.backend.Library.model.entity.products.ProductVariant;
+import com.example.backend.Library.service.impl.promotion.PromotionProductServiceImpl;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/${api.version}/admin/promotion-products")
@@ -20,29 +27,29 @@ public class PromotionProductController {
      * API để áp dụng promotion cho danh sách các product detail.
      *
      * @param promotionId ID của promotion cần áp dụng
-     * @param productDetailIds Danh sách ID của các product detail cần áp dụng promotion
+     * @param ProductVariantIds Danh sách ID của các product detail cần áp dụng promotion
      * @return ResponseEntity chứa danh sách các product detail đã được cập nhật
      */
     @PostMapping("/apply")
-    public ResponseEntity<List<ProductDetail>> applyPromotionToProducts(
+    public ResponseEntity<List<ProductVariant>> applyPromotionToProducts(
             @RequestParam Integer promotionId, // Lấy promotion ID từ query parameter
-            @RequestBody List<Integer> productDetailIds) { // Nhận danh sách ID product detail từ request body
+            @RequestBody List<Integer> ProductVariantIds) { // Nhận danh sách ID product detail từ request body
         // Gọi service để áp dụng promotion và trả về danh sách sản phẩm đã cập nhật
-        List<ProductDetail> updatedProducts = promotionProductService.applyPromotionToProducts(promotionId, productDetailIds);
+        List<ProductVariant> updatedProducts = promotionProductService.applyPromotionToProducts(promotionId, ProductVariantIds);
         return ResponseEntity.ok(updatedProducts); // Trả về kết quả dưới dạng HTTP 200 OK
     }
 
     /**
      * API để gỡ bỏ promotion khỏi danh sách các product detail.
      *
-     * @param productDetailIds Danh sách ID của các product detail cần gỡ promotion
+     * @param ProductVariantIds Danh sách ID của các product detail cần gỡ promotion
      * @return ResponseEntity chứa danh sách các product detail đã được cập nhật
      */
     @PostMapping("/remove")
-    public ResponseEntity<List<ProductDetail>> removePromotionFromProducts(
-            @RequestBody List<Integer> productDetailIds) { // Nhận danh sách ID product detail từ request body
+    public ResponseEntity<List<ProductVariant>> removePromotionFromProducts(
+            @RequestBody List<Integer> ProductVariantIds) { // Nhận danh sách ID product detail từ request body
         // Gọi service để gỡ promotion và trả về danh sách sản phẩm đã cập nhật
-        List<ProductDetail> updatedProducts = promotionProductService.removePromotionFromProducts(productDetailIds);
+        List<ProductVariant> updatedProducts = promotionProductService.removePromotionFromProducts(ProductVariantIds);
         return ResponseEntity.ok(updatedProducts); // Trả về kết quả dưới dạng HTTP 200 OK
     }
 

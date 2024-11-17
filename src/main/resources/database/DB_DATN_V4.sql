@@ -206,8 +206,6 @@ CREATE TABLE [Promotion] (
   [name] NVARCHAR(255) NOT NULL,
   [startDate] DATETIME NOT NULL,
   [endDate] DATETIME NOT NULL,
-  [quantity] INT NOT NULL,
-
   [discountPercentage] DECIMAL(5,2),
 
   [status] INT DEFAULT (1),
