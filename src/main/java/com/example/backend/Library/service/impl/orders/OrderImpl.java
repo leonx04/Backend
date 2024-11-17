@@ -51,7 +51,7 @@ public class OrderImpl implements OrderInterface {
             List<com.example.backend.Library.model.dto.response.orders.OrderItemDTO> dtos = order.getOrderDetails().stream().map(orderDetail ->
             {
                 com.example.backend.Library.model.dto.response.orders.OrderItemDTO item = new com.example.backend.Library.model.dto.response.orders.OrderItemDTO();
-                item.setProductName(orderDetail.getProductDetail().getProduct().getName());
+                item.setProductName(orderDetail.getProductVariantDetail().getProduct().getName());
                 item.setQuantity(orderDetail.getQuantity());
                 item.setPrice(orderDetail.getPrice());
                 return item;
