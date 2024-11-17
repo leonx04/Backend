@@ -9,7 +9,7 @@ package com.example.backend.Admin.controller.login;
 
 import com.example.backend.Library.model.dto.request.auth.LoginRequest;
 import com.example.backend.Library.model.entity.employee.Employee;
-import com.example.backend.Library.security.auth.Account;
+import com.example.backend.Library.security.auth.login.Account;
 import com.example.backend.Library.security.employee.EmployeeDetailService;
 import com.example.backend.Library.service.impl.employee.EmployeeService;
 import com.example.backend.Library.util.JwtUtil;

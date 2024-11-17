@@ -5,9 +5,10 @@
  * Youtube: https://www.youtube.com
  */
 
-package com.example.backend.Library.security.auth;
+package com.example.backend.Library.security.auth.login;
 
 import com.example.backend.Library.model.dto.request.auth.LoginRequest;
+import com.example.backend.Library.model.dto.request.auth.RegisterRequest;
 import com.example.backend.Library.model.entity.customer.Customer;
 import com.example.backend.Library.model.entity.employee.Employee;
 import com.example.backend.Library.service.impl.employee.EmployeeService;
@@ -45,9 +46,7 @@ public class Account {
         Map response = new HashMap();
 
         try {
-            if (result.hasErrors()) {
-                return errorCUS(response, result, 400);
-            }
+            errorCUS(response, result, 400);
 
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
@@ -67,7 +66,7 @@ public class Account {
 
                 System.out.println("Đăng nhập cho admin");
                 return response;
-            } else if (uri.contains("/api/ecm/user/")) {
+            } else if (uri.contains("/api/ecm/user/" ) || uri.contains("/user/")) {
                 Customer customer = customerService.findByEmail(login.getEmail())
                         .orElseThrow(
                                 () -> new Exception("Tài khoản không tồn tại"));// Tạo JWT token cho người dùng
@@ -97,6 +96,27 @@ public class Account {
             response.put("message", "Đăng xuất không thành công");
             response.put("status", 400);
             System.out.println(response + "\n" + e.getMessage());
+            return response;
+        }
+    }
+
+    public Map signupAccount(Map response, RegisterRequest request, BindingResult result) {
+        try {
+            errorCUS(response, result, 400);
+
+            if (!request.getPassword().equals(request.getRetypePassword())) {
+                response.put("message", "Mật khẩu không khớp");
+                response.put("status", 400);
+                return response;
+            }
+
+            customerService.registerCustomer(request);
+            response.put("message", "Tạo tài khoản thành công");
+            response.put("status", 200);
+            return response;
+        } catch (Exception e) {
+            response.put("message", e.getMessage());
+            response.put("status", 400);
             return response;
         }
     }
