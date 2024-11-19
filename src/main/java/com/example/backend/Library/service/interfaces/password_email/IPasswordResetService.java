@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface IPasswordResetService {
 
-    void initiatePasswordReset(HttpServletRequest request, String email);
+    void createAndSendOTP(String email);
 
     boolean validateOTP(String email, String otp);
 

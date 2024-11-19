@@ -11,6 +11,8 @@ import com.example.backend.Library.model.dto.request.auth.LoginRequest;
 import com.example.backend.Library.model.dto.request.auth.RegisterRequest;
 import com.example.backend.Library.model.entity.customer.Customer;
 import com.example.backend.Library.model.entity.employee.Employee;
+import com.example.backend.Library.security.customer.CustomerDetailService;
+import com.example.backend.Library.security.employee.EmployeeDetailService;
 import com.example.backend.Library.service.impl.employee.EmployeeService;
 import com.example.backend.Library.service.interfaces.customer.ICustomerService;
 import com.example.backend.Library.util.JwtUtil;
@@ -25,17 +27,21 @@ import org.springframework.validation.BindingResult;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.backend.Library.validation.customer.ValidatorCUS.errorCUS;
+import static com.example.backend.Library.validation.pts_validator.Validator.errorField;
 
 @Component
 public class Account {
+    private final EmployeeDetailService employeeDetailService;
+    private final CustomerDetailService customerDetailService;
     private AuthenticationManager authenticationManager;
     private final EmployeeService employeeService;
     private final ICustomerService customerService;
     private final JwtUtil jwtUtil;
 
-    public Account(AuthenticationManager authenticationManager, EmployeeService employeeService, ICustomerService customerService, JwtUtil jwtUtil) {
+    public Account(AuthenticationManager authenticationManager, EmployeeDetailService employeeDetailService, CustomerDetailService customerDetailService, EmployeeService employeeService, ICustomerService customerService, JwtUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
+        this.employeeDetailService = employeeDetailService;
+        this.customerDetailService = customerDetailService;
         this.employeeService = employeeService;
         this.customerService = customerService;
         this.jwtUtil = jwtUtil;
@@ -46,7 +52,7 @@ public class Account {
         Map response = new HashMap();
 
         try {
-            errorCUS(response, result, 400);
+            errorField(response, result, 400);
 
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
@@ -100,9 +106,31 @@ public class Account {
         }
     }
 
-    public Map signupAccount(Map response, RegisterRequest request, BindingResult result) {
+    public Map refreshToken(HttpServletRequest request, String refreshToken) {
+        Map response = new HashMap();
+        String url = request.getRequestURI();
+        if (jwtUtil.validateRefreshToken(refreshToken)) {
+            String username = jwtUtil.extractUsername(refreshToken);
+            if (url.contains("/api/ecm/admin/") || url.contains("/admin/")) {
+                UserDetails userDetails = employeeDetailService.loadUserByUsername(username);
+                Employee employee = employeeService.findByEmail(username);
+                return refreshTokenSuccess(response, userDetails, employee.getFullName(), employee.getId());
+            } else if (url.contains("/api/ecm/user/") || url.contains("/user/")) {
+                UserDetails userDetails = customerDetailService.loadUserByUsername(username);
+                Customer customer = customerService.findByEmail(username).orElse(null);
+                return refreshTokenSuccess(response, userDetails, customer.getFullName(), customer.getId());
+            }
+        } else {
+            response.put("status", "error");
+            return response;
+        }
+        return null;
+    }
+
+    public Map signupAccount(RegisterRequest request, BindingResult result) {
+        Map response = new HashMap();
         try {
-            errorCUS(response, result, 400);
+            errorField(response, result, 400);
 
             if (!request.getPassword().equals(request.getRetypePassword())) {
                 response.put("message", "Mật khẩu không khớp");
@@ -130,6 +158,14 @@ public class Account {
         response.put("RFTK", refreshToken);
         response.put("message", "Đăng nhập thành công");
         response.put("status", 200);
+        return response;
+    }
+
+    private Map refreshTokenSuccess(Map response, UserDetails userDetails, String fullname, int id) {
+        String newJwt = jwtUtil.generateToken(userDetails, fullname, id);
+        response.put("token", newJwt);
+        response.put("message", "Tạo token mới thành công");
+        response.put("status", "success");
         return response;
     }
 

@@ -1,97 +1,39 @@
+/*
+ * Author: Phạm Thái Sơn || JavaDEV
+ * Facebook:https://www.facebook.com/son4k2
+ * Github: https://github.com/SONPC-Developer
+ * Youtube: https://www.youtube.com
+ */
+
 package com.example.backend.Admin.controller.login;
 
-import com.example.backend.Library.service.impl.employee.EmployeeService;
-import com.example.backend.Library.service.interfaces.password_email.IPasswordResetService;
+import com.example.backend.Library.security.auth.login.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/${api.prefix}/admin/auth")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 public class AuthAdminController {
-    private static final Logger logger = LoggerFactory.getLogger(AuthAdminController.class);
 
-    private final IPasswordResetService passwordResetService;
-    private final EmployeeService employeeService;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired private AuthService authService;
 
-    public AuthAdminController(IPasswordResetService passwordResetService, EmployeeService employeeService, PasswordEncoder passwordEncoder) {
-        this.passwordResetService = passwordResetService;
-        this.employeeService = employeeService;
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    private boolean isValidEmail(String email) {
-        String emailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
-        return email != null && email.matches(emailRegex);
-    }
-
-    // Quên mật khẩu
+    // Lấy mã OTP
     @PostMapping("/get-otp")
-    public ResponseEntity<Object> forgotPassword(HttpServletRequest request, @RequestParam("email") String email) {
-        Map<String, String> response = new HashMap<>();
-        // Kiểm tra định dạng email
-        if (!isValidEmail(email)) {
-            response.put("message", "Email không hợp lệ.");
-            response.put("status", "error");
-
-            return ResponseEntity.ok(response);
-        }
-
-        // Kiểm tra email có tồn tại trong hệ thống không
-        if (employeeService.findByEmail(email) == null) {
-            logger.warn("Không có tài khoản nào liên kết với email: {}", email);
-            response.put("message", "Không tìm thấy tài khoản với email này.");
-            response.put("status", "error");
-
-            return ResponseEntity.ok(response);
-        }
-        // Gửi mã OTP đến email
-        passwordResetService.initiatePasswordReset(request, email);
-        // Trả về thông báo thành công
-        response.put("message", "Mã OTP đã được gửi đến email của bạn.");
-        response.put("status", "success");
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Object> createOTP(HttpServletRequest request, @RequestParam(name = "email", required = false) String email) {
+        return ResponseEntity.ok(authService.getOTP(request, email));
     }
 
-    // Xác thực mã OTP
-//    @PostMapping("/validate-otp")
-//    public ResponseEntity<String> validateOTP(@RequestParam String email, @RequestParam String otp) {
-//        // Kiểm tra mã OTP có hợp lệ không
-//        if (passwordResetService.validateOTP(email, otp)) { // Nếu mã OTP hợp lệ
-//            // Trả về thông báo thành công
-//            return ResponseEntity.ok("Mã OTP hợp lệ.");
-//        } else {
-//            // Trả về thông báo lỗi
-//            return ResponseEntity.badRequest().body("Mã OTP không hợp lệ hoặc đã hết hạn.");
-//        }
-//    }
-
+    // Đặt lại mật khẩu
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(
             HttpServletRequest request,
             @RequestBody Map<String, String> requestParam) {
-        String email = requestParam.get("email");
-        String otp = requestParam.get("otp");
-        String newPassword = requestParam.get("password");
-        String confirmPassword = requestParam.get("confirmPassword");
-
-        Map<String, String> response = new HashMap<>();
-
-        try {
-            return ResponseEntity.ok(passwordResetService.resetPassword(request ,email, newPassword, confirmPassword, otp));
-        } catch (Exception e) {
-            response.put("message", e.getMessage());
-            response.put("status", "error");
-            return ResponseEntity.ok(response);
-        }
+        return ResponseEntity.ok(authService.resetPassword(request, requestParam));
     }
 
 }

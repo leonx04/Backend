@@ -18,8 +18,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("${api.prefix}/user")
-@CrossOrigin(origins = "http://127.0.0.1:5501")
+@RequestMapping("${api.prefix}/user/auth")
+@CrossOrigin(origins = "http://127.0.0.1:5501/")
 public class LoginClientController {
     private static final Logger logger = LoggerFactory.getLogger(LoginClientController.class);
 
@@ -45,4 +45,21 @@ public class LoginClientController {
         return ResponseEntity.ok(account.logoutAccount());
     }
 
+    // Method kiểm tra token, tạo token mới
+    @PostMapping("refresh-token")
+    public ResponseEntity<?> refreshToken (
+            HttpServletRequest request,
+            @RequestParam("param") String refreshToken) {
+        return ResponseEntity.ok(account.refreshToken(request, refreshToken));
+    }
+
 }
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,6 @@
 package com.example.backend.Admin.config;
 
+import com.example.backend.Library.security.CorsConfig;
 import com.example.backend.Library.security.auth.JwtAuthenticationFilter;
 import com.example.backend.Library.security.employee.EmployeeDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +25,20 @@ public class AdminConfiguration {
     private final EmployeeDetailService employeeDetailService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final PasswordEncoder passwordEncoder;
+    private final CorsConfig corsConfig;
 
-    public AdminConfiguration(EmployeeDetailService employeeDetailService, PasswordEncoder passwordEncoder, JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public AdminConfiguration(EmployeeDetailService employeeDetailService, PasswordEncoder passwordEncoder, JwtAuthenticationFilter jwtAuthenticationFilter, CorsConfig corsConfig) {
         this.employeeDetailService = employeeDetailService;
         this.passwordEncoder = passwordEncoder;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.corsConfig = corsConfig;
     }
 
     @Bean
     public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfig.corsConfigSource()))
                 .securityMatcher("/api/ecm/admin/**", "/api/ecm/user/**")
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers(ADMIN_ENDPOINTS).permitAll()

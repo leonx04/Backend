@@ -8,7 +8,6 @@ import com.example.backend.Library.service.interfaces.password_email.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,30 +37,15 @@ public class PasswordResetService implements IPasswordResetService {
 
     // Khởi tạo quá trình đặt lại mật khẩu
     @Override
-    public void initiatePasswordReset(HttpServletRequest request, String email) {
-        // Kiểm tra xem email có tồn tại trong hệ thống không
-        Object exists = null;
-        String check = null;
-        if (request.getRequestURI().startsWith("/api/ecm/admin")) {
-            exists = employeeRepository.findByEmail(email);
-            check = "admin";
-        } else if (request.getRequestURI().startsWith("/api/ecm/user")) {
-            exists = customerRepository.findByEmail(email);
-            check = "customer";
-        }
-        System.out.println(request.getRequestURI() + " " + check);
-
-        // Nếu email tồn tại
-        if (exists != null) {
-            // Sinh mã OTP
-            String otp = generateOTP();
-            // Lưu mã OTP vào cache
-            cacheOTP(email, otp);
-            // Gửi email chứa mã OTP đến email của khách hàng
-            String emailBody = createEmailBody(otp);
-            // Gửi email
-            emailService.sendEmail(email, emailBody, "Cảnh báo: Mã OTP để đặt lại mật khẩu cho tài khoản ở Shop 360 Sneaker");
-        }
+    public void createAndSendOTP(String email) {
+        // Sinh mã OTP
+        String otp = generateOTP();
+        // Lưu mã OTP vào cache
+        cacheOTP(email, otp);
+        // Gửi email chứa mã OTP đến email của khách hàng
+        String emailBody = createEmailBody(otp);
+        // Gửi email
+        emailService.sendEmail(email, emailBody, "Cảnh báo: Mã OTP để đặt lại mật khẩu cho tài khoản ở Shop 360 Sneaker");
     }
 
     // Sinh mã OTP
@@ -85,94 +69,54 @@ public class PasswordResetService implements IPasswordResetService {
 
     // Đặt lại mật khẩu
     @Override
-    public Map<String, String> resetPassword(HttpServletRequest request, String email, String newPassword, String confirmPassword, String otp) {
-        Map<String, String> response = new HashMap<>();
+    public Map resetPassword(HttpServletRequest request, String email, String newPassword, String confirmPassword, String otp) {
+        Map response = new HashMap<>();
+        String uri = request.getRequestURI();
+        try {
+            if (uri.startsWith("/api/ecm/admin")) {
+                System.out.println("admin");
+                Optional<Employee> existsEmployee = employeeRepository.findByEmail(email);
+                if (existsEmployee.isPresent()) {
+                    Employee employee = existsEmployee.get();
 
-        Optional<Employee> existsEmployee = null;
-        Optional<Customer> existsCustomer = null;
+                    validateCheck(response, email, newPassword, confirmPassword, otp);
+                    if (response.get("status").equals(400)) {
+                        System.out.println(response);
+                        return response;
+                    }
+                    employee.setPassWord(passwordEncoder.encode(newPassword));
+                    employeeRepository.save(employee);
 
-        // Kiểm tra xem email có tồn tại trong hệ thống không
-        boolean check = false;
-        if (request.getRequestURI().startsWith("/api/ecm/admin")) {
-            existsEmployee = employeeRepository.findByEmail(email);
-            check = true;
-        } else if (request.getRequestURI().startsWith("/api/ecm/user")) {
-            existsCustomer = customerRepository.findByEmail(email);
-            check = false;
-        }
-        System.out.println(request.getRequestURI() + " " + check + "true = admin, false = customer");
-
-        if (check) {
-            if (existsEmployee.isPresent()) {
-                Employee employee = existsEmployee.get();
-
-                validateCheck(response, email, newPassword, confirmPassword, otp);
-
-                // Đặt lại mật khẩu
-                employee.setPassWord(passwordEncoder.encode(newPassword));
-                // Lưu thông tin khách hàng
-                employeeRepository.save(employee);
-
-                // Xóa mã OTP khỏi cache
-                Cache cache = cacheManager.getCache("passwordResetOTPs");
-                // Nếu cache tồn tại
-                if (cache != null) {
-                    // Xóa mã OTP khỏi cache
-                    cache.evict(email);
+                    return resetPasswordSuccess(response, email);
                 }
-
-                // Chuẩn bị phản hồi trả về cho client
-                response.put("message", "Mật khẩu đã được đặt lại thành công.");
-                response.put("status", "success");
-
-                // Gửi email thông báo mật khẩu đã được đặt lại thành công
-                sendPasswordResetSuccessEmail(employee.getEmail());
-                return response;
-            } else {
-                response.put("message", "Không tìm thấy tài khoản với email này.");
-                return response;
             }
-        } else {
-            if (existsCustomer.isPresent()) {
-                Customer customer = existsCustomer.get();
-                // Kiểm tra mật khẩu mới có hợp lệ không
-                if (newPassword == null || newPassword.isEmpty()) {
-                    response.put("message", "Mật khẩu không được để trống.");
-                    response.put("status", "error");
-                    return response;
-                }
-                // Kiểm tra mã OTP có hợp lệ không
-                if (!validateOTP(email, otp)) {
-                    response.put("message", "Mã OTP không hợp lệ hoặc đã hết hạn.");
-                    response.put("status", "error");
-                    return response;
-                }
-                // Đặt lại mật khẩu
-                customer.setPassword(passwordEncoder.encode(newPassword));
-                // Lưu thông tin khách hàng
-                customerRepository.save(customer);
+            if (uri.startsWith("/api/ecm/user")) {
+                System.out.println("user");
+                Optional<Customer> existsCustomer = customerRepository.findByEmail(email);
+                if (existsCustomer.isPresent()) {
+                    Customer customer = existsCustomer.get();
 
-                // Xóa mã OTP khỏi cache
-                Cache cache = cacheManager.getCache("passwordResetOTPs");
-                // Nếu cache tồn tại
-                if (cache != null) {
-                    // Xóa mã OTP khỏi cache
-                    cache.evict(email);
+                    validateCheck(response, email, newPassword, confirmPassword, otp);
+                    if (response.get("status").equals(400)) {
+                        System.out.println(response);
+                        return response;
+                    }
+
+                    customer.setPassword(passwordEncoder.encode(newPassword));
+                    customerRepository.save(customer);
+
+                    return resetPasswordSuccess(response, email);
                 }
-
-                // Chuẩn bị phản hồi trả về cho client
-                response.put("message", "Mật khẩu đã được đặt lại thành công.");
-                response.put("status", "success");
-
-                // Gửi email thông báo mật khẩu đã được đặt lại thành công
-                sendPasswordResetSuccessEmail(customer.getEmail());
-                return response;
-            } else {
-                response.put("message", "Không tìm thấy tài khoản với email này.");
-                return response;
             }
-        }
 
+            response.put("message", "Nhập sai email.");
+            response.put("status", 400);
+            return response;
+        } catch (Exception e) {
+            response.put("message", e.getMessage());
+            response.put("status", 400);
+            return response;
+        }
     }
 
     // Gửi email thông báo mật khẩu đã được đặt lại thành công
@@ -180,8 +124,20 @@ public class PasswordResetService implements IPasswordResetService {
     public void sendPasswordResetSuccessEmail(String email) {
         // Tạo nội dung email
         String emailBody = createPasswordResetSuccessEmailBody();
-        // Gửi email
         emailService.sendEmail(email, emailBody, "Thông báo: Mật khẩu của bạn đã được đặt lại thành công");
+    }
+
+    // Đặt lại mật khẩu thành công
+    private Map resetPasswordSuccess(Map response, String email) {
+        Cache cache = cacheManager.getCache("passwordResetOTPs");
+        if (cache != null) {
+            cache.evict(email); // Xóa mã OTP khỏi cache
+        }
+        sendPasswordResetSuccessEmail(email);
+
+        response.put("message", "Mật khẩu đã được đặt lại thành công.");
+        response.put("status", 200);
+        return response;
     }
 
     // Hàm kiểm tra
@@ -189,44 +145,45 @@ public class PasswordResetService implements IPasswordResetService {
         // Kiểm tra mật khẩu mới có hợp lệ không
         if (newPassword == null || newPassword.isEmpty()) {
             response.put("message", "Mật khẩu không được để trống.");
-            response.put("status", "error");
+            response.put("status", 400);
             return response;
         }
 
         // Kiểm tra mật khẩu mới có hợp lệ không
         if (newPassword.length() < 8) {
             response.put("message", "Mật khẩu phải chứa ít nhất 8 ký tự.");
-            response.put("status", "errorPassword");
+            response.put("status", 400);
             return response;
         }
 
         // kiểm tra confirmPassword
         if (confirmPassword == null || confirmPassword.isEmpty()) {
-            response.put("message", "Mật khẩu không được để trống.");
-            response.put("status", "errorPassword");
+            response.put("message", "Nhập lại mật khẩu.");
+            response.put("status", 400);
             return response;
         }
 
         // password and confirmPassword
         if (!newPassword.equals(confirmPassword)) {
             response.put("message", "Mật khẩu không khớp.");
-            response.put("status", "errorPassword");
+            response.put("status", 400);
             return response;
         }
 
         // Kiểm tra mã OTP có hợp lệ không
         if (!validateOTP(email, otp)) {
             response.put("message", "Mã OTP không hợp lệ hoặc đã hết hạn.");
-            response.put("status", "error");
+            response.put("status", 400);
             return response;
         }
-        return null;
+        response.put("status", 200);
+        return response;
     }
 
     // Tạo nội dung email thông báo mật khẩu đã được đặt lại thành công
     private String createPasswordResetSuccessEmailBody() {
         return "Chào bạn,\n\n" +
-                "Chúng tôi xin thông báo rằng mật khẩu của tài khoản của bạn tại Shop 360 Sneaker đã được đặt lại thành công.\n\n" +
+                "Chúng tôi xin thông báo rằng mật khẩu tài khoản bạn đã đăng ký tại Shop 360 Sneaker đã được đặt lại thành công.\n\n" +
                 "Nếu bạn không thực hiện yêu cầu này, vui lòng liên hệ với bộ phận hỗ trợ của chúng tôi ngay lập tức.\n\n" +
                 "Trân trọng,\n" +
                 "Đội ngũ hỗ trợ\n" +
