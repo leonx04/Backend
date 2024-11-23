@@ -9,7 +9,7 @@ package com.example.backend.Admin.controller.login;
 
 import com.example.backend.Library.model.dto.request.auth.LoginRequest;
 import com.example.backend.Library.model.entity.employee.Employee;
-import com.example.backend.Library.security.auth.Account;
+import com.example.backend.Library.security.auth.login.Account;
 import com.example.backend.Library.security.employee.EmployeeDetailService;
 import com.example.backend.Library.service.impl.employee.EmployeeService;
 import com.example.backend.Library.util.JwtUtil;
@@ -32,12 +32,10 @@ public class LoginAdminController {
 
     private final Account account;
     private final EmployeeService employeeService;
-    private final AuthenticationManager authenticationManager;
     private final EmployeeDetailService employeeDetailService;
     private final JwtUtil jwtUtil;
 
-    public LoginAdminController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, EmployeeService employeeService, EmployeeDetailService employeeDetailService, Account account) {
-        this.authenticationManager = authenticationManager;
+    public LoginAdminController(JwtUtil jwtUtil, EmployeeService employeeService, EmployeeDetailService employeeDetailService, Account account) {
         this.jwtUtil = jwtUtil;
         this.employeeService = employeeService;
         this.employeeDetailService = employeeDetailService;
@@ -61,19 +59,9 @@ public class LoginAdminController {
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<Map> refreshToken(@RequestBody String refreshToken) {
-        Map response = new HashMap();
-        if (jwtUtil.validateRefreshToken(refreshToken)) {
-            String username = jwtUtil.extractUsername(refreshToken);
-            UserDetails userDetails = employeeDetailService.loadUserByUsername(username);
-            Employee employee = employeeService.findByEmail(username);
-            String newToken = jwtUtil.generateToken(userDetails, employee.getFullName(), employee.getId());
-            response.put("token", newToken);
-            response.put("status", "success");
-            return ResponseEntity.ok(response);
-        } else {
-            response.put("status", "error");
-            return ResponseEntity.ok(response);
-        }
+    public ResponseEntity<Map> refreshToken(
+            HttpServletRequest request,
+            @RequestParam("param") String refreshToken) {
+        return ResponseEntity.ok(account.refreshToken(request, refreshToken));
     }
 }

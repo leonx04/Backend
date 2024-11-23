@@ -62,7 +62,7 @@ public class CustomerService implements ICustomerService {
         String username = request.getUserName();
         String email = request.getEmail();
         if (customerRepository.existsByUserName(username)) {
-            throw new DataIntegrityViolationException("Username already exists");
+            throw new DataIntegrityViolationException("Tên đăng nhập đã được sử dụng");
         }
         if (customerRepository.existsByEmail(email)) {
             throw new DataIntegrityViolationException("Email đã được sử dụng");

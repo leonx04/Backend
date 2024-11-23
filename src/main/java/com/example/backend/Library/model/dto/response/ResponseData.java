@@ -10,12 +10,12 @@ public class ResponseData<T> implements Serializable {
     private final int status;
     private final String message;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private T date;
+    private T data;
 
-    public ResponseData(int status, String message, T date) {
+    public ResponseData(int status, String message, T data) {
         this.status = status;
         this.message = message;
-        this.date = date;
+        this.data = data;
     }
 
     public ResponseData(int status, String message) {

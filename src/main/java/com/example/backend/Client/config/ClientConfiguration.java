@@ -1,7 +1,9 @@
 package com.example.backend.Client.config;
 
+import com.example.backend.Library.security.CorsConfig;
 import com.example.backend.Library.security.auth.JwtAuthenticationFilter;
 import com.example.backend.Library.security.customer.CustomerDetailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -30,13 +32,15 @@ public class ClientConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomerDetailService customerDetailService;
     private final PasswordEncoder passwordEncoder;
+    private final CorsConfig corsConfig;
 
     public ClientConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter,
                                CustomerDetailService customerDetailService,
-                               PasswordEncoder passwordEncoder) {
+                               PasswordEncoder passwordEncoder, CorsConfig corsConfig) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.customerDetailService = customerDetailService;
         this.passwordEncoder = passwordEncoder;
+        this.corsConfig = corsConfig;
     }
 
     @Bean
@@ -52,7 +56,7 @@ public class ClientConfiguration {
     public SecurityFilterChain clientSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfig.corsConfigSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(CLIENT_ENDPOINTS).permitAll()
 //                        .hasAnyRole("USER")
@@ -64,18 +68,5 @@ public class ClientConfiguration {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5500", "http://127.0.0.1:5500", "http://localhost:8080", "http://127.0.0.1:5501"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 }

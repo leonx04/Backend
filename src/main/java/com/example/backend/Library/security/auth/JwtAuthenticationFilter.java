@@ -43,17 +43,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        // Lây token từ header
         final String authorizationHeader = request.getHeader("Authorization");
 
         String username = null;
         String jwt = null;
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) { // Kiểm tra xem token có bắt đầu bằng "Bearer " không
+            // Lấy token từ header
             jwt = authorizationHeader.substring(7);
+            // Lấy username từ token
             username = jwtUtil.extractUsername(jwt);
         }
 
 
+        // Kiểm tra xem username có tồn tại và đã được xác thực chưa
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = null;
             System.out.println(request.getRequestURI());
@@ -61,12 +65,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // Phân biệt khách hàng và nhân viên dựa trên URL
             if (request.getRequestURI().contains("/api/ecm/admin/") || request.getRequestURI().contains("/admin/")) {
                 userDetails = employeeDetailService.loadUserByUsername(username);
-                System.out.println("em");// Gọi EmployeeDetailService cho nhân viên
+                System.out.println("em");
             } else if (request.getRequestURI().contains("/api/ecm/user/")) {
-                userDetails = customerDetailService.loadUserByUsername(username); // Gọi CustomerDetailService cho khách hàng
+                userDetails = customerDetailService.loadUserByUsername(username);
                 System.out.println("cus");
             }
 
+            // Kiểm tra xem token có hợp lệ không
             if (userDetails != null && jwtUtil.validateToken(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

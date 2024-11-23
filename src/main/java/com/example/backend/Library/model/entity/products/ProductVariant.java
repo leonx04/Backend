@@ -2,19 +2,26 @@ package com.example.backend.Library.model.entity.products;
 
 import com.example.backend.Library.model.entity.attributes.Color;
 import com.example.backend.Library.model.entity.attributes.Size;
+import com.example.backend.Library.model.entity.employee.Employee;
 import com.example.backend.Library.model.entity.promotion.Promotion;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -23,28 +30,43 @@ import java.math.BigDecimal;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class ProductDetail extends BaseEntity {
-//    private String code;
-    private int quantity;
-    private BigDecimal price;
-    private int weight;
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class ProductVariant  {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
+     String SKU;
+     int quantity;
+     BigDecimal price;
+     int weight;
 
     @ManyToOne()
     @JoinColumn(name = "productId", referencedColumnName = "id")
-    private Product product;
+     Product product;
 
     @ManyToOne()
     @JoinColumn(name = "sizeId", referencedColumnName = "id")
-    private Size size;
+     Size size;
 
     @ManyToOne()
     @JoinColumn(name = "colorId", referencedColumnName = "id")
-    private Color color;
+     Color color;
 
     @ManyToOne()
     @JoinColumn(name = "promotionId", referencedColumnName = "id")
-    private Promotion promotion;
+     Promotion promotion;
+    int status;
+    @CreationTimestamp
+    LocalDate createdAt;
 
-//    private int status;
+    @ManyToOne
+    @JoinColumn(name = "createdBy", nullable = false)
+    Employee createdBy;
+
+    @CreationTimestamp
+    LocalDate updatedAt;
+    @ManyToOne
+    @JoinColumn(name = "updatedBy", nullable = false)
+    Employee updatedBy;
+
 }

@@ -66,22 +66,22 @@ public class CustomerAdminController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<?> getAllCustomers(
-            @RequestParam(value = "page", defaultValue = "0") int page
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
     ) {
-        Pageable pageable = PageRequest.of(page, 10);
-        Page<CustomerResponse> customers = customerService.getCustomers(pageable);
+            Pageable pageable = PageRequest.of(page, size);
+            Page<CustomerResponse> customers = customerService.getCustomers(pageable);
 
-        int totalPage = customers.getTotalPages();
-        List<CustomerResponse> customerList = customers.getContent();
+            int totalPage = customers.getTotalPages();
+            List<CustomerResponse> customerList = customers.getContent();
 
-        return ResponseEntity.ok().body(
-                EntityResponse.builder()
-                        .data(Collections.singletonList(customerList))
-                        .totalPage(totalPage)
-                        .build()
-        );
+            return ResponseEntity.ok().body(
+                    EntityResponse.builder()
+                            .data(Collections.singletonList(customerList))
+                            .totalPage(totalPage)
+                            .build()
+            );
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getCustomerById(@PathVariable("id") int id) {
         try {
@@ -150,7 +150,7 @@ public class CustomerAdminController {
 
         // Trả về danh sách khách hàng tìm thấy
         return ResponseEntity.ok().body(
-                EntityResponse.builder()
+                com.example.backend.Library.model.dto.response.EntityResponse.builder()
                         .data(Collections.singletonList(customerList))
                         .totalPage(totalPage)
                         .build()

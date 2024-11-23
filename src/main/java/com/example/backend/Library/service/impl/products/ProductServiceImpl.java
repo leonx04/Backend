@@ -1,11 +1,13 @@
 package com.example.backend.Library.service.impl.products;
 
-import com.example.backend.Library.exception.exceptioncustomer.ResourceNotFoundException;
+import com.example.backend.Library.model.dto.reponse.PageableResponse;
+import com.example.backend.Library.model.dto.reponse.products.ProductResponse;
+import com.example.backend.Library.model.dto.request.products.ProductParamRequest;
 import com.example.backend.Library.model.entity.products.Product;
-import com.example.backend.Library.model.entity.products.Product;
-import com.example.backend.Library.repository.attributes.BrandRepository;
-import com.example.backend.Library.repository.products.ProductRepository;
-import com.example.backend.Library.service.interfaces.GenericCrudService;
+import com.example.backend.Library.model.mapper.products.ProductMapper;
+import com.example.backend.Library.repository.products.productVariant.ProductVariantRepository;
+import com.example.backend.Library.repository.products.product.ProductCustomizeQueryRepository;
+import com.example.backend.Library.repository.products.product.ProductRepository;
 import com.example.backend.Library.service.interfaces.products.ProductService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -15,47 +17,54 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE , makeFinal = true)
 public class ProductServiceImpl implements ProductService {
-    final ProductRepository productRepo;
+     ProductRepository productRepository;
+     ProductCustomizeQueryRepository productCustomizeQueryRepository;
 
-     @Override
-     public Product create(Product product) {
-          productRepo.save(product);
-          return product;
-     }
+     ProductVariantRepository variantRepo;
+     ProductMapper productMapper;
 
-     @Override
-     public Optional<Product> findById(Integer id) {
-         return productRepo.findById(id);//optional<Product> // empty Optional
-     }
+    @Override
+    public PageableResponse getPageData(ProductParamRequest paramRequest) {
+        PageableResponse pageableResponse = productCustomizeQueryRepository.getPageData(paramRequest);
+        List<Product> products = Optional.ofNullable(pageableResponse.getContent())
+                .filter(content -> content instanceof List<?> && !((List<?>) content).isEmpty() && ((List<?>) content).get(0) instanceof Product)
+                .map(content -> (List<Product>) content)
+                .orElse(Collections.emptyList());
 
-     @Override
-     public List<Product> findAll() {
-         List<Product> products = productRepo.findAll();
-         return (products.isEmpty() ? Collections.emptyList() : products);
-     }
+        List<ProductResponse> productResponses = mapAndEnhanceBrandsToBrandResponses(products);
+        pageableResponse.setContent(productResponses);
+        return pageableResponse;
+    }
 
-     @Override
-     public Product update(Product product) {
-         if (!productRepo.existsById(product.getId())) {
-             throw new ResourceNotFoundException("Update failed: Product not found with ID: " + product.getId());
-         }
-         return productRepo.save(product);
-     }
+    @Override
+    public PageableResponse getPageDataByPrefix(ProductParamRequest paramRequest) {
+        List<Product> products =  productCustomizeQueryRepository.getWithPagination(paramRequest);
+        List<String> productNames = products.stream().map(Product::getName).toList();
+        Long totalElements = productCustomizeQueryRepository.getTotalElements(paramRequest);
 
-     @Override
-     public boolean existsById(Integer id) {
-         return productRepo.existsById(id);
-     }
+        return PageableResponse.<String>builder()
+                .totalElements(totalElements)
+                .pageSize(paramRequest.getPageSize())
+                .totalPages((int) Math.ceil((double) totalElements / paramRequest.getPageSize()))
+                .pageNo(paramRequest.getPageNo())
+                .content(productNames)
+                .build();
+    }
 
-     @Override
-     public void changeStatus(int id, int status) {
-         Product product = productRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product update status with id: " + id + " failed!"));
-         product.setStatus(status);
-         productRepo.save(product);
-     }
+    private List<ProductResponse> mapAndEnhanceBrandsToBrandResponses(List<Product> products) {
+        List<ProductResponse> productResponses = products.stream()
+                .map(product -> {
+                    ProductResponse productResponse = productMapper.toProductResponse(product);
+                    productResponse.setAppliedVariantProductCount(variantRepo.countByProductId(product.getId()));
+                    return productResponse;
+                })
+                .collect(Collectors.toList());
+        return productResponses;
+    }
 }

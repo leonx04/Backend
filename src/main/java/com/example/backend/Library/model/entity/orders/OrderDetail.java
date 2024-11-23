@@ -1,6 +1,6 @@
 package com.example.backend.Library.model.entity.orders;
 
-import com.example.backend.Library.model.entity.products.ProductDetail;
+import com.example.backend.Library.model.entity.products.ProductVariant;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -35,8 +34,8 @@ public class OrderDetail {
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "productVariantId", referencedColumnName = "id")
-    private ProductDetail productDetail;
+    @JoinColumn(name = "productDetailId", referencedColumnName = "id")
+    private ProductVariant productVariantDetail;
 
     private int quantity;
     private Double price;

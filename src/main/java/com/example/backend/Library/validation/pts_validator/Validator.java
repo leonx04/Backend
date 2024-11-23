@@ -5,14 +5,14 @@
  * Youtube: https://www.youtube.com
  */
 
-package com.example.backend.Library.validation.customer;
+package com.example.backend.Library.validation.pts_validator;
 
 import org.springframework.validation.BindingResult;
 
 import java.util.Map;
 
-public class ValidatorCUS {
-    public static Map errorCUS(Map response, BindingResult result, int status) {
+public class Validator {
+    public static Map errorField(Map response, BindingResult result, int status) {
         if (result.hasErrors()) {
             result.getFieldErrors().stream().forEach(e -> {
                 response.put(e.getField(), e.getDefaultMessage());
@@ -22,4 +22,11 @@ public class ValidatorCUS {
         }
         return null;
     }
+
+    public static boolean isValidEmail(String email) {
+        String emailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+        return email != null && email.matches(emailRegex);
+    }
+
+
 }
