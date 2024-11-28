@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -73,5 +74,29 @@ public class OrderStatusLogImpl implements OrderStatusLogInterface {
         return orderStatusLogRepository.save(orderStatusLog);
     }
 
+//    @Override
+//    public PageDTO<OrderStatusLogDTO> findAllByTimeRange(LocalDate startDate, LocalDate endDate, int pageNo, int pageSize) {
+//        Pageable pageable = PageRequest.of(pageNo, pageSize);
+//        Page<OrderStatusLog> orderStatusLog = orderStatusLogRepository.findAllByTimeRange(startDate,endDate,pageable);
+//        List<OrderStatusLog> orderStatusLogList = orderStatusLog.getContent();
+//        List<OrderStatusLogDTO> orderStatusLogDTOList = orderStatusLogList.stream().map(
+//                osl -> {
+//                    OrderStatusLogDTO dto = new OrderStatusLogDTO();
+//                    dto.setNameEmployee(osl.getEmployee().getFullName());
+//                    dto.setCode(osl.getOrder().getCode());
+//                    dto.setStatus(osl.getOrderStatus());
+//                    dto.setUpdatedAt(osl.getUpdatedAt());
+//                    return dto;
+//                }).collect(Collectors.toList());
+//        PageDTO<OrderStatusLogDTO> dto = new PageDTO<>();
+//        dto.setContent(orderStatusLogDTOList);
+//        dto.setPageNo(pageNo);
+//        dto.setPageSize(pageSize);
+//        dto.setTotalElements(orderStatusLog.getTotalElements());
+//        dto.setTotalPages(orderStatusLog.getTotalPages());
+//        dto.setLast(orderStatusLog.isLast());
+//        return dto;
+//    }
+//
 
 }

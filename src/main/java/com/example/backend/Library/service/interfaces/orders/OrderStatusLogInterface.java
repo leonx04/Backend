@@ -1,13 +1,18 @@
 package com.example.backend.Library.service.interfaces.orders;
 
 
+
 import com.example.backend.Library.model.dto.request.order.InsertOrderStatusLogRequest;
 import com.example.backend.Library.model.dto.response.orders.OrderStatusLogDTO;
 import com.example.backend.Library.model.dto.response.orders.PageDTO;
 import com.example.backend.Library.model.entity.orders.OrderStatusLog;
 
+import java.time.LocalDate;
+
 public interface OrderStatusLogInterface {
     PageDTO<OrderStatusLogDTO> getOrderStatusLog(int pageNo, int pageSize);
     OrderStatusLog saveOrderStatusLog(InsertOrderStatusLogRequest request);
+
+//    PageDTO<OrderStatusLogDTO> findAllByTimeRange(LocalDate startDate, LocalDate endDate,int pageNo, int pageSize );
 
 }

@@ -98,14 +98,14 @@ public class OrdersExcel {
             int startRow = rowIdx;
 
             for (OrderDetail detail : order.getOrderDetails()) {
-                if (detail == null || detail.getProductDetail() == null || detail.getProductDetail().getProduct() == null) {
+                if (detail == null || detail.getProductVariantDetail() == null || detail.getProductVariantDetail().getProduct() == null) {
                     continue; // Bỏ qua chi tiết bị thiếu dữ liệu
                 }
 
                 Row row = sheet.createRow(rowIdx++);
 
-                createCell(row, 4, detail.getProductDetail().getProduct().getId(), currentStyle); // Mã SP
-                createCell(row, 5, detail.getProductDetail().getProduct().getName(), currentStyle); // Tên SP
+                createCell(row, 4, detail.getProductVariantDetail().getSKU(), currentStyle); // Mã SP
+                createCell(row, 5, detail.getProductVariantDetail().getProduct().getName(), currentStyle); // Tên SP
                 createCell(row, 6, detail.getQuantity(), currentStyle); // Số lượng
                 createCell(row, 7, detail.getPrice(), currentStyle); // Đơn giá
 
