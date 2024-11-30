@@ -8,16 +8,16 @@ public class AddressRequest {
     @NotBlank(message = "Nhập tên người nhận")
     String recipientName;
     @NotBlank(message = "Nhập số điện thoại người nhận")
+    @Pattern(regexp = "^0\\d{9}$", message = "Số điện thoại không hợp lệ")
     String recipientPhone;
     @NotBlank(message = "Nhập địa chỉ chi tiết")
     String detailAddress;
-    @NotBlank(message = "Thành phố")
+    @NotBlank(message = "Chọn Thành phố")
     String city;
-    @NotBlank(message = "Quận/huyện")
+    @NotBlank(message = "Chọn Quận/huyện")
     String district;
-    @NotBlank(message = "Phường/xã")
+    @NotBlank(message = "Chọn Phường/xã")
     String commune;
-//    @NotNull(message = "Trạng thái địa chỉ")
     Integer status;
     Integer customerId;
 }

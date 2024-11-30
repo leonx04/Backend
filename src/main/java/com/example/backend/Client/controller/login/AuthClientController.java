@@ -49,7 +49,7 @@ public class AuthClientController {
     @PostMapping("get-otp")
     public ResponseEntity<?> createOTP(
             HttpServletRequest request,
-            @RequestParam("email") String email) {
+            @RequestParam(name = "email", required = false) String email) {
         return ResponseEntity.ok(authService.getOTP(request, email));
     }
 

@@ -48,7 +48,7 @@ public class AddressService implements IAddressService {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new DataNotFoundException("Customer not found"));
         return addressMapper
-                .toAddressResponses(addressRepository.findAllByCustomer(customer));
+                .toAddressResponses(addressRepository.findAllByCustomerOrderByStatusDesc(customer));
     }
 
     @Override

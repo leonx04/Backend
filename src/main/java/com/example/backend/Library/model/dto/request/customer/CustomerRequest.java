@@ -1,3 +1,10 @@
+/*
+ * Author: Phạm Thái Sơn || JavaDEV
+ * Facebook:https://www.facebook.com/son4k2
+ * Github: https://github.com/SONPC-Developer
+ * Youtube: https://www.youtube.com
+ */
+
 package com.example.backend.Library.model.dto.request.customer;
 
 import jakarta.validation.constraints.*;
@@ -21,8 +28,6 @@ public class CustomerRequest {
 
     private Integer gender;
 
-//    @NotBlank(message = "Email is required")
-//    @Email(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Email không đúng định dạng")
     private String email;
 
     @NotBlank(message = "Phone number is required")

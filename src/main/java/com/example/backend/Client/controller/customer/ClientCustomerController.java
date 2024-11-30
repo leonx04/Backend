@@ -1,11 +1,20 @@
+/*
+ * Author: Phạm Thái Sơn || JavaDEV
+ * Facebook:https://www.facebook.com/son4k2
+ * Github: https://github.com/SONPC-Developer
+ * Youtube: https://www.youtube.com
+ */
+
 package com.example.backend.Client.controller.customer;
 
+import com.example.backend.Library.component.customer.CustomerComponent;
 import com.example.backend.Library.model.dto.request.customer.CustomerRequest;
 import com.example.backend.Library.model.entity.customer.Customer;
 import com.example.backend.Library.service.interfaces.customer.ICustomerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,15 +23,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("${api.prefix}/user/customers")
+@CrossOrigin(origins = "http://127.0.0.1:5501")
 public class ClientCustomerController {
-    @Autowired
-    private ICustomerService customerService;
+    @Autowired private ICustomerService customerService;
+    @Autowired private CustomerComponent customerComponent;
 
     // Method cập nhật thông tin và ảnh của khách hàng
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCustomer(
             @PathVariable int id,
-            @Valid @ModelAttribute CustomerRequest request,
+            @Valid CustomerRequest request,
             BindingResult result,
             @RequestParam(value = "avatar", required = false) MultipartFile avatar
     ) {
@@ -50,6 +60,12 @@ public class ClientCustomerController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
+    }
+
+    // Method lấy thông tin khách hàng theo id
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getCustomerById(@PathVariable("id") int id) {
+        return ResponseEntity.ok(customerComponent.getCustomer(id));
     }
 
     // Method xóa cứng khách hàng

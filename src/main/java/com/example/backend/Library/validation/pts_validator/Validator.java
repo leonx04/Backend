@@ -20,7 +20,8 @@ public class Validator {
             response.put("status", status);
             return response;
         }
-        return null;
+        response.put("status", 200);
+        return response;
     }
 
     public static boolean isValidEmail(String email) {

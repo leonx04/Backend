@@ -3,7 +3,7 @@ package com.example.backend.Client.config;
 import com.example.backend.Library.security.CorsConfig;
 import com.example.backend.Library.security.auth.JwtAuthenticationFilter;
 import com.example.backend.Library.security.customer.CustomerDetailService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -17,12 +17,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.*;
 
-import java.util.Arrays;
-import java.util.List;
-
+import static com.example.backend.Admin.config.Endpoints.ADMIN_ENDPOINTS;
+import static com.example.backend.Admin.config.Endpoints.PUBLIC_ADMIN_ENDPOINTS;
 import static com.example.backend.Client.config.Endpoints.CLIENT_ENDPOINTS;
+import static com.example.backend.Client.config.Endpoints.PUBLIC_CLIENT_ENDPOINTS;
 
 @Configuration
 @EnableWebSecurity
@@ -58,13 +57,20 @@ public class ClientConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(CLIENT_ENDPOINTS).permitAll()
-//                        .hasAnyRole("USER")
-                                .anyRequest().permitAll()
+                        .requestMatchers(PUBLIC_ADMIN_ENDPOINTS).permitAll()
+                        .requestMatchers(ADMIN_ENDPOINTS).hasAnyRole("ADMIN", "STAFF")
+                        .requestMatchers(PUBLIC_CLIENT_ENDPOINTS).permitAll()
+                        .requestMatchers(CLIENT_ENDPOINTS).hasRole("USER")
                 )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+//                .exceptionHandling(exceptions -> exceptions
+//                        .authenticationEntryPoint((request, response, authException) -> {
+//                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//                            response.getWriter().write("Unauthorized access");
+//                        })
+//                )
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

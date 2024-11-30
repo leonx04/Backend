@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("${api.prefix}/user/auth")
 @CrossOrigin(origins = "http://127.0.0.1:5501/")
@@ -49,8 +51,14 @@ public class LoginClientController {
     @PostMapping("refresh-token")
     public ResponseEntity<?> refreshToken (
             HttpServletRequest request,
-            @RequestParam("param") String refreshToken) {
-        return ResponseEntity.ok(account.refreshToken(request, refreshToken));
+            @RequestBody Map<String, String> payload) {
+        String refreshToken = payload.get("refreshToken");
+        try {
+            return ResponseEntity.ok(account.refreshToken(request, refreshToken));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage()); // Trả về lỗi nếu có lỗi xảy ra
+        }
+
     }
 
 }

@@ -2,12 +2,6 @@ spring:
   application:
     name: Backend
 
-#  datasource:
-#    url: jdbc:sqlserver://localhost:1433;database=DB_DATN_V4;encrypt=true;trustServerCertificate=true
-#    username: sa
-#    password: son123
-#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-
   jpa:
     hibernate:
       ddl-auto: none

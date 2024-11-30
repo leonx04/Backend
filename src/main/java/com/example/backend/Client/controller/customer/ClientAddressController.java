@@ -1,7 +1,14 @@
+/*
+ * Author: Phạm Thái Sơn || JavaDEV
+ * Facebook:https://www.facebook.com/son4k2
+ * Github: https://github.com/SONPC-Developer
+ * Youtube: https://www.youtube.com
+ */
+
 package com.example.backend.Client.controller.customer;
 
+import com.example.backend.Library.component.address.AddressComponent;
 import com.example.backend.Library.model.dto.request.customer.AddressRequest;
-import com.example.backend.Library.model.dto.response.customer.AddressResponse;
 import com.example.backend.Library.service.interfaces.customer.IAddressService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,98 +16,91 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
-@RequestMapping("${api.prefix}/user/address")
+@RequestMapping("${api.prefix}/user/addresses")
+@CrossOrigin(origins = "http://127.0.0.1:5501")
 public class ClientAddressController {
+    @Autowired private AddressComponent addressComponent;
+
     @Autowired
     private IAddressService addressService;
 
-    @PostMapping("/{customerId}")
+    @PostMapping("/customer/{customerId}")
     public ResponseEntity<?> createAddress(
             @PathVariable("customerId") Integer customerId,
             @Valid @RequestBody AddressRequest request,
             BindingResult result
     ) {
-        if (result.hasErrors()) {
-            List<String> errorMessgages = result.getFieldErrors().stream()
-                    .map(FieldError::getDefaultMessage)
-                    .toList();
-            return ResponseEntity.badRequest().body(errorMessgages);
-        }
-        try {
-            addressService.createAddress(customerId, request);
-            return ResponseEntity.ok("Thêm địa chỉ thành công");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.badRequest().body("Thêm địa chỉ thất bại");
-        }
+        return ResponseEntity.ok(addressComponent.createAddress(customerId, request, result));
     }
 
     // Lấy danh sách địa chỉ của khách hàng
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<?> getAllAddressOfCustomer(@PathVariable("customerId") Integer customerId) {
-        try {
-            List<AddressResponse> addresses = addressService.getAllAddressOfCustomer(customerId);
-            if (addresses.isEmpty()) {
-                return ResponseEntity.ok("Không có địa chỉ nào");
-            }
-            return ResponseEntity.ok(addresses);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Lấy danh sách địa chỉ thất bại");
-        }
+    public ResponseEntity<?> getAllAddressOfCustomer(
+            @PathVariable("customerId") Integer customerId) {
+        return ResponseEntity.ok(addressComponent.getAddressesByCustomerId(customerId));
     }
 
     // Lấy thông tin địa chỉ theo id
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAddressById(@PathVariable Integer id) {
-        AddressResponse addressResponse = addressService.getAddressById(id);
-        if (addressResponse != null) {
-            return ResponseEntity.ok(addressResponse);
-        } else {
-            return ResponseEntity.badRequest().body("Địa chỉ không tồn tại");
-        }
+    public ResponseEntity<Map> getAddressById(@PathVariable Integer id) {
+        return ResponseEntity.ok(addressComponent.getAddressById(id));
     }
 
     // Cập nhật thông tin địa chỉ
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateAddress(@PathVariable Integer id, @RequestBody AddressRequest request) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateAddress(
+            @PathVariable Integer id,
+            @RequestBody AddressRequest request) {
+        Map<String, String> response = new HashMap<>();
         try {
             addressService.updateAddress(id, request);
-            return ResponseEntity.ok("Cập nhật địa chỉ thành công");
+            response.put("message", "Cập nhật địa chỉ thành công");
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Cập nhật địa chỉ thất bại");
+            System.out.println(e.getMessage());
+            response.put("message", "Cập nhật địa chỉ thất bại");
+            response.put("status", "error");
+            return ResponseEntity.ok(response);
         }
     }
 
     // Xóa địa chỉ
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAddress(@PathVariable Integer id) {
+        Map<String, String> response = new HashMap<>();
         try {
-            if (Objects.isNull(addressService.getAddressById(id))) {
-                return ResponseEntity.badRequest().body("Địa chỉ không tồn tại");
-            }
             addressService.deleteAddress(id);
-            return ResponseEntity.ok("Xóa địa chỉ thành công");
+            response.put("message", "Xóa địa chỉ thành công");
+            response.put("status", "success");
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Xóa địa chỉ thất bại");
+            System.out.println(e.getMessage());
+            response.put("message", e.getMessage());
+            response.put("status", "error");
+            return ResponseEntity.ok(response);
         }
     }
 
     // Cập nhật địa chỉ mặc định
     @PatchMapping("/default/{id}")
-    public ResponseEntity<?> updateDefaultAddress(@PathVariable Integer id) {
+    public ResponseEntity<?> updateDefaultAddress(
+            @PathVariable Integer id
+    ) {
+        Map<String, String> response = new HashMap<>();
         try {
             addressService.updateDefaultAddress(id);
-            return ResponseEntity.ok("Cập nhật địa chỉ mặc định thành công");
+            response.put("message", "Cập nhật địa chỉ mặc định thành công");
+            response.put("status", "success");
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Cập nhật địa chỉ mặc định thất bại");
+            System.out.println(e.getMessage());
+            response.put("message", e.getMessage());
+            response.put("status", "error");
+            return ResponseEntity.ok(response);
         }
     }
-
-
-
-
 }

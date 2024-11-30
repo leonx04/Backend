@@ -9,13 +9,13 @@ ${AnsiColor.BRIGHT_BLUE} ╚════╝    ╚════╝   ╚═══
 ${AnsiColor.BRIGHT_BLUE}                                               Welcome to the ${AnsiColor.BRIGHT_YELLOW}360 Sneaker!${AnsiColor.BRIGHT_BLUE}
 ${AnsiColor.GREEN}                                   ---------------------------------------------------
 ${AnsiColor.CYAN}                                        Project: ${AnsiColor.BRIGHT_YELLOW}360 Sneaker - Shoe E-Commerce
-${AnsiColor.CYAN}                                        Group: ${AnsiColor.BRIGHT_YELLOW}SD**
+${AnsiColor.CYAN}                                        Group: ${AnsiColor.BRIGHT_YELLOW}SD-82
 ${AnsiColor.CYAN}                                     🚀 Spring Boot Version: ${AnsiColor.WHITE}(0.0.1-SNAPSHOT)
 
 ${AnsiColor.BRIGHT_GREEN}                                   🌟 Explore our amazing Shoe collection! 🌟
 ${AnsiColor.BRIGHT_BLUE}                                   Your gateway to stylish and comfortable wear!
 ${AnsiColor.YELLOW}                                   💡 Let's make your shopping experience enjoyable! 💡
-${AnsiColor.RED}                                        Powered by ${AnsiColor.BRIGHT_WHITE}Team SD**
+${AnsiColor.RED}                                        Powered by ${AnsiColor.BRIGHT_WHITE}Team SD-82
 
 ${AnsiColor.BRIGHT_YELLOW}                                   ---------------------------------------------------
 ${AnsiColor.CYAN}                                           Members:

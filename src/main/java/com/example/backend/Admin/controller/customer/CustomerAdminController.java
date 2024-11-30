@@ -82,6 +82,8 @@ public class CustomerAdminController {
                             .build()
             );
     }
+
+    // Method lấy thông tin khách hàng theo id
     @GetMapping("/{id}")
     public ResponseEntity<?> getCustomerById(@PathVariable("id") int id) {
         try {

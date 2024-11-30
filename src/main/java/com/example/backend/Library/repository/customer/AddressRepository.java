@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Integer> {
     List<Address> findAllByCustomer(Customer customer);
+    List<Address> findAllByCustomerOrderByStatusDesc(Customer customer);
 }

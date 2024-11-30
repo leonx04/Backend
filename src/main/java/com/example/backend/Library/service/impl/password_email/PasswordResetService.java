@@ -109,7 +109,7 @@ public class PasswordResetService implements IPasswordResetService {
                 }
             }
 
-            response.put("message", "Nhập sai email.");
+            response.put("message", "Nhập email tài khoản.");
             response.put("status", 400);
             return response;
         } catch (Exception e) {
@@ -142,41 +142,52 @@ public class PasswordResetService implements IPasswordResetService {
 
     // Hàm kiểm tra
     private Map validateCheck(Map response, String email, String newPassword, String confirmPassword, String otp) {
+        List<String> list = new ArrayList<>();
+        int status = 200;
+
         // Kiểm tra mật khẩu mới có hợp lệ không
         if (newPassword == null || newPassword.isEmpty()) {
-            response.put("message", "Mật khẩu không được để trống.");
-            response.put("status", 400);
-            return response;
-        }
+            list.add("Mật khẩu không được để trống.");
+            status = 400;
+        } else
 
         // Kiểm tra mật khẩu mới có hợp lệ không
         if (newPassword.length() < 8) {
-            response.put("message", "Mật khẩu phải chứa ít nhất 8 ký tự.");
-            response.put("status", 400);
-            return response;
+            list.add("Mật khẩu phải chứa ít nhất 8 ký tự.");
+            status = 400;
         }
 
         // kiểm tra confirmPassword
         if (confirmPassword == null || confirmPassword.isEmpty()) {
-            response.put("message", "Nhập lại mật khẩu.");
-            response.put("status", 400);
-            return response;
-        }
+            list.add("Nhập lại mật khẩu.");
+            status = 400;
+        } else
 
         // password and confirmPassword
         if (!newPassword.equals(confirmPassword)) {
-            response.put("message", "Mật khẩu không khớp.");
-            response.put("status", 400);
-            return response;
+            list.add("Mật khẩu không khớp.");
+            status = 400;
         }
+
+        // Kiểm tra mã OTP
+        if (otp == null || otp.isEmpty()) {
+            list.add("Hãy nhập mã otp.");
+            status = 400;
+        } else
 
         // Kiểm tra mã OTP có hợp lệ không
         if (!validateOTP(email, otp)) {
-            response.put("message", "Mã OTP không hợp lệ hoặc đã hết hạn.");
-            response.put("status", 400);
+            list.add("Mã OTP không hợp lệ hoặc đã hết hạn.");
+            status = 400;
+        }
+        if (status == 400) {
+            String message = String.join("<br>", list);
+            response.put("message", message);
+            response.put("status", status);
             return response;
         }
-        response.put("status", 200);
+
+        response.put("status", status);
         return response;
     }
 
