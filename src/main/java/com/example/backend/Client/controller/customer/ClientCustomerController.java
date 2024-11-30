@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("${api.prefix}/user/customers")
-public class CustomerClientController {
+public class ClientCustomerController {
     @Autowired
     private ICustomerService customerService;
 
