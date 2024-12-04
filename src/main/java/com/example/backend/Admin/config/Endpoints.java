@@ -22,14 +22,15 @@ public class Endpoints {
             "/api/ecm/admin/customers/search",
             "/api/ecm/admin/personal/**",
             "/api/ecm/admin/address/customer/**",
+            "/api/ecm/admin/address/default/**",
+            "/api/ecm/admin/address/**",
             "/api/orders/pending",
             "/api/v1/admin/products",
             "/api/v1/admin/products/**",
             "/api/admin/employees",
             "/api/admin/employees/**",
             "/api/admin/vouchers/search",
-            "/api/admin/vouchers",
-            "/api/v1/admin/promotions",
-            "/staff/dashboard"
+            "/api/v1/admin/vouchers",
+            "/api/v1/admin/promotions"
     };
 }

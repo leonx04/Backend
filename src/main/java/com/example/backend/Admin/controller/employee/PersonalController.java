@@ -11,12 +11,15 @@ import com.example.backend.Library.model.dto.request.employee.EmployeeRequest;
 import com.example.backend.Library.service.impl.employee.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
+
+import static com.example.backend.Library.validation.pts_validator.Validator.errorField;
 
 @RestController
 @RequestMapping("${api.prefix}/admin/personal")
@@ -25,7 +28,9 @@ public class PersonalController {
     @Autowired
     private EmployeeService employeeService;
 
-    // Lấy thông tin cá nhân
+    /**
+     * Lấy thông tin cá nhân
+     * */
     @GetMapping("/{id}")
     public ResponseEntity<?> getPersonal (@PathVariable("id") Integer id) {
         return employeeService.getEmployeeById(id)
@@ -33,20 +38,19 @@ public class PersonalController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Cập nhật thông tin cá nhân
-    @PutMapping("/{id}")
+    /**
+     * Cập nhật thông tin cá nhân
+     * */
+    @PutMapping(value = "/{id}")
     public ResponseEntity<?> updatePersonal (
             @PathVariable("id") Integer id,
-            @Valid EmployeeRequest request,
-            BindingResult result,
-            @RequestParam(value = "avatar", required = false) MultipartFile avatar) {
-        Map<String, String> response = new HashMap<>();
+            @RequestParam(value = "avatar", required = false) MultipartFile avatar,
+            @Valid @ModelAttribute EmployeeRequest request,
+            BindingResult result) {
+        Map response = new HashMap<>();
         try {
-            if (result.hasErrors()) {
-                result.getFieldErrors().forEach(error -> {
-                    response.put(error.getField(), error.getDefaultMessage());
-                });
-                response.put("status", "errorCode");
+            errorField(response, result);
+            if (response.get("status").equals(400)) {
                 return ResponseEntity.ok(response);
             }
             employeeService.updateEmployee(id, request, avatar);

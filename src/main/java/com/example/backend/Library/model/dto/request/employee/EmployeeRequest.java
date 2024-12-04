@@ -30,7 +30,7 @@ public class EmployeeRequest {
     @NotBlank(message = "Địa chỉ không được để trống")
     String address;
     String imageUrl;
-    @NotNull(message = "Chức vụ không được để trống")
+
     int roleId;
     int status;
     String note;

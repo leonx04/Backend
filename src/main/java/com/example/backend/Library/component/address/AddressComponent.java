@@ -41,7 +41,7 @@ public class AddressComponent {
     public Map createAddress(int customerId, AddressRequest request, BindingResult result) {
         Map response = new HashMap<>();
         try {
-            errorField(response, result, 400);
+            errorField(response, result);
             if (response.get("status").equals(400)) {
                 return response;
             } else {

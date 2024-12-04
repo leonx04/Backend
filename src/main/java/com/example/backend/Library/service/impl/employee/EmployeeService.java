@@ -121,7 +121,12 @@ public class EmployeeService {
         Employee employee = employeeMapper.toEmployeeRequest(request);
         employee.setId(id);
         employee.setRoleId(existEpl.get().getRoleId());
+        employee.setPassWord(existEpl.get().getPassWord());
         if (avatar != null) {
+//            if (avatar.getSize() > 1024 * 3) { // 3MB
+//                System.out.println(avatar.getSize());
+//                throw new DataNotFoundException("Kích thước ảnh quá lớn");
+//            }
             String imageUrl = uploadFile(avatar);
             System.out.println(imageUrl);
             employee.setImageUrl(imageUrl);

@@ -52,7 +52,7 @@ public class Account {
         Map response = new HashMap();
 
         try {
-            errorField(response, result, 400);
+            errorField(response, result);
 
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
@@ -130,7 +130,7 @@ public class Account {
     public Map signupAccount(RegisterRequest request, BindingResult result) {
         Map response = new HashMap();
         try {
-            errorField(response, result, 400);
+            errorField(response, result);
 
             if (!request.getPassword().equals(request.getRetypePassword())) {
                 response.put("message", "Mật khẩu không khớp");

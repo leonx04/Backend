@@ -1,9 +1,15 @@
+/*
+ * Author: Phạm Thái Sơn || JavaDEV
+ * Facebook:https://www.facebook.com/son4k2
+ * Github: https://github.com/SONPC-Developer
+ * Youtube: https://www.youtube.com
+ */
+
 package com.example.backend.Client.config;
 
 import com.example.backend.Library.security.CorsConfig;
 import com.example.backend.Library.security.auth.JwtAuthenticationFilter;
 import com.example.backend.Library.security.customer.CustomerDetailService;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -13,7 +19,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -56,11 +61,13 @@ public class ClientConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigSource()))
+                .securityMatcher("/api/ecm/admin/**", "/api/ecm/user/**", "/api/v1/admin/**")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_ADMIN_ENDPOINTS).permitAll()
                         .requestMatchers(ADMIN_ENDPOINTS).hasAnyRole("ADMIN", "STAFF")
                         .requestMatchers(PUBLIC_CLIENT_ENDPOINTS).permitAll()
                         .requestMatchers(CLIENT_ENDPOINTS).hasRole("USER")
+                        .anyRequest().authenticated()
                 )
 //                .exceptionHandling(exceptions -> exceptions
 //                        .authenticationEntryPoint((request, response, authException) -> {

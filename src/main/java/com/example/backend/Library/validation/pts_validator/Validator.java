@@ -12,15 +12,15 @@ import org.springframework.validation.BindingResult;
 import java.util.Map;
 
 public class Validator {
-    public static Map errorField(Map response, BindingResult result, int status) {
+    public static Map errorField(Map response, BindingResult result) {
         if (result.hasErrors()) {
             result.getFieldErrors().stream().forEach(e -> {
                 response.put(e.getField(), e.getDefaultMessage());
             });
-            response.put("status", status);
-            return response;
+            response.put("status", 400);
+        } else {
+            response.put("status", 200);
         }
-        response.put("status", 200);
         return response;
     }
 
