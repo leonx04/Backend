@@ -17,7 +17,7 @@ public class cartDetailController {
     @Autowired
     private cartDetail_Impl cartService;
     @GetMapping()
-    public ResponseEntity<?> getCartDetail(@RequestParam("id") Integer id) {
+    public ResponseEntity<?> getCartDetail(@RequestParam("id") Integer id)  {
         if (id == null) {
             return ResponseEntity.badRequest().body("ID is required");
         }
