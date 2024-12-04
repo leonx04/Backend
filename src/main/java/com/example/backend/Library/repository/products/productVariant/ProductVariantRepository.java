@@ -19,7 +19,20 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariant, 
     @Query("SELECT count(pv) FROM ProductVariant pv WHERE pv.product.material.id = :idMaterial")
     Long countByMaterial(@Param("idMaterial") Integer idMaterial);
 
+    @Query("SELECT count(pv) FROM ProductVariant pv WHERE pv.product.sole.id = :idSole")
+    Long countBySole(@Param("idSole") Integer idSole);
+
+
+    @Query("SELECT count(pv) FROM ProductVariant pv WHERE pv.color.id = :idColor")
+    Long countByColor(@Param("idColor") Integer idColor);
+
+
+    @Query("SELECT count(pv) FROM ProductVariant pv WHERE pv.size.id = :idSize")
+    Long countBySize(@Param("idSize") Integer idSize);
+
     @Transactional
     @Query("SELECT COUNT(pv) FROM ProductVariant pv WHERE pv.product.id = :productId")
     Long countByProductId(@Param("productId") Integer productId);
+
+
 }

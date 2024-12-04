@@ -23,7 +23,7 @@ import java.util.List;
 @ToString
 @SuperBuilder
 public class AttributeResponse {
-     String id;
+    Integer id;
     String name;
     Long appliedProductCount;
     LocalDate createdAt;

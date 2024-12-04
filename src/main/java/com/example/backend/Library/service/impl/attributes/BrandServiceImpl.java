@@ -13,6 +13,7 @@ import com.example.backend.Library.service.interfaces.attributes.BrandService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -28,7 +29,7 @@ public class BrandServiceImpl implements BrandService {
 
      ProductVariantRepository variantRepo;
 
-    EmployeeRepo employeeRepo;
+//    EmployeeRepo employeeRepo;
 
      BrandCustomizeQueryRepository brandCustomizeQueryRepository;
      BrandMapper brandMapper;
@@ -42,13 +43,12 @@ public class BrandServiceImpl implements BrandService {
                 .map(content -> (List<Brand>) content)
                 .orElse(Collections.emptyList());
 
-        List<BrandResponse> brandResponses = mapAndEnhanceBrandsToBrandResponses(brands);
+        List<BrandResponse> brandResponses = mapAndEnhanceBrandsToBrandResponses(brands);//Map brands --> BrandResponse + bổ sung trường.
         pageableResponse.setContent(brandResponses);
-
         return pageableResponse;
     }
 
-    @Override
+    @Override//lấy danh sách name trên 1 trang (pagination) dựa trên tiền tố.
     public PageableResponse getPageDataByPrefix(AttributeParamRequest paramRequest) {
         List<Brand> brands =  brandCustomizeQueryRepository.getWithPagination(paramRequest);
         List<String> brandNames = brands.stream().map(Brand::getName).toList();
@@ -58,9 +58,25 @@ public class BrandServiceImpl implements BrandService {
         return PageableResponse.<String>builder()
                 .totalElements(totalElements)
                 .pageSize(paramRequest.getPageSize())
-                .totalPages((int) Math.ceil((double) totalElements / paramRequest.getPageSize()))
+                .totalPages((int) Math.ceil((double) totalElements / paramRequest.getPageSize()))// tính tổng số trang = tổng số elements / kích thước 1 trang.
                 .pageNo(paramRequest.getPageNo())
                 .content(brandNames)
+                .build();
+    }
+
+    @Override
+    public PageableResponse getEntityByName(AttributeParamRequest paramRequest) {
+        Optional<Brand> brand = brandRepo.findByName(paramRequest.getSearchByName());//entity || null.
+
+        List<Brand> brands = brand.map(Collections::singletonList).orElse(Collections.emptyList());
+
+        List<BrandResponse> content = mapAndEnhanceBrandsToBrandResponses(brands);
+        return PageableResponse.builder()
+                .totalElements(content.isEmpty() ? 0L : 1L)
+                .pageSize(paramRequest.getPageSize())
+                .totalPages(content.isEmpty() ? 0 : 1)
+                .pageNo(paramRequest.getPageNo())//1
+                .content(content)
                 .build();
     }
 

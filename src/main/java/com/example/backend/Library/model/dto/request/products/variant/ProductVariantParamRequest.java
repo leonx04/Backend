@@ -1,4 +1,4 @@
-package com.example.backend.Library.model.dto.request.products;
+package com.example.backend.Library.model.dto.request.products.variant;
 
 import com.example.backend.Library.enums.product.ProductStatus;
 import lombok.AccessLevel;

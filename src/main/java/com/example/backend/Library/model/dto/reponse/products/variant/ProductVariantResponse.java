@@ -1,5 +1,6 @@
-package com.example.backend.Library.model.dto.reponse.products;
+package com.example.backend.Library.model.dto.reponse.products.variant;
 
+import com.example.backend.Library.enums.product.ProductStatus;
 import com.example.backend.Library.model.entity.employee.Employee;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,15 +21,14 @@ public class ProductVariantResponse {
 
     Long id;
     String SKU;
-    int quantity;
+    Integer quantity;
     BigDecimal price;
-    int weight;
+    Integer weight;
     String size;
     String color;
 
     String promotion;
-    int status;
-
+    ProductStatus status;
     LocalDate createdAt;
     Employee createdBy;
     LocalDate updatedAt;

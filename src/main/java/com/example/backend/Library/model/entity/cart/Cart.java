@@ -1,7 +1,6 @@
 package com.example.backend.Library.model.entity.cart;
 
 import com.example.backend.Library.model.entity.customer.Customer;
-import com.example.backend.Library.model.entity.products.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

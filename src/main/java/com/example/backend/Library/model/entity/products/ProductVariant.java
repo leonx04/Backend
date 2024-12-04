@@ -34,11 +34,11 @@ import java.time.LocalDate;
 public class ProductVariant  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    Integer id;
      String SKU;
-     int quantity;
+     Integer quantity;
      BigDecimal price;
-     int weight;
+     Integer weight;
 
     @ManyToOne()
     @JoinColumn(name = "productId", referencedColumnName = "id")
@@ -55,7 +55,7 @@ public class ProductVariant  {
     @ManyToOne()
     @JoinColumn(name = "promotionId", referencedColumnName = "id")
      Promotion promotion;
-    int status;
+    Integer status;
     @CreationTimestamp
     LocalDate createdAt;
 
@@ -68,5 +68,4 @@ public class ProductVariant  {
     @ManyToOne
     @JoinColumn(name = "updatedBy", nullable = false)
     Employee updatedBy;
-
 }

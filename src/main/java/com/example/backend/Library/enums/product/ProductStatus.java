@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 public enum ProductStatus {
     ALL(0),
     ACTIVE(1),
-    INACTIVE(2);
-
+    INACTIVE(2),
+    PENDING(4);
     private final int value;
 
     // Constructor
@@ -18,7 +18,6 @@ public enum ProductStatus {
         return value;
     }
 
-    // Optional: Method to get ProductStatus from value
     public static ProductStatus fromValue(int value) {
         for (ProductStatus status : ProductStatus.values()) {
             if (status.value == value) {
@@ -27,4 +26,6 @@ public enum ProductStatus {
         }
         throw new IllegalArgumentException("Invalid value: " + value);
     }
+
+
 }

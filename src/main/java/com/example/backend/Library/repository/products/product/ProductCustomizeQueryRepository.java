@@ -1,7 +1,7 @@
 package com.example.backend.Library.repository.products.product;
 
 import com.example.backend.Library.model.dto.reponse.PageableResponse;
-import com.example.backend.Library.model.dto.request.products.ProductParamRequest;
+import com.example.backend.Library.model.dto.request.products.product.ProductParamRequest;
 import com.example.backend.Library.model.entity.products.Product;
 import com.example.backend.Library.repository.QueryBuilder;
 import jakarta.persistence.EntityManager;

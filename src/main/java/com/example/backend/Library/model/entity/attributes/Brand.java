@@ -1,7 +1,6 @@
 package com.example.backend.Library.model.entity.attributes;
 
 import com.example.backend.Library.model.entity.employee.Employee;
-import com.example.backend.Library.model.entity.products.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,8 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,5 +39,5 @@ public class Brand  {
 
     @ManyToOne
     @JoinColumn(name = "createdBy", nullable = false)
-     Employee createdBy; // Thay đổi kiểu thành Employee
+     Employee createdBy; // Thay đổi kiểu thành EmployeeReponse để ko lộ thông tin.
 }

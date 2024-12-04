@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AttributeParamRequest {
+    //có thể đổi thành là Map<key, value> : để có thể lọc theo nhiều trường.
     String searchByName;
     String sortBy = "createdAt";//stt,name.
     String sortDir = "desc";//desc

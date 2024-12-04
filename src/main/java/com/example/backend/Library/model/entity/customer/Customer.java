@@ -20,7 +20,7 @@ public class Customer extends BaseEntity {
 
     @Column(name = "Code", nullable = false, length = 255)
     private String code = "CUS";
-
+    
     @Column(name = "Username", nullable = false, length = 100)
     private String userName;
 

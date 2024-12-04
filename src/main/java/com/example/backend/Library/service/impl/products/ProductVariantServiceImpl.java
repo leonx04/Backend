@@ -1,11 +1,8 @@
 package com.example.backend.Library.service.impl.products;
 
-import com.example.backend.Library.exception.exceptioncustomer.ResourceNotFoundException;
 import com.example.backend.Library.model.dto.reponse.PageableResponse;
-import com.example.backend.Library.model.dto.reponse.products.ProductResponse;
-import com.example.backend.Library.model.dto.reponse.products.ProductVariantResponse;
-import com.example.backend.Library.model.dto.request.products.ProductVariantParamRequest;
-import com.example.backend.Library.model.entity.products.Product;
+import com.example.backend.Library.model.dto.reponse.products.variant.ProductVariantResponse;
+import com.example.backend.Library.model.dto.request.products.variant.ProductVariantParamRequest;
 import com.example.backend.Library.model.entity.products.ProductVariant;
 import com.example.backend.Library.model.mapper.products.ProductVariantMapper;
 import com.example.backend.Library.repository.products.productVariant.ProductVariantCustomizeQueryRepository;

@@ -1,4 +1,4 @@
-package com.example.backend.Library.model.dto.reponse.products;
+package com.example.backend.Library.model.dto.reponse.products.product;
 
 import com.example.backend.Library.enums.product.ProductStatus;
 import com.example.backend.Library.model.entity.employee.Employee;
@@ -27,9 +27,9 @@ public class ProductResponse {
 
      String sole;
      LocalDate createdAt;
-     Employee createdBy;
+     Employee createdBy;//đổi thành EmployeeRepo
 
-     LocalDate updatedAt;
-     Employee updatedBy;
+     LocalDate updatedAt;// có khả năng bỏ
+     Employee updatedBy;// có khả năng bỏ
      Long appliedVariantProductCount;
 }
