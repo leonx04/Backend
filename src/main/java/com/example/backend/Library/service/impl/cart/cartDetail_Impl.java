@@ -3,7 +3,10 @@ package com.example.backend.Library.service.impl.cart;
 
 import com.example.backend.Library.model.dto.request.cart.CartDetailDTO;
 
+import com.example.backend.Library.model.entity.attributes.ProductImage;
 import com.example.backend.Library.model.entity.cart.CartDetail;
+
+import com.example.backend.Library.repository.attributes.ProductImageRepository;
 import com.example.backend.Library.repository.cart.CartDetailRepository;
 import com.example.backend.Library.service.interfaces.cart.cartDetail_Interface;
 import org.apache.poi.hpsf.Decimal;
@@ -19,6 +22,8 @@ import java.util.stream.Collectors;
 public class cartDetail_Impl implements cartDetail_Interface {
     @Autowired
     private CartDetailRepository cartDetail;
+    @Autowired
+    private ProductImageRepository productImageRp;
     @Override
     public List<CartDetailDTO> findByIdUserd(Integer id) {
         List<CartDetail> cartDetails = cartDetail.findByCart_User_Id(id);
@@ -29,6 +34,12 @@ public class cartDetail_Impl implements cartDetail_Interface {
                     cartDetailDTO.setQuantity(cart.getQuantity());
                     cartDetailDTO.setPrice(cart.getProductVariantDetail().getPrice());
                     cartDetailDTO.setSubtotal(BigDecimal.valueOf(cart.getQuantity()).multiply(cart.getProductVariantDetail().getPrice()));
+                    ProductImage productImage = productImageRp.findFirstByProductVariantId(cart.getProductVariantDetail().getId());
+                    if (productImage != null) {
+                        cartDetailDTO.setProductImageUrl(productImage.getImageURL()); // Lưu URL ảnh vào DTO
+                        System.out.println(productImage.getImageURL());
+                    }
+
                     return cartDetailDTO;
 
                         }
