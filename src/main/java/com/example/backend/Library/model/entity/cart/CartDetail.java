@@ -33,6 +33,6 @@ public class CartDetail {
     @ManyToOne
     @JoinColumn(name = "productDetailId", referencedColumnName = "id")
     private ProductVariant productVariantDetail;
-    private int quantity;
+    private Integer  quantity;
 
 }

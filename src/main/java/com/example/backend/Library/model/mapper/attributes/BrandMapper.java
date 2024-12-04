@@ -1,6 +1,6 @@
 package com.example.backend.Library.model.mapper.attributes;
 
-import com.example.backend.Library.model.dto.reponse.attributes.BrandResponse;
+import com.example.backend.Library.model.dto.response.attributes.BrandResponse;
 import com.example.backend.Library.model.entity.attributes.Brand;
 import org.mapstruct.Mapper;
 

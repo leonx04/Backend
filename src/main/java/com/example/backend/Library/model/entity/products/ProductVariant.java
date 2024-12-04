@@ -69,4 +69,8 @@ public class ProductVariant  {
     @JoinColumn(name = "updatedBy", nullable = false)
     Employee updatedBy;
 
+
+    public String getFullName() {
+        return product.getName() + " - " + SKU;
+    }
 }

@@ -13,6 +13,6 @@ public interface OrderStatusLogInterface {
     PageDTO<OrderStatusLogDTO> getOrderStatusLog(int pageNo, int pageSize);
     OrderStatusLog saveOrderStatusLog(InsertOrderStatusLogRequest request);
 
-//    PageDTO<OrderStatusLogDTO> findAllByTimeRange(LocalDate startDate, LocalDate endDate,int pageNo, int pageSize );
+    PageDTO<OrderStatusLogDTO> findAllByTimeRange(LocalDate startDate, LocalDate endDate,int pageNo, int pageSize );
 
 }

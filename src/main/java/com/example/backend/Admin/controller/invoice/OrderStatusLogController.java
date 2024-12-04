@@ -22,15 +22,15 @@ public class OrderStatusLogController {
         PageDTO<OrderStatusLogDTO> orderStatusLogDTO = orderStatusLog.getOrderStatusLog(pageNo, pageSize);
         return ResponseEntity.ok(orderStatusLogDTO);
     }
-//    @GetMapping("/order-status")
-//    public ResponseEntity<?> getOrderStatusLogs(
-//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-//            @RequestParam(defaultValue = "0") int pageNo,
-//            @RequestParam(defaultValue = "10") int pageSize
-//    ) {
-//        PageDTO<OrderStatusLogDTO> logs = orderStatusLog.findAllByTimeRange(startDate, endDate, pageNo, pageSize);
-//        return ResponseEntity.ok(logs);
-//    }
+    @GetMapping("/order-status-date")
+    public ResponseEntity<?> getOrderStatusLogs(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize
+    ) {
+        PageDTO<OrderStatusLogDTO> logs = orderStatusLog.findAllByTimeRange(startDate, endDate, pageNo, pageSize);
+        return ResponseEntity.ok(logs);
+    }
 
 }

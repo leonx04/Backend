@@ -14,8 +14,7 @@ import java.time.LocalDateTime;
 @Repository
 public interface OrderStatusLogRepository extends JpaRepository<OrderStatusLog,Integer> {
     Page<OrderStatusLog> findAll(Pageable pageable);
-//    @Query(value = "select o from OrderStatusLog o where Date(o.updatedAt) between :statusDate and :endDate ")
-//    Page<OrderStatusLog> findAllByTimeRange(@Param("startDate") LocalDate startDate,
-//                                            @Param("endDate") LocalDate endDate, Pageable pageable);
+    @Query("select o from OrderStatusLog o where CAST(o.updatedAt AS DATE) between :startDate and :endDate")
+    Page<OrderStatusLog> findAllByTimeRange(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, Pageable pageable);
 
 }

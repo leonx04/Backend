@@ -1,7 +1,7 @@
 package com.example.backend.Library.service.impl.attributes;
 
 import com.example.backend.Library.model.dto.reponse.PageableResponse;
-import com.example.backend.Library.model.dto.reponse.attributes.BrandResponse;
+import com.example.backend.Library.model.dto.response.attributes.BrandResponse;
 import com.example.backend.Library.model.dto.request.attributes.AttributeParamRequest;
 import com.example.backend.Library.model.entity.attributes.Brand;
 import com.example.backend.Library.model.mapper.attributes.BrandMapper;

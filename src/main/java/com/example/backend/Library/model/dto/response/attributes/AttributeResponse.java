@@ -1,4 +1,4 @@
-package com.example.backend.Library.model.dto.reponse.attributes;
+package com.example.backend.Library.model.dto.response.attributes;
 
 import com.example.backend.Library.model.entity.employee.Employee;
 import lombok.AccessLevel;
