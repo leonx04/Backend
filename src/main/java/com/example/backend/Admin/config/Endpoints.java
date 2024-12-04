@@ -8,6 +8,9 @@
 package com.example.backend.Admin.config;
 
 public class Endpoints {
+    /**
+     * Endpoints không cần xác thực
+     * */
     public static String[] PUBLIC_ADMIN_ENDPOINTS = {
             "/api/ecm/admin/auth/login",
             "/api/ecm/admin/auth/logout",
@@ -16,7 +19,11 @@ public class Endpoints {
             "/api/ecm/admin/auth/refresh-token"
     };
 
+    /**
+     * Endpoints cần xác thực phía admin
+     */
     public static String[] ADMIN_ENDPOINTS = {
+            "/api/ecm/admin/**",
             "/api/ecm/admin/customers",
             "/api/ecm/admin/customers/**",
             "/api/ecm/admin/customers/search",
@@ -27,10 +34,14 @@ public class Endpoints {
             "/api/orders/pending",
             "/api/v1/admin/products",
             "/api/v1/admin/products/**",
+            "/api/v1/admin/product-variants/product/**",
+            "/api/v1/admin/product-variants/promotion/**",
             "/api/admin/employees",
             "/api/admin/employees/**",
-            "/api/admin/vouchers/search",
             "/api/v1/admin/vouchers",
-            "/api/v1/admin/promotions"
+            "/api/v1/admin/vouchers/**",
+            "/api/v1/admin/vouchers/search",
+            "/api/v1/admin/promotions",
+            "/api/v1/admin/promotions/**"
     };
 }
